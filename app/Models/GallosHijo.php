@@ -38,6 +38,10 @@ class GallosHijo extends Model
 		'hijo_id'
 	];
 
+	public function padre()
+	{
+		return $this->belongsTo(Gallo::class, 'padre_id');
+	}
 	public function gallo()
 	{
 		return $this->belongsTo(Gallo::class, 'hijo_id');

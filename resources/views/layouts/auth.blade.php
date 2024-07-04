@@ -6,15 +6,17 @@
         <title>Rooster APP</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     </head>
-    <body class="">
+    <body>
         <div class="container-fluid vh-100 bg-black bg-gradient">
             <div class="row justify-content-center align-items-center">
-                <div class="col-md-12">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xs-4 mx-auto">
                     <div class="card shadow-lg bg-transparent border-dark text-warning my-4    ">
                         <div class="card-header text-center">{{ __('Autenticación') }}</div>
         
                         <div class="card-body">
-                            <img src="{{ asset('img/logo.png') }}" alt="" class="w-100">
+                            <div class="container-fluid text-center">
+                                <img src="{{ asset('img/logo.png') }}" alt="" width="200" height="200">
+                            </div>
                             @yield('content')
                         </div>
                     </div>

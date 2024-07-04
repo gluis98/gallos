@@ -22,7 +22,7 @@
                     </a>
                 </div>
             </nav>
-            <div class="container-fluid d-none d-sm-none d-md-block d-lg-block d-xs-block">
+            <div class="container-fluid d-none d-sm-none d-md-block d-lg-block d-xs-block p-0">
                 <ul class="nav border-bottom bg-black">
                     <li class="nav-item">
                       <a class="nav-link text-white active" aria-current="page" href="#">Gallos</a>

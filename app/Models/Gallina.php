@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int|null $padre_id
  * @property int|null $madre_id
- * @property string|null $ placa
+ * @property string|null $placa
  * @property string|null $marca_nacimiento
  * @property string|null $marca_federacion
  * @property string|null $color
@@ -42,7 +42,7 @@ class Gallina extends Model
 	protected $fillable = [
 		'padre_id',
 		'madre_id',
-		' placa',
+		'placa',
 		'marca_nacimiento',
 		'marca_federacion',
 		'color',

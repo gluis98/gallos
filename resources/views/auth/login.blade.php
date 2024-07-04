@@ -33,7 +33,7 @@
             </div>
 
             <div class="row mb-0">
-                <div class="col-md-12 offset-md-4 text-center">
+                <div class="col-md-12 text-center">
                     <button type="submit" class="btn btn-danger">
                         {{ __('Iniciar sesión') }}
                     </button>

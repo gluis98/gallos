@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gallina;
 use App\Models\Gallo;
 use App\Models\GallosHijo;
 use App\Models\GallosImagene;
@@ -12,7 +13,7 @@ class GalloController extends Controller
 {
     public function index()
     {
-        $g = Gallo::with('gallos_imagenes', 'gallos_hijos', 'ventas')->get();
+        $g = Gallo::with('gallos_imagenes', 'gallos_hijos', 'gallos_hijos.padre', 'ventas')->get();
         return response()->json([
             'data' => $g
         ], 200);
@@ -26,16 +27,20 @@ class GalloController extends Controller
         $g = Gallo::create($request->all())->latest('id')->first();
 
         if($request->padre_id != null){
+            $padre = Gallo::where('placa', $request->padre_id)->first();
             $gh = GallosHijo::create([ 
-                'padre_id' => $request->padre_id,
+                'padre_id' => $padre->id,
                 'hijo_id' => $g->id
             ])->latest('id')->first();
         }
 
         if($request->madre_id != null){
-            $ghm = GallosHijo::find($gh->id);
-            $ghm->madre_id = $request->madre_id;
-            $ghm->save();
+            $madre = Gallina::where('placa', $request->madre_id)->first();
+            if(!empty($madre)){
+                $ghm = GallosHijo::find($gh->id);
+                $ghm->madre_id = $madre->id;
+                $ghm->save();
+            }
         }
 
         if($request->hasFile('imagen')){
@@ -59,7 +64,7 @@ class GalloController extends Controller
      */
     public function show(string $id)
     {
-        $g = Gallo::with('gallos_imagenes', 'gallos_hijos', 'ventas')->find($id);
+        $g = Gallo::with('gallos_imagenes', 'gallos_hijos', 'gallos_hijos.padre', 'gallos_hijos.gallina', 'ventas')->find($id);
         return response()->json([
             'data' => $g
         ], 200);

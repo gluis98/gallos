@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $luna
  * @property string|null $peleas
  * @property string|null $observaciones
+ * @property string|null $estatus
  * 
  * @property Collection|GallosHijo[] $gallos_hijos
  * @property Collection|GallosImagene[] $gallos_imagenes
