@@ -2,24 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    /**
+  /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $clientes = User::all();
+        return response()->json([
+            'data' => $clientes
+        ], 200);
     }
 
     /**
@@ -27,7 +23,10 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $clientes = User::create($request->all());
+        return response()->json([
+            'msj' => "Registro registrado exitosamente"
+        ], 200);
     }
 
     /**
@@ -35,30 +34,31 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        $clientes = User::find($id);
+        return response()->json([
+            'data' => $clientes
+        ], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $clientes = User::find($id)->fill($request->all())->save();
+        return response()->json([
+            'msj' => "Registro actualizado exitosamente"
+        ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $clientes = User::find($id)->delete();
+        return response()->json([
+            'msj' => "Registro eliminado exitosamente"
+        ], 200);
     }
 }

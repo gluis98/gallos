@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class Gallo
  * 
  * @property int $id
- * @property string|null $ placa
+ * @property string|null $placa
  * @property string|null $marca_nacimiento
  * @property string|null $marca_federacion
  * @property string|null $color
@@ -35,7 +35,7 @@ class Gallo extends Model
 	public $timestamps = false;
 
 	protected $fillable = [
-		' placa',
+		'placa',
 		'marca_nacimiento',
 		'marca_federacion',
 		'color',
@@ -43,7 +43,8 @@ class Gallo extends Model
 		'fecha_nacimiento',
 		'luna',
 		'peleas',
-		'observaciones'
+		'observaciones',
+		'estatus'
 	];
 
 	public function gallos_hijos()

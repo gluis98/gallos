@@ -38,12 +38,12 @@ class GalloController extends Controller
             $ghm->save();
         }
 
-        if($request->hasFile('file')){
-            foreach($request->file('file') as $file){
+        if($request->hasFile('imagen')){
+            foreach($request->file('imagen') as $file){
                 $name = $file->getClientOriginalName();
                 $file->move(public_path('files/gallos/' . $request->placa . '/'), $name);
                 $gi = GallosImagene::create([
-                                'gallina_id' => $g->id, 
+                                'gallo_id' => $g->id, 
                                 'imagen' => $file->getClientOriginalName()
                     ]);
             }
