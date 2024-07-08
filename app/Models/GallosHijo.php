@@ -29,18 +29,29 @@ class GallosHijo extends Model
 	protected $casts = [
 		'padre_id' => 'int',
 		'madre_id' => 'int',
-		'hijo_id' => 'int'
+	
 	];
 
 	protected $fillable = [
 		'padre_id',
 		'madre_id',
-		'hijo_id'
+		'hijo_id',
+		'tipo'
 	];
 
 	public function padre()
 	{
 		return $this->belongsTo(Gallo::class, 'padre_id');
+	}
+
+	public function madre()
+	{
+		return $this->belongsTo(Gallina::class, 'madre_id');
+	}
+
+	public function hijos()
+	{
+		return $this->belongsTo(GallosHijo::class, 'padre_id');
 	}
 	public function gallo()
 	{

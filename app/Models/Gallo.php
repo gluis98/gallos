@@ -50,7 +50,12 @@ class Gallo extends Model
 
 	public function gallos_hijos()
 	{
-		return $this->hasMany(GallosHijo::class, 'hijo_id');
+		return $this->hasMany(GallosHijo::class, 'hijo_id')->where('tipo', 'Gallo');
+	}
+
+	public function hijos()
+	{
+		return $this->hasMany(GallosHijo::class, 'padre_id');
 	}
 
 	public function gallos_imagenes()

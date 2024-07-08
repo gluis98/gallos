@@ -11,7 +11,7 @@ class VentaController extends Controller
 {
     public function index()
     {
-        $v = Venta::with('cliente', 'gallo')->get();
+        $v = Venta::with('gallo')->get();
         return response()->json([
             'data' => $v
         ], 200);
@@ -23,7 +23,6 @@ class VentaController extends Controller
     public function store(Request $request)
     {
         $v = Venta::create($request->all());
-
         $g = Gallo::find($request->gallo_id);
         $g->estatus = "Vendido";
         $g->save();
@@ -59,9 +58,24 @@ class VentaController extends Controller
      */
     public function destroy($id)
     {
-        $v = Venta::find($id)->delete();
+        $v = Venta::find($id);
+        $g = Gallo::find($v->gallo_id);
+        $g->estatus = "Activo";
+        $g->save();
+        $v->delete();
+
         return response()->json([
             'msj' => "Registro eliminado exitosamente"
+        ], 200);
+    }
+
+    public function search(Request $request){
+        $g = Venta::with('gallo')
+            ->where('nombre_cliente', 'like', '%' . $request->dato . '%')
+            ->orWhere('created_at', 'like', '%' . $request->dato . '%')
+            ->get();
+        return response()->json([
+            'data' => $g
         ], 200);
     }
 }

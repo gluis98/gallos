@@ -6,7 +6,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Registrar gallo</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Registrar gallina</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="form-gallo">
@@ -64,10 +64,6 @@
                     <input type="text" class="form-control" name="luna" id="luna" required>
                 </div>
 
-                <div class="form-group mb-2">
-                    <label for="peleas">Cantidad de peleas *</label>
-                    <input type="text" class="form-control" name="peleas" id="peleas" required>
-                </div>
 
                 <div class="form-group mb-2">
                     <label for="observaciones">Observaciones</label>
@@ -113,14 +109,11 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Vender gallo</h1>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Vender gallina</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="form-venta">
             <div class="modal-body">
-                <div class="alert alert-light">
-                    <p>Los campos con <span class="text-danger">*</span> son obligatorios</p>
-                </div>
                 @csrf
                 <div class="form-group">
                     <h4>Placa del Gallo: <span id="placa-venta"></span></h4>
@@ -129,8 +122,8 @@
                 <hr>
                 <div class="form-group mb-2 row">
                     <div class="col-md-6">
-                        <label for="nombre_cliente">Nombre del cliente (*)</label>
-                        <input type="text" class="form-control" name="nombre_cliente" id="nombre_cliente" required>
+                        <label for="nombre_cliente">Nombre del cliente</label>
+                        <input type="text" class="form-control" name="nombre_cliente" id="nombre_cliente">
                     </div>
                     <div class="col-md-6">
                         <label for="telefono">Telefono</label>
@@ -138,8 +131,8 @@
                     </div>
                 </div>
                 <div class="form-group mb-2">
-                    <label for="monto">Monto (*)</label>
-                    <input type="text" class="form-control" name="monto" id="monto" required>
+                    <label for="monto">Monto</label>
+                    <input type="text" class="form-control" name="monto" id="monto">
                 </div>
                 <div class="form-group mb-2">
                     <label for="observaciones">Observaciones</label>
@@ -156,20 +149,20 @@
   </div>
 
     <section class="container-fluid bg-white p-4">
-        <h2>Gallos</h2>
+        <h2>Gallinas</h2>
         <hr>
         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal-gallo">
             <span class="material-symbols-outlined float-start me-2">
                 add_circle
             </span>
-            Nuevo gallo
+            Nueva gallina
         </button>
-        <a href="{{route('report.all')}}" class="btn btn-dark " target="_blank">
+        <button class="btn btn-dark ">
             <span class="material-symbols-outlined float-start me-2">
                 picture_as_pdf
             </span>
             PDF
-        </a>
+        </button>
         <form id="form-search" class="my-2">
             @csrf
             <div class="form-group">
@@ -221,7 +214,7 @@
                     console.log("I was closed by the timer");
                 }
                 });
-                fetch('api/gallos', {
+                fetch('api/gallinas', {
                     method: 'POST',
                     body: form,
                     headers: {
@@ -335,7 +328,7 @@
                     console.log("I was closed by the timer");
                 }
                 });
-                fetch('api/gallos/search', {
+                fetch('api/gallinas/search', {
                     method: 'POST',
                     body: form,
                     headers: {
@@ -353,7 +346,7 @@
                     moment.locale('es');
                     data.data.forEach(e => {
                         console.log(e)
-                        if(e.gallos_imagenes.length > 0){
+                        if(e.gallinas_imagenes.length > 0){
                             // e.gallos_imagenes.forEach(f => {
                             //     if(e.gallos_imagenes.length == 1){
                             //         size = "w-100"
@@ -365,19 +358,19 @@
 
                             //     if(f.extention == 'png' || f.extention == 'jpg') {
                             //             template_img += `
-                            //             <img src="files/gallos/${e.id}/${f.imagen}" alt="" class="${size} float-left">
+                            //             <img src="files/gallos/${e.placa}/${f.imagen}" alt="" class="${size} float-left">
                             //             `;
                             //     }
 
                             //     if(f.extention == 'mp4') {
                             //         template_video += `
-                            //         <video src="files/gallos/${e.id}/${f.imagen}" alt="" class="${size}" controls/>
+                            //         <video src="files/gallos/${e.placa}/${f.imagen}" alt="" class="${size}" controls/>
                             //         `;
                             //     }
 
                             //     if(f.extention != 'mp4' && f.extention != 'png' && f.extention != 'jpg') {
                             //         template_file += `
-                            //         <a href="files/gallos/${e.id}/${f.imagen}" alt="" class="btn btn-outline-primary ${size}">
+                            //         <a href="files/gallos/${e.placa}/${f.imagen}" alt="" class="btn btn-outline-primary ${size}">
                             //             <span class="material-symbols-outlined">
                             //                 download
                             //             </span> 
@@ -386,9 +379,9 @@
                             //         `;
                             //     }
                             // });
-                            template_img = `<img src="files/gallos/${e.id}/${e.gallos_imagenes[0].imagen}" class="card-img-top" height="300" alt="...">`
+                            template_img = `<img src="files/gallinas/${e.placa}/${e.gallinas_imagenes[0].imagen}" class="card-img-top" alt="...">`
                         }else{
-                            template_img = `<img src="img/avatar.png" alt="" class="w-100" height="300">`;
+                            template_img = `<img src="img/avatar.png" alt="" class="w-100">`;
                         }
 
                         if(e.estatus != "Vendido"){
@@ -495,7 +488,7 @@
                     }
                 })
 
-                fetch('api/gallos/'+id, {
+                fetch('api/gallinas/'+id, {
                     method: 'GET',
                 }).then(response => response.json()
                 ).then(function(res){   
@@ -555,7 +548,7 @@
                 }
                 });
                 console.log(id)
-                fetch(`api/gallos/${id}`, {
+                fetch(`api/gallinas/${id}`, {
                     method: 'POST',
                     body: form
                 }).then(response => response.text())
@@ -587,13 +580,13 @@
                 confirmButtonText: "Si, eliminar."
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch('api/gallos/'+id, {
+                    fetch('api/gallinas/'+id, {
                         method: 'DELETE'
                     })
                     .then(response => response.json())
                     .then(res => {
                         Swal.fire({
-                            title: "Eliminado",
+                            title: "Eliminada",
                             text: res.msj,
                             icon: "success",
                             showConfirmButton: false,
@@ -633,7 +626,7 @@
                     }
                 })
 
-                fetch('api/gallos/'+id, {
+                fetch('api/gallinas/'+id, {
                     method: 'GET',
                 }).then(response => response.json()
                 ).then(function(res){   
@@ -643,9 +636,9 @@
                     if(res.data.gallos_hijos.length > 0){
                         if(res.data.gallos_hijos[0].padre != null){
                             if(res.data.gallos_hijos[0].padre.gallos_imagenes.length > 0){
-                                template_img = `<img src="files/gallos/${res.data.gallos_hijos[0].padre.id}/${res.data.gallos_hijos[0].padre.gallos_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
+                                template_img = `<img src="files/gallos/${res.data.gallos_hijos[0].padre.placa}/${res.data.gallos_hijos[0].padre.gallos_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
                             }else{
-                                template_img = `<img src="img/avatar.png" alt="" class="img-fluid rounded-start h-100">`;
+                                template_img = `<img src="img/avatar.png" alt="" class="img-fluid rounded-start vh-100">`;
                             }                          
                             template = `
                                     <div class="col-md-12">
@@ -691,12 +684,12 @@
                         }
 
                         if(res.data.gallos_hijos[0].madre != null){
-                            if(res.data.gallos_hijos[0].madre.gallinas_imagenes.length > 0){
-                                template_img = `<img src="files/gallinas/${res.data.gallos_hijos[0].madre.placa}/${res.data.gallos_hijos[0].madre.gallinas_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
+                            if(res.data.gallos_hijos[0].madre.gallos_imagenes.length > 0){
+                                template_img = `<img src="files/gallinas/${res.data.gallos_hijos[0].madre.placa}/${res.data.gallos_hijos[0].madre.gallos_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
                             }else{
                                 template_img = `<img src="img/avatar-2.png" alt="" class="img-fluid rounded-start vh-100">`;
                             }                          
-                            template += `
+                            template = `
                                     <div class="col-md-12">
                                         <div class="card mb-3" style="max-width: 540px;">
                                             <div class="row g-0">
@@ -740,12 +733,9 @@
                         }
 
 
-                    }
-                    res.data.hijos.forEach(e => {
-                        if(e.tipo == "Gallo"){
-                            console.log(e.tipo)
-                            if(e.gallo.gallos_imagenes.length > 0){
-                                template_img = `<img src="files/gallos/${e.gallo.id}/${e.gallo.gallos_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
+                        res.data.gallos_hijos.forEach(e => {
+                            if(e.gallina.gallinas_imagenes.length > 0){
+                                template_img = `<img src="files/gallos/${e.gallina.placa}/${e.gallina.gallinas_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
                             }else{
                                 template_img = `<img src="img/avatar.png" alt="" class="img-fluid rounded-start h-100">`;
                             }                          
@@ -784,9 +774,8 @@
                                     </div>
                                 </div>
                             `;
-                        }
-
-                    });
+                        });
+                    }
 
                     $('#pedigree-section').html(template)
                     $('#modal-pedigree').modal('show')
@@ -803,7 +792,7 @@
             })
 
             async function getGallos(){
-                const response = await fetch('api/gallos');
+                const response = await fetch('api/gallinas');
                 const data = await response.json();
                 let template = "", 
                     template_img = "",
@@ -814,7 +803,8 @@
                     btnLike = "";
                 moment.locale('es');
                 data.data.forEach(e => {
-                    if(e.gallos_imagenes.length > 0){
+                    console.log(e)
+                    if(e.gallinas_imagenes.length > 0){
                         // e.gallos_imagenes.forEach(f => {
                         //     if(e.gallos_imagenes.length == 1){
                         //         size = "w-100"
@@ -826,19 +816,19 @@
 
                         //     if(f.extention == 'png' || f.extention == 'jpg') {
                         //             template_img += `
-                        //             <img src="files/gallos/${e.id}/${f.imagen}" alt="" class="${size} float-left">
+                        //             <img src="files/gallos/${e.placa}/${f.imagen}" alt="" class="${size} float-left">
                         //             `;
                         //     }
 
                         //     if(f.extention == 'mp4') {
                         //         template_video += `
-                        //         <video src="files/gallos/${e.id}/${f.imagen}" alt="" class="${size}" controls/>
+                        //         <video src="files/gallos/${e.placa}/${f.imagen}" alt="" class="${size}" controls/>
                         //         `;
                         //     }
 
                         //     if(f.extention != 'mp4' && f.extention != 'png' && f.extention != 'jpg') {
                         //         template_file += `
-                        //         <a href="files/gallos/${e.id}/${f.imagen}" alt="" class="btn btn-outline-primary ${size}">
+                        //         <a href="files/gallos/${e.placa}/${f.imagen}" alt="" class="btn btn-outline-primary ${size}">
                         //             <span class="material-symbols-outlined">
                         //                 download
                         //             </span> 
@@ -847,12 +837,13 @@
                         //         `;
                         //     }
                         // });
-                        template_img = `<img src="files/gallos/${e.id}/${e.gallos_imagenes[0].imagen}" class="card-img-top" alt="..." height="300">`
+                        template_img = `<img src="files/gallinas/${e.placa}/${e.gallinas_imagenes[0].imagen}" class="card-img-top" alt="...">`
                     }else{
-                        template_img = `<img src="img/avatar.png" alt="" class="w-100" height="300">`;
+                        template_img = `<img src="img/avatar-2.png" alt="" class="w-100">`;
                     }
 
                     if(e.estatus != "Vendido"){
+                        console.log(e.estatus)
                         btn = `<a href="#" class="btn btn-dark my-2  btn-sm float-end sell" data-id="${e.id}" data-placa="${e.placa}" data-bs-toggle="tooltip" title="Vender gallo">
                                         <span class="material-symbols-outlined float-start">
                                             sell
@@ -892,17 +883,17 @@
                                             account_tree
                                         </span>
                                     </a>
-                                    <a href="report/show/${e.id}" class="btn text-muted my-2  btn-sm float-end" data-id="${e.id}" data-bs-toggle="tooltip" title="Imprimir ficha" target="_blank">
+                                    <a href="report/show/${e.id}" class="btn text-muted my-2  btn-sm float-end" data-id="${e.id}" data-bs-toggle="tooltip" title="Imprimir ficha">
                                         <span class="material-symbols-outlined float-start mx-2">
                                             picture_as_pdf
                                         </span>
                                     </a>
-                                    <a href="#" class="btn text-muted my-2  btn-sm float-end edit" data-id="${e.id}" data-bs-toggle="tooltip" title="Editar gallo">
+                                    <a href="#" class="btn text-muted my-2  btn-sm float-end edit" data-id="${e.id}" data-bs-toggle="tooltip" title="Editar gallina">
                                         <span class="material-symbols-outlined float-start mx-2">
                                             edit
                                         </span>
                                     </a>
-                                    <a href="#" class="btn text-danger my-2  btn-sm float-end delete" data-id="${e.id}" data-bs-toggle="tooltip" title="Eliminar gallo">
+                                    <a href="#" class="btn text-danger my-2  btn-sm float-end delete" data-id="${e.id}" data-bs-toggle="tooltip" title="Eliminar gallina">
                                         <span class="material-symbols-outlined float-start mx-2">
                                             delete_forever
                                         </span>

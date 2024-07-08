@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ReporteController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,10 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Auth::routes();
 
-Route::view('/home', 'admin.gallos.index')->name('home');
+Route::middleware('auth')->group(function () {
+    Route::view('/', 'admin.gallos.index')->name('home');
+    Route::view('/gallinas', 'admin.gallinas.index')->name('gallinas');
+    Route::view('/ventas', 'admin.ventas.index')->name('ventas');
+    Route::controller(ReporteController::class)->group(function(){
+        Route::get('/report/all', 'all')->name('report.all');
+        Route::get('/report/show/{id}', 'show')->name('report.show');
+    });
+});
+

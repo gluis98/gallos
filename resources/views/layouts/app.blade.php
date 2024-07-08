@@ -25,20 +25,23 @@
             <div class="container-fluid d-none d-sm-none d-md-block d-lg-block d-xs-block p-0">
                 <ul class="nav border-bottom bg-black">
                     <li class="nav-item">
-                      <a class="nav-link text-white active" aria-current="page" href="#">Gallos</a>
+                      <a class="nav-link text-white active" aria-current="page" href="{{ route('home')}}">Gallos</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link text-white" href="#">Gallinas</a>
+                      <a class="nav-link text-white" href="{{ route('gallinas')}}">Gallinas</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link text-white" href="#">Ventas</a>
+                      <a class="nav-link text-white" href="{{ route('ventas')}}">Ventas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#">
-                            <span class="material-symbols-outlined float-end">
-                                settings
-                            </span>
-                        </a>
+                        <form action="{{route('logout')}}" method="POST">
+                            @csrf
+                            <button class="nav-link text-white">
+                                <span class="material-symbols-outlined float-end">
+                                    logout
+                                </span>
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>
@@ -49,13 +52,17 @@
         </main>
 
         <footer class="container-fluid fixed-bottom bg-dark p-3 justify-content-start align-content-center border-top bg-black d-block d-sm-block d-md-none d-lg-none d-xs-none text-center">
-            <a href="#" class="btn text-white text-decoration-none">Gallos</a>
-            <a href="#" class="btn text-white text-decoration-none">Gallinas</a>
-            <a href="#" class="btn text-white text-decoration-none">Ventas</a>
-            <a href="#" class="btn text-white text-decoration-none">
-                <span class="material-symbols-outlined float-end">
-                    settings
-                </span></a>
+            <a href="{{route('home')}}" class="btn text-white text-decoration-none">Gallos</a>
+            <a href="{{route('gallinas')}}" class="btn text-white text-decoration-none">Gallinas</a>
+            <a href="{{route('ventas')}}" class="btn text-white text-decoration-none">Ventas</a>
+            <form action="{{route('logout')}}" method="POST" class="text-center w-100">
+                @csrf
+                <button class="nav-link text-white">
+                    <span class="material-symbols-outlined float-end mx-auto">
+                        logout
+                    </span>
+                </button>
+            </form>
         </footer>
         
     </body>
