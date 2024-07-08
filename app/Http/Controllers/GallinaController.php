@@ -46,7 +46,7 @@ class GallinaController extends Controller
         if($request->hasFile('imagen')){
             foreach($request->file('imagen') as $file){
                 $name = $file->getClientOriginalName();
-                $file->move(public_path('files/gallinas/' . $request->placa . '/'), $name);
+                $file->move(public_path('files/gallinas/' . $g->id . '/'), $name);
                 $gi = GallinasImagene::create([
                                 'gallina_id' => $g->id, 
                                 'imagen' => $file->getClientOriginalName()
@@ -109,7 +109,7 @@ class GallinaController extends Controller
         if($request->hasFile('imagen')){
             foreach($request->file('imagen') as $file){
                 $name = $file->getClientOriginalName();
-                $file->move(public_path('files/gallinas/' . $request->placa . '/'), $name);
+                $file->move(public_path('files/gallinas/' . $id . '/'), $name);
                 $gi = GallinasImagene::create([
                                 'gallina_id' => $id, 
                                 'imagen' => $file->getClientOriginalName()

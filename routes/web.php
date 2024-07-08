@@ -24,6 +24,8 @@ Route::middleware('auth')->group(function () {
     Route::controller(ReporteController::class)->group(function(){
         Route::get('/report/all', 'all')->name('report.all');
         Route::get('/report/show/{id}', 'show')->name('report.show');
+        Route::get('/report/gallinas/all', 'allGallinas')->name('report.all.gallinas');
+        Route::get('/report/show-gallina/{id}', 'showGallina')->name('report.show.gallina');
     });
 });
 

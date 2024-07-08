@@ -16,19 +16,19 @@
 </head>
 <body>
     @foreach ($g as $item)
-    <h2>Ficha de Gallo</h2>
+    <h2>Ficha de Gallina</h2>
     <hr>
     <div class="card w-75" >
-        @if(count($item->gallos_imagenes) > 0)
-            <img src="../files/gallos/{{$item->id}}/{{$item->gallos_imagenes->first()->imagen}}" class="w-100" alt="...">
+        @if(count($item->gallinas_imagenes) > 0)
+            <img src="../../files/gallinas/{{$item->id}}/{{$item->gallinas_imagenes->first()->imagen}}" class="w-100" alt="...">
         @else
-            <img src="../img/avatar.png" class="w-100" alt="...">
+            <img src="../../img/avatar.png" class="w-100" alt="...">
         @endif
         <div class="card-header border">
-            <h5 class="card-title">Placa del gallo: {{$item->placa}}</h5>
+            <h5 class="card-title">Placa de la gallina: {{$item->placa}}</h5>
         </div>
         <div class="card-body">
-            <p class="card-text fs-4">
+            <p class="card-text fs-5">
                 <span class="fw-bold">Marca de nacimiento: {{$item->marca_nacimiento}}</span><br>
                 <span class="fw-bold">Marca de federacion: {{$item->marca_federacion}}</span><br>
                 <span class="fw-bold">Fecha de nacimiento: {{$item->fecha_nacimiento}}</span><br>
@@ -36,10 +36,7 @@
                 <span class="fw-bold">Luna: {{$item->luna}}</span><br>
                 <span class="fw-bold">Cresta: {{$item->cresta}}</span>
                 <hr>
-                <span class="fw-bold fs-4">N° de Peleas: {{$item->peleas}}</span>
-                <hr>
-                <hr>
-                <span class="fw-bold fs-4">Observaciones: {{$item->observaciones}}</span>
+                <span class="fw-bold fs-5">Observaciones: {{$item->observaciones}}</span>
                 <hr>
             </p>
             <h4><b>Estatus</b>: {{$item->estatus}}</h4>

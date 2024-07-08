@@ -720,7 +720,7 @@
 
                         if(res.data.gallos_hijos[0].madre != null){
                             if(res.data.gallos_hijos[0].madre.gallinas_imagenes.length > 0){
-                                template_img = `<img src="files/gallinas/${res.data.gallos_hijos[0].madre.placa}/${res.data.gallos_hijos[0].madre.gallinas_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
+                                template_img = `<img src="files/gallinas/${res.data.gallos_hijos[0].madre.id}/${res.data.gallos_hijos[0].madre.gallinas_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
                             }else{
                                 template_img = `<img src="img/avatar-2.png" alt="" class="img-fluid rounded-start vh-100">`;
                             }                          
@@ -966,11 +966,7 @@
                     `;
                 });
                 $('#padre_id').html(template)
-                new TomSelect("[name=padre_id]",{
-                    persist: false,
-                    createOnBlur: true,
-                    create: true
-                });
+                
             }
 
             async function getGallinasPlacas(){
@@ -985,11 +981,7 @@
                     `;
                 });
                 $('#madre_id').html(template)
-                new TomSelect("[name=madre_id]",{
-                    persist: false,
-                    createOnBlur: true,
-                    create: true
-                });
+                
             }
 
         })

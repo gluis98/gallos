@@ -157,12 +157,12 @@
             </span>
             Nueva gallina
         </button>
-        {{-- <button class="btn btn-dark ">
+        <a href="{{ route('report.all.gallinas') }}" class="btn btn-dark " target="_blank">
             <span class="material-symbols-outlined float-start me-2">
                 picture_as_pdf
             </span>
             PDF
-        </button> --}}
+        </a>
         <form id="form-search" class="my-2">
             @csrf
             <div class="form-group">
@@ -707,7 +707,7 @@
 
                         if(res.data.gallos_hijos[0].madre != null){
                             if(res.data.gallos_hijos[0].madre.gallos_imagenes.length > 0){
-                                template_img = `<img src="files/gallinas/${res.data.gallos_hijos[0].madre.placa}/${res.data.gallos_hijos[0].madre.gallos_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
+                                template_img = `<img src="files/gallinas/${res.data.gallos_hijos[0].madre.id}/${res.data.gallos_hijos[0].madre.gallos_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
                             }else{
                                 template_img = `<img src="img/avatar-2.png" alt="" class="img-fluid rounded-start vh-100">`;
                             }                          
@@ -757,7 +757,7 @@
 
                         res.data.gallos_hijos.forEach(e => {
                             if(e.gallina.gallinas_imagenes.length > 0){
-                                template_img = `<img src="files/gallos/${e.gallina.placa}/${e.gallina.gallinas_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
+                                template_img = `<img src="files/gallos/${e.gallina.id}/${e.gallina.gallinas_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
                             }else{
                                 template_img = `<img src="img/avatar.png" alt="" class="img-fluid rounded-start h-100">`;
                             }                          
@@ -859,7 +859,7 @@
                         //         `;
                         //     }
                         // });
-                        template_img = `<img src="files/gallinas/${e.placa}/${e.gallinas_imagenes[0].imagen}" class="card-img-top" alt="...">`
+                        template_img = `<img src="files/gallinas/${e.id}/${e.gallinas_imagenes[0].imagen}" class="card-img-top" alt="...">`
                     }else{
                         template_img = `<img src="img/avatar-2.png" alt="" class="w-100">`;
                     }
@@ -904,12 +904,12 @@
                                         <span class="material-symbols-outlined float-start mx-2">
                                             account_tree
                                         </span>
-                                    </a>
-                                    <a href="report/show/${e.id}" class="btn text-muted my-2  btn-sm float-end" data-id="${e.id}" data-bs-toggle="tooltip" title="Imprimir ficha">
+                                    </a>-->
+                                    <a href="report/show-gallina/${e.id}" class="btn text-muted my-2  btn-sm float-end" data-id="${e.id}" data-bs-toggle="tooltip" title="Imprimir ficha" target="_blank">
                                         <span class="material-symbols-outlined float-start mx-2">
                                             picture_as_pdf
                                         </span>
-                                    </a>-->
+                                    </a>
                                     <a href="#" class="btn text-muted my-2  btn-sm float-end edit" data-id="${e.id}" data-bs-toggle="tooltip" title="Editar gallina">
                                         <span class="material-symbols-outlined float-start mx-2">
                                             edit
@@ -952,11 +952,11 @@
                     `;
                 });
                 $('#padre_id').html(template)
-                new TomSelect("[name=padre_id]",{
-                    persist: false,
-                    createOnBlur: true,
-                    create: true
-                });
+                // new TomSelect("[name=padre_id]",{
+                //     persist: false,
+                //     createOnBlur: true,
+                //     create: true
+                // });
             }
 
             async function getGallinasPlacas(){
@@ -972,11 +972,11 @@
                     `;
                 });
                 $('#madre_id').html(template)
-                new TomSelect("[name=madre_id]",{
-                    persist: false,
-                    createOnBlur: true,
-                    create: true
-                });
+                // new TomSelect("[name=madre_id]",{
+                //     persist: false,
+                //     createOnBlur: true,
+                //     create: true
+                // });
             }
 
         })
