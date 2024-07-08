@@ -178,8 +178,8 @@
 <script>
     $(document).ready(function(){
         getGallos();
-        getGallosPlacas()
-        getGallinasPlacas()
+        getGallosPlacas();
+        getGallinasPlacas();
 
         $(document).on('click', '.sell', function(){
             id = $(this).attr('data-id');
@@ -241,6 +241,8 @@
                         }
                         });
                         getGallos();
+                        getGallosPlacas();
+                        getGallinasPlacas();
                     $('#form-gallo').trigger('reset')
                     $('#modal-gallo').modal('hide')
                  });
@@ -492,12 +494,28 @@
                     method: 'GET',
                 }).then(response => response.json()
                 ).then(function(res){   
-                    
+                    console.log(res)
                     $('#modal-gallo').modal('show')
 
 
-                    $('input[name=padre_id]').val((res.data.gallos_hijos.length > 0) ? res.data.gallos_hijos[0].padre.placa : "");
-                    $('input[name=madre_id]').val((res.data.gallos_hijos.length > 0 && res.data.gallos_hijos[0].gallina != null) ? res.data.gallos_hijos[0].gallina.placa : "");
+                    $('#padre_id option').each(function() {
+                        if($(this).val() != ""){
+                            let padre = (res.data.gallos_hijos.length > 0 && res.data.gallos_hijos[0].padre != null) ? res.data.gallos_hijos[0].padre.id : "";
+                               if($(this).val() == padre){
+                                   $(this).prop('selected', true);
+                               }
+                        }
+                    });
+
+                    $('#madre_id option').each(function() {
+                        if($(this).val() != ""){
+                            let madre = (res.data.gallos_hijos.length > 0 && res.data.gallos_hijos[0].madre != null) ? res.data.gallos_hijos[0].madre.id : "";
+                            if($(this).val() == madre){
+                                $(this).prop('selected', true);
+                            }
+                        }
+                    });
+
                     $('input[name=placa]').val(res.data.placa);
                     $('input[name=marca_nacimiento]').val(res.data.marca_nacimiento);
                     $('input[name=marca_federacion]').val(res.data.marca_federacion);
@@ -562,6 +580,8 @@
                         timer: 1500
                     });
                     getGallos();
+                    getGallosPlacas();
+                    getGallinasPlacas();
                     $('#form-gallo-edit').trigger('reset')
                     $('#form-gallo-edit').attr('id', 'form-gallo');
                     $('#modal-gallo').modal('hide')
@@ -593,6 +613,8 @@
                             timer: 1500
                         });
                         getGallos();
+                        getGallosPlacas();
+                        getGallinasPlacas();
                     })
                     
                 }
@@ -921,11 +943,12 @@
             async function getGallosPlacas(){
                 const response = await fetch('api/gallos');
                 const data = await response.json();
-                let template = "";
+                let template = "<option value>--- SELECCIONE UNA PLACA ---</option>";
                 moment.locale('es');
+                console.log(data)
                 data.data.forEach(e => {
                     template += `
-                        <option value="${e.placa}">${e.placa}</option>
+                        <option value="${e.id}">${e.placa}</option>
                     `;
                 });
                 $('#padre_id').html(template)
@@ -934,12 +957,13 @@
             async function getGallinasPlacas(){
                 const response = await fetch('api/gallinas');
                 const data = await response.json();
-                let template = "";
+                let template = "<option value>--- SELECCIONE UNA PLACA ---</option>";
                 moment.locale('es');
                 console.log(data)
+                
                 data.data.forEach(e => {
                     template += `
-                        <option value="${e.placa}">${e.placa}</option>
+                        <option value="${e.id}">${e.placa}</option>
                     `;
                 });
                 $('#madre_id').html(template)

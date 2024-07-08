@@ -505,8 +505,29 @@
                     
                     $('#modal-gallo').modal('show')
 
+                    console.log(res)
+                    // $('input[name=gallo_id] option').each(e => {
+                    //     if($(this).val() == e.)
+                    // });
+                    $('#padre_id option').each(function() {
+                        if($(this).val() != ""){
+                            let padre = (res.data.gallos_hijos.length > 0 && res.data.gallos_hijos[0].padre != null) ? res.data.gallos_hijos[0].padre.id : "";
+                               if($(this).val() == padre){
+                                   $(this).prop('selected', true);
+                               }
+                        }
+                    });
 
-                    $('input[name=padre_id]').val((res.data.gallos_hijos.length > 0) ? res.data.gallos_hijos[0].padre.placa : "");
+                    $('#madre_id option').each(function() {
+                        if($(this).val() != ""){
+                            let madre = (res.data.gallos_hijos.length > 0 && res.data.gallos_hijos[0].madre != null) ? res.data.gallos_hijos[0].madre.id : "";
+                            if($(this).val() == madre){
+                                $(this).prop('selected', true);
+                            }
+                        }
+
+                    });
+
                     $('input[name=madre_id]').val((res.data.gallos_hijos.length > 0 && res.data.gallos_hijos[0].gallina != null) ? res.data.gallos_hijos[0].gallina.placa : "");
                     $('input[name=placa]').val(res.data.placa);
                     $('input[name=marca_nacimiento]').val(res.data.marca_nacimiento);
@@ -937,11 +958,11 @@
             async function getGallosPlacas(){
                 const response = await fetch('api/gallos');
                 const data = await response.json();
-                let template = "";
+                let template = "<option value>--- SELECCIONE UNA PLACA ---</option>";
                 moment.locale('es');
                 data.data.forEach(e => {
                     template += `
-                        <option value="${e.placa}">${e.placa}</option>
+                        <option value="${e.id}">${e.placa}</option>
                     `;
                 });
                 $('#padre_id').html(template)
@@ -950,12 +971,12 @@
             async function getGallinasPlacas(){
                 const response = await fetch('api/gallinas');
                 const data = await response.json();
-                let template = "";
+                let template = "<option value>--- SELECCIONE UNA PLACA ---</option>";
                 moment.locale('es');
                 console.log(data)
                 data.data.forEach(e => {
                     template += `
-                        <option value="${e.placa}">${e.placa}</option>
+                        <option value="${e.id}">${e.placa}</option>
                     `;
                 });
                 $('#madre_id').html(template)

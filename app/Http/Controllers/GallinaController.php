@@ -64,7 +64,7 @@ class GallinaController extends Controller
      */
     public function show(string $id)
     {
-        $g = Gallina::with('gallinas_imagenes', 'gallos_hijos', 'gallos_hijos.padre', 'gallos_hijos.padre.gallos_imagenes')->find($id);
+        $g = Gallina::with('gallinas_imagenes', 'gallos_hijos', 'gallos_hijos.padre', 'gallos_hijos.padre.gallos_imagenes', 'gallos_hijos.madre', )->find($id);
         return response()->json([
             'data' => $g
         ], 200);
@@ -77,23 +77,34 @@ class GallinaController extends Controller
     {
         $g = Gallina::find($id)->fill($request->all())->save();
 
-        // if($request->padre_id != null){
-        //     $padre = Gallo::where('placa', $request->padre_id)->first();
-        //     $gh = GallosHijo::create([ 
-        //         'padre_id' => $padre->id,
-        //         'hijo_id' => $id,
-        //         'tipo' => 'Gallina'
-        //     ])->latest('id')->first();
-        // }
+        if($request->padre_id != null){
+            $gh = GallosHijo::where('hijo_id', $id)->delete();
+            $gh = GallosHijo::create([ 
+                'padre_id' => $request->padre_id,
+                'hijo_id' => $id,
+                'tipo' => 'Gallina'
+            ])->latest('id')->first();
+        }
 
-        // if($request->madre_id != null){
-        //     $madre = Gallina::where('placa', $request->madre_id)->first();
-        //     if(!empty($madre)){
-        //         $ghm = GallosHijo::find($gh->id);
-        //         $ghm->madre_id = $madre->id;
-        //         $ghm->save();
-        //     }
-        // }
+        if($request->padre_id == null && $request->madre_id != null){
+            $madre = Gallina::find($request->madre_id);
+            $gh = GallosHijo::where('hijo_id', $id)->delete();
+            $gh = GallosHijo::create([ 
+                'madre_id' => $request->madre_id,
+                'hijo_id' => $id,
+                'tipo' => 'Gallina'
+            ])->latest('id')->first();
+        }
+
+        if($request->madre_id != null){
+            $madre = Gallina::find($request->madre_id);
+            if(!empty($madre)){
+                $ghm = GallosHijo::find($gh->id);
+                $ghm->madre_id = $madre->id;
+                $ghm->save();
+            }
+        }
+
 
         if($request->hasFile('imagen')){
             foreach($request->file('imagen') as $file){

@@ -90,8 +90,38 @@ class GalloController extends Controller
     public function update(Request $request, $id)
     {
         $g = Gallo::find($id);
-        $g->fill($request->all())->save();
+        if($request->padre_id != null){
+            $gh = GallosHijo::where('hijo_id', $id)->delete();
+            $gh = GallosHijo::create([ 
+                'padre_id' => $request->padre_id,
+                'hijo_id' => $id,
+                'tipo' => 'Gallo'
+            ])->latest('id')->first();
+        }
 
+        if($request->padre_id == null && $request->madre_id != null){
+            $madre = Gallina::find($request->madre_id);
+            $gh = GallosHijo::where('hijo_id', $id)->delete();
+            $gh = GallosHijo::create([ 
+                'madre_id' => $request->madre_id,
+                'hijo_id' => $id,
+                'tipo' => 'Gallo'
+            ])->latest('id')->first();
+        }
+
+        if($request->madre_id != null){
+            $madre = Gallina::find($request->madre_id);
+            if(!empty($madre)){
+                $ghm = GallosHijo::find($gh->id);
+                $ghm->madre_id = $madre->id;
+                $ghm->save();
+            }
+        }
+
+        
+
+        $g->fill($request->all())->save();
+        
         if($request->hasFile('imagen')){
             GallosImagene::where('gallo_id', $id)->delete();
             foreach($request->file('imagen') as $file){
