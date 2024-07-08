@@ -157,12 +157,12 @@
             </span>
             Nueva gallina
         </button>
-        <button class="btn btn-dark ">
+        {{-- <button class="btn btn-dark ">
             <span class="material-symbols-outlined float-start me-2">
                 picture_as_pdf
             </span>
             PDF
-        </button>
+        </button> --}}
         <form id="form-search" class="my-2">
             @csrf
             <div class="form-group">
@@ -420,7 +420,7 @@
                                     <hr>
                                     <div class="container-fluid">
                                         ${btn}
-                                        <a href="#" class="btn text-danger my-2  btn-sm float-end pedigree" data-id="${e.id}" data-bs-toggle="tooltip" title="Pedigree">
+                                       <!-- <a href="#" class="btn text-danger my-2  btn-sm float-end pedigree" data-id="${e.id}" data-bs-toggle="tooltip" title="Pedigree">
                                             <span class="material-symbols-outlined float-start mx-2">
                                                 account_tree
                                             </span>
@@ -429,7 +429,7 @@
                                             <span class="material-symbols-outlined float-start mx-2">
                                                 picture_as_pdf
                                             </span>
-                                        </a>
+                                        </a> -->
                                         <a href="#" class="btn text-muted my-2  btn-sm float-end edit" data-id="${e.id}" data-bs-toggle="tooltip" title="Editar gallo">
                                             <span class="material-symbols-outlined float-start mx-2">
                                                 edit
@@ -877,8 +877,8 @@
                                 </h5>
                                 <hr>
                                 <div class="container-fluid">
-                                    ${btn}
-                                    <a href="#" class="btn text-danger my-2  btn-sm float-end pedigree" data-id="${e.id}" data-bs-toggle="tooltip" title="Pedigree">
+                                    
+                                    <!-- <a href="#" class="btn text-danger my-2  btn-sm float-end pedigree" data-id="${e.id}" data-bs-toggle="tooltip" title="Pedigree">
                                         <span class="material-symbols-outlined float-start mx-2">
                                             account_tree
                                         </span>
@@ -887,7 +887,7 @@
                                         <span class="material-symbols-outlined float-start mx-2">
                                             picture_as_pdf
                                         </span>
-                                    </a>
+                                    </a>-->
                                     <a href="#" class="btn text-muted my-2  btn-sm float-end edit" data-id="${e.id}" data-bs-toggle="tooltip" title="Editar gallina">
                                         <span class="material-symbols-outlined float-start mx-2">
                                             edit

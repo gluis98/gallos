@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : LOCALHOST
+Source Server         : localhost
 Source Server Version : 50505
-Source Host           : 127.0.0.1:3306
+Source Host           : localhost:3306
 Source Database       : gallos
 
 Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2024-07-08 09:28:54
+Date: 2024-07-08 10:27:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -68,12 +68,11 @@ CREATE TABLE `gallinas` (
   `observaciones` text DEFAULT NULL,
   `estatus` varchar(255) DEFAULT 'Activa',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of gallinas
 -- ----------------------------
-INSERT INTO `gallinas` VALUES ('2', '5412', '1234', '1234', 'Marca', 'Fede', 'Rojo', 'Loca', '2024-07-06', 'Llena', null, 'Activa');
 
 -- ----------------------------
 -- Table structure for gallinas_imagenes
@@ -86,12 +85,11 @@ CREATE TABLE `gallinas_imagenes` (
   PRIMARY KEY (`id`),
   KEY `gallo_id` (`gallina_id`),
   CONSTRAINT `gallinas_imagenes_ibfk_1` FOREIGN KEY (`gallina_id`) REFERENCES `gallinas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of gallinas_imagenes
 -- ----------------------------
-INSERT INTO `gallinas_imagenes` VALUES ('1', '2', 'gallina.jpg');
 
 -- ----------------------------
 -- Table structure for gallos
@@ -110,18 +108,11 @@ CREATE TABLE `gallos` (
   `observaciones` text DEFAULT NULL,
   `estatus` varchar(255) DEFAULT 'Activo',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of gallos
 -- ----------------------------
-INSERT INTO `gallos` VALUES ('12', '5412', 'Marca', 'Marca', 'rojo', 'loca', '2024-07-04', 'Llena', '3', 'Ninguna', 'Activo');
-INSERT INTO `gallos` VALUES ('13', '5413', 'Marcass', 'Marca', 'rojo', 'loca', '2024-12-03', 'Llena', '3', null, 'Vendido');
-INSERT INTO `gallos` VALUES ('14', '5414', 'Marcaa', 'Marca', 'rojo', 'loca', '2024-12-31', 'Llena', '3', null, 'Activo');
-INSERT INTO `gallos` VALUES ('15', '5415', 'Marca', 'Marca', 'rojo', 'loca', '2024-12-31', 'Llena', '3', null, 'Activo');
-INSERT INTO `gallos` VALUES ('18', '5416', 'Marca', 'Fede', 'Rojo', 'Loca', '2024-07-05', 'Llena', '6', null, 'Activo');
-INSERT INTO `gallos` VALUES ('20', '9512', 'Marca', 'Fede', 'Rojo', 'Loca', '2024-07-06', 'Llena', '5', null, 'Activo');
-INSERT INTO `gallos` VALUES ('23', '5486', 'Marca', 'Fede', 'Rojo', 'Loca', '2024-07-06', 'Llena', '3', null, 'Activo');
 
 -- ----------------------------
 -- Table structure for gallos_hijos
@@ -139,18 +130,11 @@ CREATE TABLE `gallos_hijos` (
   KEY `madre_id` (`madre_id`),
   CONSTRAINT `gallos_hijos_ibfk_1` FOREIGN KEY (`padre_id`) REFERENCES `gallos` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `gallos_hijos_ibfk_3` FOREIGN KEY (`madre_id`) REFERENCES `gallinas` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of gallos_hijos
 -- ----------------------------
-INSERT INTO `gallos_hijos` VALUES ('6', '12', null, '13', 'Gallo');
-INSERT INTO `gallos_hijos` VALUES ('7', '12', null, '14', 'Gallo');
-INSERT INTO `gallos_hijos` VALUES ('8', '12', null, '15', 'Gallo');
-INSERT INTO `gallos_hijos` VALUES ('14', '12', null, '18', 'Gallo');
-INSERT INTO `gallos_hijos` VALUES ('20', '12', null, '2', 'Gallina');
-INSERT INTO `gallos_hijos` VALUES ('22', '15', '2', '20', 'Gallo');
-INSERT INTO `gallos_hijos` VALUES ('25', '12', '2', '23', 'Gallo');
 
 -- ----------------------------
 -- Table structure for gallos_imagenes
@@ -163,17 +147,11 @@ CREATE TABLE `gallos_imagenes` (
   PRIMARY KEY (`id`),
   KEY `gallo_id` (`gallo_id`),
   CONSTRAINT `gallos_imagenes_ibfk_1` FOREIGN KEY (`gallo_id`) REFERENCES `gallos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of gallos_imagenes
 -- ----------------------------
-INSERT INTO `gallos_imagenes` VALUES ('5', '12', 'complemento2.png');
-INSERT INTO `gallos_imagenes` VALUES ('7', '18', 'images.jpg');
-INSERT INTO `gallos_imagenes` VALUES ('9', '13', 'images (1).jpg');
-INSERT INTO `gallos_imagenes` VALUES ('10', '20', '24483fdee03369fa13b30d513373a301.jpg');
-INSERT INTO `gallos_imagenes` VALUES ('11', '15', 'eb3865cf3044826ed166c63db98ddd29.jpg');
-INSERT INTO `gallos_imagenes` VALUES ('14', '23', 'images (2).jpg');
 
 -- ----------------------------
 -- Table structure for migrations
@@ -253,7 +231,7 @@ CREATE TABLE `users` (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('1', 'Luis Gómez', 'admin@mail.com', null, '$2y$12$bhirqdMp66KFmIQ3xzsUVOltDVKmV7sce9/zH1KJ96yKgfU/jIKkm', null, '2024-07-04 02:41:25', '2024-07-04 02:41:25');
+INSERT INTO `users` VALUES ('1', 'Diego', 'admin@mail.com', null, '$2y$12$bhirqdMp66KFmIQ3xzsUVOltDVKmV7sce9/zH1KJ96yKgfU/jIKkm', null, '2024-07-04 02:41:25', '2024-07-04 02:41:25');
 
 -- ----------------------------
 -- Table structure for ventas
@@ -272,9 +250,8 @@ CREATE TABLE `ventas` (
   PRIMARY KEY (`id`),
   KEY `gallo_id` (`gallo_id`),
   CONSTRAINT `ventas_ibfk_2` FOREIGN KEY (`gallo_id`) REFERENCES `gallos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of ventas
 -- ----------------------------
-INSERT INTO `ventas` VALUES ('4', '13', 'Luis Fernando', '0426123456', '200', null, 'Finalizada', '2024-07-05 23:49:23', '2024-07-05 23:49:23');

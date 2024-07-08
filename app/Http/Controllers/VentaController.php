@@ -73,6 +73,7 @@ class VentaController extends Controller
         $g = Venta::with('gallo')
             ->where('nombre_cliente', 'like', '%' . $request->dato . '%')
             ->orWhere('created_at', 'like', '%' . $request->dato . '%')
+            ->orWhere('monto', 'like', '%' . $request->dato . '%')
             ->get();
         return response()->json([
             'data' => $g

@@ -123,7 +123,7 @@ class GallinaController extends Controller
     }
 
     public function search(Request $request){
-        $g = Gallina::with('gallinas_imagenes', 'gallos_hijos', 'gallos_hijos.madre', 'gallos_hijos.padre', 'ventas')
+        $g = Gallina::with('gallinas_imagenes', 'gallos_hijos', 'gallos_hijos.madre', 'gallos_hijos.padre')
             ->where('placa', 'like', '%' . $request->dato . '%')
             ->orWhere('marca_nacimiento', 'like', '%' . $request->dato . '%')
             ->get();

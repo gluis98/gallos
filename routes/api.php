@@ -23,6 +23,7 @@ Route::apiResource('gallos', \App\Http\Controllers\GalloController::class);
 Route::post('gallos/search', [\App\Http\Controllers\GalloController::class,'search']);
 
 Route::apiResource('gallinas', \App\Http\Controllers\GallinaController::class);
+Route::post('gallinas/search', [\App\Http\Controllers\GallinaController::class,'search']);
 Route::apiResource('clientes', \App\Http\Controllers\ClienteController::class);
 Route::apiResource('ventas', \App\Http\Controllers\VentaController::class);
 Route::post('ventas/search', [\App\Http\Controllers\VentaController::class,'search']);

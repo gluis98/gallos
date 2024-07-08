@@ -248,8 +248,11 @@
                         }
                         });
                         getGallos();
+                        getGallosPlacas()
+                        getGallinasPlacas()
                     $('#form-gallo').trigger('reset')
                     $('#modal-gallo').modal('hide')
+
                  });
             })
 
@@ -569,6 +572,8 @@
                         timer: 1500
                     });
                     getGallos();
+                    getGallosPlacas();
+                    getGallinasPlacas();
                     $('#form-gallo-edit').trigger('reset')
                     $('#form-gallo-edit').attr('id', 'form-gallo');
                     $('#modal-gallo').modal('hide')
@@ -600,6 +605,8 @@
                             timer: 1500
                         });
                         getGallos();
+                        getGallosPlacas();
+                        getGallinasPlacas();
                     })
                     
                 }
