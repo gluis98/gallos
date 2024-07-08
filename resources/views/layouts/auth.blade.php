@@ -9,15 +9,18 @@
     <body>
         <div class="container-fluid vh-100 bg-black bg-gradient">
             <div class="row justify-content-center align-items-center">
-                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xs-4 mx-auto">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xs-4 mx-auto">
                     <div class="card shadow-lg bg-transparent border-dark text-warning my-4    ">
                         <div class="card-header text-center">{{ __('Autenticación') }}</div>
         
-                        <div class="card-body">
-                            <div class="container-fluid text-center">
-                                <img src="{{ asset('img/logo.png') }}" alt="" width="200" height="200">
+                        <div class="card-body p-0">
+                            <div class="container-fluid text-center p-0">
+                                <img src="{{ asset('img/logo.jpeg') }}" alt="" class="w-100">
                             </div>
-                            @yield('content')
+                            <div class="container-fluid p-3">
+                                @yield('content')
+
+                            </div>
                         </div>
                     </div>
                 </div>

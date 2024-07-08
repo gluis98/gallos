@@ -15,15 +15,15 @@
     </head>
     <body class="bg-dark">
         <header>
-            <nav class="navbar navbar-expand-lg bg-black navbar-dark ">
+            <nav class="navbar navbar-expand-lg bg-black navbar-dark p-0">
                 <div class="container-fluid">
                     <a class="navbar-brand mx-auto" href="#">
-                    <img src="{{ asset('img/logo.png') }}" alt="" width="130" height="130">
+                    <img src="{{ asset('img/logo.jpeg') }}" alt="" width="200" height="300">
                     </a>
                 </div>
             </nav>
             <div class="container-fluid d-none d-sm-none d-md-block d-lg-block d-xs-block p-0">
-                <ul class="nav border-bottom bg-black">
+                <ul class="nav border-bottom bg-black p-0">
                     <li class="nav-item">
                       <a class="nav-link text-white active" aria-current="page" href="{{ route('home')}}">Gallos</a>
                     </li>
@@ -55,7 +55,12 @@
             <a href="{{route('home')}}" class="btn text-white text-decoration-none">Gallos</a>
             <a href="{{route('gallinas')}}" class="btn text-white text-decoration-none">Gallinas</a>
             <a href="{{route('ventas')}}" class="btn text-white text-decoration-none">Ventas</a>
-            <form action="{{route('logout')}}" method="POST" class="text-center w-100">
+            <a href="#" class="btn text-white text-decoration-none" onclick="$('#form-logout').submit()">
+                <span class="material-symbols-outlined float-end mx-auto">
+                    logout
+                </span>
+            </a>
+            <form action="{{route('logout')}}" method="POST" class="text-center w-100 d-none" id="form-logout">
                 @csrf
                 <button class="nav-link text-white">
                     <span class="material-symbols-outlined float-end mx-auto">
