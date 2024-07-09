@@ -952,6 +952,11 @@
                     `;
                 });
                 $('#padre_id').html(template)
+                new TomSelect("[name=padre_id]",{
+                    persist: false,
+                    createOnBlur: true,
+                    create: true
+                });
             }
 
             async function getGallinasPlacas(){
@@ -967,6 +972,11 @@
                     `;
                 });
                 $('#madre_id').html(template)
+                new TomSelect("[name=madre_id]",{
+                    persist: false,
+                    createOnBlur: true,
+                    create: true
+                });
             }
 
         })
