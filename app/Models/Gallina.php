@@ -62,5 +62,10 @@ class Gallina extends Model
 		return $this->hasMany(GallosHijo::class, 'hijo_id')->where('tipo', 'Gallina');
 	}
 
+	public function hijos()
+	{
+		return $this->hasMany(GallosHijo::class, 'madre_id');
+	}
+
 	
 }

@@ -64,7 +64,18 @@ class GallinaController extends Controller
      */
     public function show(string $id)
     {
-        $g = Gallina::with('gallinas_imagenes', 'gallos_hijos', 'gallos_hijos.padre', 'gallos_hijos.padre.gallos_imagenes', 'gallos_hijos.madre', )->find($id);
+        $g = Gallina::with('gallinas_imagenes', 
+                            'gallos_hijos',
+                            'gallos_hijos.gallo',
+                            'gallos_hijos.gallo.gallos_imagenes', 
+                            'gallos_hijos.padre', 
+                            'gallos_hijos.padre.gallos_imagenes', 
+                            'gallos_hijos.madre', 
+                            'gallos_hijos.madre.gallinas_imagenes', 
+                            'gallos_hijos.gallina', 
+                            'hijos',
+                            'hijos.gallo',
+                            'hijos.gallo.gallos_imagenes' )->find($id);
         return response()->json([
             'data' => $g
         ], 200);

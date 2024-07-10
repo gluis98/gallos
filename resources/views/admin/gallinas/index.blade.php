@@ -3,7 +3,7 @@
 @section('content')
     <!-- Modal gallo -->
 <div class="modal fade" id="modal-gallo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Registrar gallina</h1>
@@ -655,12 +655,12 @@
                     console.log(res)
                     let template = "", 
                         template_img = "";
-                    if(res.data.gallos_hijos.length > 0){
+                        if(res.data.gallos_hijos.length > 0){
                         if(res.data.gallos_hijos[0].padre != null){
                             if(res.data.gallos_hijos[0].padre.gallos_imagenes.length > 0){
-                                template_img = `<img src="files/gallos/${res.data.gallos_hijos[0].padre.placa}/${res.data.gallos_hijos[0].padre.gallos_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
+                                template_img = `<img src="files/gallos/${res.data.gallos_hijos[0].padre.id}/${res.data.gallos_hijos[0].padre.gallos_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
                             }else{
-                                template_img = `<img src="img/avatar.png" alt="" class="img-fluid rounded-start vh-100">`;
+                                template_img = `<img src="img/avatar.png" alt="" class="img-fluid rounded-start h-100">`;
                             }                          
                             template = `
                                     <div class="col-md-12">
@@ -706,12 +706,12 @@
                         }
 
                         if(res.data.gallos_hijos[0].madre != null){
-                            if(res.data.gallos_hijos[0].madre.gallos_imagenes.length > 0){
-                                template_img = `<img src="files/gallinas/${res.data.gallos_hijos[0].madre.id}/${res.data.gallos_hijos[0].madre.gallos_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
+                            if(res.data.gallos_hijos[0].madre.gallinas_imagenes.length > 0){
+                                template_img = `<img src="files/gallinas/${res.data.gallos_hijos[0].madre.id}/${res.data.gallos_hijos[0].madre.gallinas_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
                             }else{
                                 template_img = `<img src="img/avatar-2.png" alt="" class="img-fluid rounded-start vh-100">`;
                             }                          
-                            template = `
+                            template += `
                                     <div class="col-md-12">
                                         <div class="card mb-3" style="max-width: 540px;">
                                             <div class="row g-0">
@@ -753,11 +753,13 @@
                             
                             `;
                         }
+                    }
 
-
-                        res.data.gallos_hijos.forEach(e => {
-                            if(e.gallina.gallinas_imagenes.length > 0){
-                                template_img = `<img src="files/gallos/${e.gallina.id}/${e.gallina.gallinas_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
+                    res.data.hijos.forEach(e => {
+                        if(e.tipo == "Gallo"){
+                            console.log(e.tipo)
+                            if(e.gallo.gallos_imagenes.length > 0){
+                                template_img = `<img src="files/gallos/${e.gallo.id}/${e.gallo.gallos_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
                             }else{
                                 template_img = `<img src="img/avatar.png" alt="" class="img-fluid rounded-start h-100">`;
                             }                          
@@ -796,8 +798,9 @@
                                     </div>
                                 </div>
                             `;
-                        });
-                    }
+                        }
+
+                    });
 
                     $('#pedigree-section').html(template)
                     $('#modal-pedigree').modal('show')
@@ -899,12 +902,11 @@
                                 </h5>
                                 <hr>
                                 <div class="container-fluid">
-                                    
-                                    <!-- <a href="#" class="btn text-danger my-2  btn-sm float-end pedigree" data-id="${e.id}" data-bs-toggle="tooltip" title="Pedigree">
+                                    <a href="#" class="btn text-danger my-2  btn-sm float-end pedigree" data-id="${e.id}" data-bs-toggle="tooltip" title="Pedigree">
                                         <span class="material-symbols-outlined float-start mx-2">
                                             account_tree
                                         </span>
-                                    </a>-->
+                                    </a>
                                     <a href="report/show-gallina/${e.id}" class="btn text-muted my-2  btn-sm float-end" data-id="${e.id}" data-bs-toggle="tooltip" title="Imprimir ficha" target="_blank">
                                         <span class="material-symbols-outlined float-start mx-2">
                                             picture_as_pdf
