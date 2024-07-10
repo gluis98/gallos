@@ -30,28 +30,49 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="form-group mb-2">
                     <label for="placa">Placa *</label>
                     <input type="text" class="form-control" name="placa" id="placa" required>
                 </div>
+                
                 <div class="form-group mb-2">
                     <label for="marca_nacimiento">Marca de nacimiento *</label>
                     <input type="text" class="form-control" name="marca_nacimiento" id="marca_nacimiento" required>
                 </div>
 
-                <div class="form-group mb-2">
+                <button type="button" class="btn btn-link" id="btn-add-marca">+ Añadir marca de federación</button>
+                <div class="form-group mb-2" id="add-marca">
                     <label for="marca_federacion">Marca de federacion *</label>
-                    <input type="text" class="form-control" name="marca_federacion" id="marca_federacion" required>
+                    <input type="text" class="form-control" name="marca_federacion" id="marca_federacion">
+                    <button type="button" class="btn btn-link text-danger" id="btn-del-marca">- Eliminar marca de federación</button>
                 </div>
 
                 <div class="form-group mb-2">
                     <label for="color">Color *</label>
-                    <input type="text" class="form-control" name="color" id="color" required>
+                    <select class="form-control" name="color" id="color" required>
+                        <option value="Zambo">Zambo</option>
+                        <option value="Melao">Melao</option>
+                        <option value="Giro">Giro</option>
+                        <option value="Marañon">Marañon</option>
+                        <option value="Calica">Calica</option>
+                        <option value="Pinto">Pinto</option>
+                        <option value="Jabao">Jabao</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="color_alternativo">Color alternativo *</label>
+                    <input type="text" class="form-control" name="color_alternativo" id="color_alternativo" required>
                 </div>
 
                 <div class="form-group mb-2">
                     <label for="cresta">Cresta *</label>
-                    <input type="text" class="form-control" name="cresta" id="cresta" required>
+                    <select class="form-control" name="cresta" id="cresta" required>
+                        <option value="Lisa">Lisa</option>
+                        <option value="Roseta">Roseta</option>
+                        <option value="Pava">Pava</option>
+                    </select>
                 </div>
 
                 <div class="form-group mb-2">
@@ -61,7 +82,16 @@
 
                 <div class="form-group mb-2">
                     <label for="luna">Luna *</label>
-                    <input type="text" class="form-control" name="luna" id="luna" required>
+                    <select class="form-control" name="luna" id="luna" required>
+                        <option value="Nueva">Nueva</option>
+                        <option value="Creciente cóncava">Creciente</option>
+                        <option value="Cuarto creciente">Cuarto creciente</option>
+                        <option value="Creciente gibosa">Creciente gibosa</option>
+                        <option value="Llena">Llena</option>
+                        <option value="Menguante gibosa">Menguante</option>
+                        <option value="Cuarto menguante">Cuarto menguante</option>
+                        <option value="Menguante cóncava">Menguante cóncava</option>
+                    </select>
                 </div>
 
                 <div class="form-group mb-2">
@@ -184,9 +214,26 @@
 @section('scripts')
 <script>
     $(document).ready(function(){
+        $('#add-marca').hide();
+
         getGallos();
         getGallosPlacas()
         getGallinasPlacas()
+
+        $('#btn-add-marca').click(function(){
+            $('#add-marca').show()
+            $('[name=marca_federacion]').removeAttr('disabled');
+            $('#btn-del-marca').show()
+            $(this).hide()
+        });
+
+        $('#btn-del-marca').click(function(){
+            $('[name=marca_federacion]').val('');
+            $('[name=marca_federacion]').attr('disabled', 'disabled');
+            $('#add-marca').hide()
+            $(this).hide()
+            $('#btn-add-marca').show()
+        });
 
         $(document).on('click', '.sell', function(){
             id = $(this).attr('data-id');
@@ -525,15 +572,39 @@
                                 $(this).prop('selected', true);
                             }
                         }
-
                     });
+
+                    $('#cresta option').each(function() {
+                        if($(this).val() == res.data.cresta){
+                            $(this).prop('selected', true);
+                        }
+                    });
+
+                    $('#color option').each(function() {
+                        if($(this).val() == res.data.color){
+                            $(this).prop('selected', true);
+                        }
+                    });
+
+                    $('#luna option').each(function() {
+                        if($(this).val() == res.data.luna){
+                            $(this).prop('selected', true);
+                        }
+                    });
+
+                    if(res.data.marca_federacion != null){
+                        $('#add-marca').show()
+                        $('[name=marca_federacion]').removeAttr('disabled');
+                        $('#btn-del-marca').show()
+                        $('#btn-add-marca').hide()
+                        $('input[name=marca_federacion]').val(res.data.marca_federacion);
+                    }
+                    
 
                     $('input[name=madre_id]').val((res.data.gallos_hijos.length > 0 && res.data.gallos_hijos[0].gallina != null) ? res.data.gallos_hijos[0].gallina.placa : "");
                     $('input[name=placa]').val(res.data.placa);
                     $('input[name=marca_nacimiento]').val(res.data.marca_nacimiento);
-                    $('input[name=marca_federacion]').val(res.data.marca_federacion);
-                    $('input[name=color]').val(res.data.color);
-                    $('input[name=cresta]').val(res.data.cresta);
+                    $('input[name=color_alternativo]').val(res.data.color_alternativo);
                     $('input[name=fecha_nacimiento]').val(res.data.fecha_nacimiento);
                     $('input[name=luna]').val(res.data.luna);
                     $('input[name=peleas]').val(res.data.peleas);

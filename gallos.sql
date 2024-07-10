@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2024-07-08 10:27:43
+Date: 2024-07-10 16:43:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -62,17 +62,20 @@ CREATE TABLE `gallinas` (
   `marca_nacimiento` varchar(255) DEFAULT NULL,
   `marca_federacion` varchar(255) DEFAULT NULL,
   `color` varchar(255) DEFAULT NULL,
+  `color_alternativo` varchar(255) DEFAULT '',
   `cresta` varchar(255) DEFAULT NULL,
   `fecha_nacimiento` varchar(255) DEFAULT NULL,
   `luna` varchar(255) DEFAULT NULL,
   `observaciones` text DEFAULT NULL,
   `estatus` varchar(255) DEFAULT 'Activa',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of gallinas
 -- ----------------------------
+INSERT INTO `gallinas` VALUES ('4', '27', '4', '1234', 'Marca', 'Marca', 'Calica', 'Negro', 'Pava', '2024-07-08', 'Llena', null, 'Activa');
+INSERT INTO `gallinas` VALUES ('5', '27', '4', '5413', 'Marca', 'Marca', 'Zambo', 'Negro', 'Lisa', '2024-07-08', 'Llena', null, 'Activa');
 
 -- ----------------------------
 -- Table structure for gallinas_imagenes
@@ -85,11 +88,15 @@ CREATE TABLE `gallinas_imagenes` (
   PRIMARY KEY (`id`),
   KEY `gallo_id` (`gallina_id`),
   CONSTRAINT `gallinas_imagenes_ibfk_1` FOREIGN KEY (`gallina_id`) REFERENCES `gallinas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of gallinas_imagenes
 -- ----------------------------
+INSERT INTO `gallinas_imagenes` VALUES ('3', '4', 'images.jpeg');
+INSERT INTO `gallinas_imagenes` VALUES ('4', '5', 'images.jpeg');
+INSERT INTO `gallinas_imagenes` VALUES ('5', '4', 'images.jpeg');
+INSERT INTO `gallinas_imagenes` VALUES ('6', '5', 'images.jpeg');
 
 -- ----------------------------
 -- Table structure for gallos
@@ -101,6 +108,7 @@ CREATE TABLE `gallos` (
   `marca_nacimiento` varchar(255) DEFAULT NULL,
   `marca_federacion` varchar(255) DEFAULT NULL,
   `color` varchar(255) DEFAULT NULL,
+  `color_alternativo` varchar(255) DEFAULT NULL,
   `cresta` varchar(255) DEFAULT NULL,
   `fecha_nacimiento` varchar(255) DEFAULT NULL,
   `luna` varchar(255) DEFAULT NULL,
@@ -108,11 +116,13 @@ CREATE TABLE `gallos` (
   `observaciones` text DEFAULT NULL,
   `estatus` varchar(255) DEFAULT 'Activo',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of gallos
 -- ----------------------------
+INSERT INTO `gallos` VALUES ('27', '5412', 'Marca', 'Marca', 'Calica', 'Negro', 'Roseta', '2024-07-08', 'Menguante gibosa', '3', null, 'Activo');
+INSERT INTO `gallos` VALUES ('28', '5413', 'Marca', 'Marca', 'Zambo', 'Negro', 'Lisa', '2024-07-10', 'Nueva', '3', null, 'Activo');
 
 -- ----------------------------
 -- Table structure for gallos_hijos
@@ -130,11 +140,15 @@ CREATE TABLE `gallos_hijos` (
   KEY `madre_id` (`madre_id`),
   CONSTRAINT `gallos_hijos_ibfk_1` FOREIGN KEY (`padre_id`) REFERENCES `gallos` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `gallos_hijos_ibfk_3` FOREIGN KEY (`madre_id`) REFERENCES `gallinas` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of gallos_hijos
 -- ----------------------------
+INSERT INTO `gallos_hijos` VALUES ('51', '27', '4', '4', 'Gallina');
+INSERT INTO `gallos_hijos` VALUES ('52', '27', '4', '5', 'Gallina');
+INSERT INTO `gallos_hijos` VALUES ('54', null, '5', '27', 'Gallo');
+INSERT INTO `gallos_hijos` VALUES ('55', '27', '5', '28', 'Gallo');
 
 -- ----------------------------
 -- Table structure for gallos_imagenes
@@ -147,11 +161,13 @@ CREATE TABLE `gallos_imagenes` (
   PRIMARY KEY (`id`),
   KEY `gallo_id` (`gallo_id`),
   CONSTRAINT `gallos_imagenes_ibfk_1` FOREIGN KEY (`gallo_id`) REFERENCES `gallos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of gallos_imagenes
 -- ----------------------------
+INSERT INTO `gallos_imagenes` VALUES ('17', '27', 'complemento2.png');
+INSERT INTO `gallos_imagenes` VALUES ('19', '28', 'Gallo-combate.jpeg');
 
 -- ----------------------------
 -- Table structure for migrations

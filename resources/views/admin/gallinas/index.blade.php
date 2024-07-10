@@ -39,19 +39,36 @@
                     <input type="text" class="form-control" name="marca_nacimiento" id="marca_nacimiento" required>
                 </div>
 
-                <div class="form-group mb-2">
+                {{-- <div class="form-group mb-2">
                     <label for="marca_federacion">Marca de federacion *</label>
                     <input type="text" class="form-control" name="marca_federacion" id="marca_federacion" required>
-                </div>
+                </div> --}}
 
                 <div class="form-group mb-2">
                     <label for="color">Color *</label>
-                    <input type="text" class="form-control" name="color" id="color" required>
+                    <select class="form-control" name="color" id="color" required>
+                        <option value="Zambo">Zambo</option>
+                        <option value="Melao">Melao</option>
+                        <option value="Giro">Giro</option>
+                        <option value="Marañon">Marañon</option>
+                        <option value="Calica">Calica</option>
+                        <option value="Pinto">Pinto</option>
+                        <option value="Jabao">Jabao</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="color_alternativo">Color alternativo *</label>
+                    <input type="text" class="form-control" name="color_alternativo" id="color_alternativo" required>
                 </div>
 
                 <div class="form-group mb-2">
                     <label for="cresta">Cresta *</label>
-                    <input type="text" class="form-control" name="cresta" id="cresta" required>
+                    <select class="form-control" name="cresta" id="cresta" required>
+                        <option value="Lisa">Lisa</option>
+                        <option value="Roseta">Roseta</option>
+                        <option value="Pava">Pava</option>
+                    </select>
                 </div>
 
                 <div class="form-group mb-2">
@@ -61,8 +78,18 @@
 
                 <div class="form-group mb-2">
                     <label for="luna">Luna *</label>
-                    <input type="text" class="form-control" name="luna" id="luna" required>
+                    <select class="form-control" name="luna" id="luna" required>
+                        <option value="Nueva">Nueva</option>
+                        <option value="Creciente cóncava">Creciente</option>
+                        <option value="Cuarto creciente">Cuarto creciente</option>
+                        <option value="Creciente gibosa">Creciente gibosa</option>
+                        <option value="Llena">Llena</option>
+                        <option value="Menguante gibosa">Menguante</option>
+                        <option value="Cuarto menguante">Cuarto menguante</option>
+                        <option value="Menguante cóncava">Menguante cóncava</option>
+                    </select>
                 </div>
+
 
 
                 <div class="form-group mb-2">
@@ -516,10 +543,29 @@
                         }
                     });
 
+                    $('#cresta option').each(function() {
+                        if($(this).val() == res.data.cresta){
+                            $(this).prop('selected', true);
+                        }
+                    });
+
+                    $('#color option').each(function() {
+                        if($(this).val() == res.data.color){
+                            $(this).prop('selected', true);
+                        }
+                    });
+
+                    $('#luna option').each(function() {
+                        if($(this).val() == res.data.luna){
+                            $(this).prop('selected', true);
+                        }
+                    });
+
                     $('input[name=placa]').val(res.data.placa);
                     $('input[name=marca_nacimiento]').val(res.data.marca_nacimiento);
                     $('input[name=marca_federacion]').val(res.data.marca_federacion);
                     $('input[name=color]').val(res.data.color);
+                    $('input[name=color_alternativo]').val(res.data.color_alternativo);
                     $('input[name=cresta]').val(res.data.cresta);
                     $('input[name=fecha_nacimiento]').val(res.data.fecha_nacimiento);
                     $('input[name=luna]').val(res.data.luna);

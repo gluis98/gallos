@@ -40,6 +40,7 @@ class Gallo extends Model
 		'marca_nacimiento',
 		'marca_federacion',
 		'color',
+		'color_alternativo',
 		'cresta',
 		'fecha_nacimiento',
 		'luna',
