@@ -52,7 +52,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    @if($item->gallos_hijos[0]->padre != null)
+                                    @if($item->gallos_hijos->count() > 0 && $item->gallos_hijos[0]->padre != null)
                                     <table class="table">
                                         <tr>
                                             <td>
@@ -76,7 +76,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if($item->gallos_hijos[0]->madre != null)
+                                    @if($item->gallos_hijos->count() > 0 && $item->gallos_hijos[0]->madre != null)
                                     <table class="table">
                                         <tr>
                                             <td>
