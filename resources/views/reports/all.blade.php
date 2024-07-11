@@ -21,8 +21,8 @@
         <tbody>
             <tr>
                 <td>
-                    @if($g->gallos_imagenes != null)
-                    <img src="../../files/gallos/{{$g->id}}/{{$g->gallos_imagenes->first()->imagen}}" class="h-100 w-100" alt="..." class="border">
+                    @if($item->gallos_imagenes != null)
+                    <img src="../../files/gallos/{{$item->id}}/{{$item->gallos_imagenes->first()->imagen}}" class="h-100 w-100" alt="..." class="border">
                     @else
                     <img src="../../files/img/avatar.png" class="h-100 w-100" alt="..." class="border">
                     @endif
