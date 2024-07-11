@@ -21,7 +21,12 @@
         <tbody>
             <tr>
                 <td>
-                    <img src="../../files/gallinas/{{$item->id}}/{{$item->gallinas_imagenes->first()->imagen}}" class="h-100 w-100" alt="..." class="border">
+                    @if($g->gallos_imagenes != null)
+                    <img src="../../files/gallinas/{{$g->id}}/{{$g->gallos_imagenes->first()->imagen}}" class="h-100 w-100" alt="..." class="border">
+                    @else
+                    <img src="../../files/img/avatar-2.png" class="h-100 w-100" alt="..." class="border">
+                    @endif
+                    
                 </td>
                 <td>
                     <h5>Placa del gallo: {{$item->placa}}</h5>
