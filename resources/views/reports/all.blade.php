@@ -56,7 +56,7 @@
                                     <table class="table">
                                         <tr>
                                             <td>
-                                                @if($item->gallos_hijos[0]->padre->gallos_imagenes != null)
+                                                @if($item->gallos_hijos[0]->padre->gallos_imagenes->count() > 0)
                                                 <img src="../files/gallos/{{$item->gallos_hijos[0]->padre->id}}/{{$item->gallos_hijos[0]->padre->gallos_imagenes->first()->imagen}}" width="100%" height="180" alt="..." class="border">
                                                 @else
                                                 <img src="../img/avatar.png" width="100%" height="180" alt="..." class="border">
@@ -80,7 +80,7 @@
                                     <table class="table">
                                         <tr>
                                             <td>
-                                                @if($item->gallos_hijos[0]->madre->gallinas_imagenes != null)
+                                                @if($item->gallos_hijos[0]->madre->gallinas_imagenes->count() > 0)
                                                 <img src="../files/gallinas/{{$item->gallos_hijos[0]->madre->id}}/{{$item->gallos_hijos[0]->madre->gallinas_imagenes->first()->imagen}}" width="100%" height="180" alt="..." class="border">
                                                 @else
                                                 <img src="../img/avatar-2.png" width="100%" height="180" alt="..." class="border">
