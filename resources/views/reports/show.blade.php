@@ -20,7 +20,11 @@
         <tbody>
             <tr>
                 <td>
+                    @if($g->gallos_imagenes->count() > 0)
                     <img src="../../files/gallos/{{$g->id}}/{{$g->gallos_imagenes->first()->imagen}}" class="h-100 w-100" alt="..." class="border">
+                    @else
+                    <img src="../../img/avatar.png" class="h-100 w-100" alt="..." class="border">
+                    @endif
                 </td>
                 <td>
                     <h5>Placa del gallo: {{$g->placa}}</h5>
@@ -47,14 +51,14 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    @if($g->gallos_hijos[0]->padre != null)
+                                    @if($g->gallos_hijos->count() > 0 && $g->gallos_hijos[0]->padre != null)
                                     <table class="table">
                                         <tr>
                                             <td>
-                                                @if($g->gallos_hijos[0]->padre->gallos_imagenes != null)
+                                                @if($g->gallos_hijos[0]->padre->gallos_imagenes->count() > 0)
                                                 <img src="../../files/gallos/{{$g->gallos_hijos[0]->padre->id}}/{{$g->gallos_hijos[0]->padre->gallos_imagenes->first()->imagen}}" width="100%" height="180" alt="..." class="border">
                                                 @else
-                                                <img src="../../files/img/avatar.png" width="100%" height="180" alt="..." class="border">
+                                                <img src="../../img/avatar.png" width="100%" height="180" alt="..." class="border">
                                                 @endif
                                                 <h6>Placa del padre: {{$g->gallos_hijos[0]->padre->placa}}</h6>
                                                 <p class=" p-4 border" style="font-size: 12px">
@@ -71,14 +75,14 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if($g->gallos_hijos[0]->madre != null)
+                                    @if($g->gallos_hijos->count() > 0 && $g->gallos_hijos[0]->madre != null)
                                     <table class="table">
                                         <tr>
                                             <td>
-                                                @if($g->gallos_hijos[0]->madre->gallinas_imagenes != null)
+                                                @if($g->gallos_hijos[0]->madre->gallinas_imagenes->count() > 0)
                                                 <img src="../../files/gallinas/{{$g->gallos_hijos[0]->madre->id}}/{{$g->gallos_hijos[0]->madre->gallinas_imagenes->first()->imagen}}" width="100%" height="180" alt="..." class="border">
                                                 @else
-                                                <img src="../../files/img/avatar-2.png" width="100%" height="180" alt="..." class="border">
+                                                <img src="../../img/avatar-2.png" width="100%" height="180" alt="..." class="border">
                                                 @endif
                                                 <h6>Placa de la madre: {{$g->gallos_hijos[0]->madre->placa}}</h6>
                                                 <p class="p-4 border" style="font-size: 12px">

@@ -26,7 +26,7 @@ class GallinaController extends Controller
         $g = Gallina::create($request->all())->latest('id')->first();
 
         if($request->padre_id != null){
-            $padre = Gallo::where('placa', $request->padre_id)->first();
+            $padre = Gallo::find($request->padre_id);
             $gh = GallosHijo::create([ 
                 'padre_id' => $padre->id,
                 'hijo_id' => $g->id,
@@ -35,7 +35,7 @@ class GallinaController extends Controller
         }
 
         if($request->madre_id != null){
-            $madre = Gallina::where('placa', $request->madre_id)->first();
+            $madre = Gallina::find($request->madre_id);
             if(!empty($madre)){
                 $ghm = GallosHijo::find($gh->id);
                 $ghm->madre_id = $madre->id;
