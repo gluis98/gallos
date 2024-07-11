@@ -24,7 +24,7 @@
                     @if($item->gallinas_imagenes->count() > 0)
                     <img src="../../files/gallinas/{{$item->id}}/{{$item->gallinas_imagenes->first()->imagen}}" class="h-100 w-100" alt="..." class="border">
                     @else
-                    <img src="../../files/img/avatar-2.png" class="h-100 w-100" alt="..." class="border">
+                    <img src="../../img/avatar-2.png" class="h-100 w-100" alt="..." class="border">
                     @endif
                     
                 </td>
