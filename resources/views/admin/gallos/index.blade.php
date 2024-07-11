@@ -35,6 +35,11 @@
                     <label for="placa">Placa *</label>
                     <input type="text" class="form-control" name="placa" id="placa" required>
                 </div>
+
+                <div class="form-group mb-2">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" class="form-control" name="nombre" id="nombre">
+                </div>
                 
                 <div class="form-group mb-2">
                     <label for="marca_nacimiento">Marca de nacimiento *</label>
@@ -58,12 +63,13 @@
                         <option value="Calica">Calica</option>
                         <option value="Pinto">Pinto</option>
                         <option value="Jabao">Jabao</option>
+                        <option value="Camagüey">Camagüey</option>
                     </select>
                 </div>
 
                 <div class="form-group mb-2">
                     <label for="color_alternativo">Color alternativo *</label>
-                    <input type="text" class="form-control" name="color_alternativo" id="color_alternativo" required>
+                    <input type="text" class="form-control" name="color_alternativo" id="color_alternativo">
                 </div>
 
                 <div class="form-group mb-2">
@@ -603,6 +609,7 @@
 
                     $('input[name=madre_id]').val((res.data.gallos_hijos.length > 0 && res.data.gallos_hijos[0].gallina != null) ? res.data.gallos_hijos[0].gallina.placa : "");
                     $('input[name=placa]').val(res.data.placa);
+                    $('input[name=nombre]').val(res.data.nombre);
                     $('input[name=marca_nacimiento]').val(res.data.marca_nacimiento);
                     $('input[name=color_alternativo]').val(res.data.color_alternativo);
                     $('input[name=fecha_nacimiento]').val(res.data.fecha_nacimiento);

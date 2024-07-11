@@ -34,6 +34,12 @@
                     <label for="placa">Placa *</label>
                     <input type="text" class="form-control" name="placa" id="placa" required>
                 </div>
+
+                <div class="form-group mb-2">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" class="form-control" name="nombre" id="nombre">
+                </div>
+
                 <div class="form-group mb-2">
                     <label for="marca_nacimiento">Marca de nacimiento *</label>
                     <input type="text" class="form-control" name="marca_nacimiento" id="marca_nacimiento" required>
@@ -54,12 +60,13 @@
                         <option value="Calica">Calica</option>
                         <option value="Pinto">Pinto</option>
                         <option value="Jabao">Jabao</option>
+                        <option value="Camagüey">Camagüey</option>
                     </select>
                 </div>
 
                 <div class="form-group mb-2">
                     <label for="color_alternativo">Color alternativo *</label>
-                    <input type="text" class="form-control" name="color_alternativo" id="color_alternativo" required>
+                    <input type="text" class="form-control" name="color_alternativo" id="color_alternativo">
                 </div>
 
                 <div class="form-group mb-2">
@@ -408,9 +415,9 @@
                             //         `;
                             //     }
                             // });
-                            template_img = `<img src="files/gallinas/${e.placa}/${e.gallinas_imagenes[0].imagen}" class="card-img-top" alt="...">`
+                            template_img = `<img src="files/gallinas/${e.id}/${e.gallinas_imagenes[0].imagen}" class="card-img-top" alt="...">`
                         }else{
-                            template_img = `<img src="img/avatar.png" alt="" class="w-100">`;
+                            template_img = `<img src="img/avatar-2.png" alt="" class="w-100">`;
                         }
 
                         if(e.estatus != "Vendido"){
@@ -562,6 +569,7 @@
                     });
 
                     $('input[name=placa]').val(res.data.placa);
+                    $('input[name=nombre]').val(res.data.nombre);
                     $('input[name=marca_nacimiento]').val(res.data.marca_nacimiento);
                     $('input[name=marca_federacion]').val(res.data.marca_federacion);
                     $('input[name=color]').val(res.data.color);

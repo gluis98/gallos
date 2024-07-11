@@ -37,6 +37,7 @@ class Gallo extends Model
 
 	protected $fillable = [
 		'placa',
+		'nombre',
 		'marca_nacimiento',
 		'marca_federacion',
 		'color',

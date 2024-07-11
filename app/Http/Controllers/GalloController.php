@@ -155,6 +155,9 @@ class GalloController extends Controller
         $g = Gallo::with('gallos_imagenes', 'gallos_hijos', 'gallos_hijos.padre', 'ventas')
             ->where('placa', 'like', '%' . $request->dato . '%')
             ->orWhere('marca_nacimiento', 'like', '%' . $request->dato . '%')
+            ->orWhere('nombre', 'like', '%' . $request->dato . '%')
+            ->orWhere('color', 'like', '%' . $request->dato . '%')
+            ->orWhere('color_alternativo', 'like', '%' . $request->dato . '%')
             ->get();
         return response()->json([
             'data' => $g

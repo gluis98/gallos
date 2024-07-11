@@ -148,6 +148,9 @@ class GallinaController extends Controller
         $g = Gallina::with('gallinas_imagenes', 'gallos_hijos', 'gallos_hijos.madre', 'gallos_hijos.padre')
             ->where('placa', 'like', '%' . $request->dato . '%')
             ->orWhere('marca_nacimiento', 'like', '%' . $request->dato . '%')
+            ->orWhere('nombre', 'like', '%' . $request->dato . '%')
+            ->orWhere('color', 'like', '%' . $request->dato . '%')
+            ->orWhere('color_alternativo', 'like', '%' . $request->dato . '%')
             ->get();
         return response()->json([
             'data' => $g

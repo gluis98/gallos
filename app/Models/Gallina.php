@@ -43,6 +43,7 @@ class Gallina extends Model
 		'padre_id',
 		'madre_id',
 		'placa',
+		'nombre',
 		'marca_nacimiento',
 		'marca_federacion',
 		'color',
