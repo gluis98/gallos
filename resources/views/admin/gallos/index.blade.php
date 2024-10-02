@@ -40,7 +40,7 @@
                     <label for="nombre">Nombre</label>
                     <input type="text" class="form-control" name="nombre" id="nombre">
                 </div>
-                
+
                 <div class="form-group mb-2">
                     <label for="marca_nacimiento">Marca de nacimiento *</label>
                     <input type="text" class="form-control" name="marca_nacimiento" id="marca_nacimiento" required>
@@ -119,7 +119,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-danger" id="btn-save">Guardar</button>
             </div>
-        </form>  
+        </form>
       </div>
     </div>
   </div>
@@ -399,7 +399,7 @@
                     }
                 }).then(response => response.json())
                 .then(data => {
-                    let template = "", 
+                    let template = "",
                         template_img = "",
                         template_video = "",
                         template_file = "",
@@ -436,8 +436,8 @@
                             //         <a href="files/gallos/${e.id}/${f.imagen}" alt="" class="btn btn-outline-primary ${size}">
                             //             <span class="material-symbols-outlined">
                             //                 download
-                            //             </span> 
-                            //             Descargar ${f.route}                                    
+                            //             </span>
+                            //             Descargar ${f.route}
                             //         </a>
                             //         `;
                             //     }
@@ -452,32 +452,32 @@
                             btn = `<a href="#" class="btn btn-dark my-2  btn-sm float-end sell" data-id="${e.id}" data-placa="${e.placa}" data-bs-toggle="tooltip" title="Vender gallo">
                                             <span class="material-symbols-outlined float-start">
                                                 sell
-                                            </span> 
+                                            </span>
                                         </a>`;
                         }
-                    
+
 
                         template += `
                         <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-4">
                             <div class="card mt-4 mx-auto shadow">
                                 ${template_img}
-                                <div class="card-body border-top">                                
+                                <div class="card-body border-top">
                                     <h5 class="card-title text-muted">
                                         <span class="material-symbols-outlined float-start mx-2">
                                             loyalty
-                                        </span> 
+                                        </span>
                                         Placa: <i class="float-end text-black">${e.placa}</i>
                                     </h5>
                                     <h5 class="card-title text-muted">
                                         <span class="material-symbols-outlined float-start mx-2">
                                             barefoot
-                                        </span> 
+                                        </span>
                                         Marca: <i class="float-end text-black">${e.marca_nacimiento}</i>
                                     </h5>
                                     <h5 class="card-title text-muted">
                                         <span class="material-symbols-outlined float-start mx-2">
                                             favorite
-                                        </span> 
+                                        </span>
                                         Estado: <i class="float-end text-black">${e.estatus}</i>
                                     </h5>
                                     <hr>
@@ -521,7 +521,7 @@
                             return new bootstrap.Tooltip(tooltipTriggerEl)
                         })
                     })
-                    
+
                  });
             })
 
@@ -554,8 +554,8 @@
                 fetch('api/gallos/'+id, {
                     method: 'GET',
                 }).then(response => response.json()
-                ).then(function(res){   
-                    
+                ).then(function(res){
+
                     $('#modal-gallo').modal('show')
 
                     console.log(res)
@@ -605,7 +605,7 @@
                         $('#btn-add-marca').hide()
                         $('input[name=marca_federacion]').val(res.data.marca_federacion);
                     }
-                    
+
 
                     $('input[name=madre_id]').val((res.data.gallos_hijos.length > 0 && res.data.gallos_hijos[0].gallina != null) ? res.data.gallos_hijos[0].gallina.placa : "");
                     $('input[name=placa]').val(res.data.placa);
@@ -616,10 +616,10 @@
                     $('input[name=luna]').val(res.data.luna);
                     $('input[name=peleas]').val(res.data.peleas);
                     $('[name=observaciones]').val(res.data.observaciones);
-                    
+
                     $('[name=estatus]').prepend(`<option selected>${res.data.estatus}</option>`);
                     $('#form-gallo').attr('id', 'form-gallo-edit');
-                
+
 
                 }).catch(function(err){
                     Swal.fire({
@@ -707,7 +707,7 @@
                         getGallosPlacas();
                         getGallinasPlacas();
                     })
-                    
+
                 }
                 });
             })
@@ -742,9 +742,9 @@
                 fetch('api/gallos/'+id, {
                     method: 'GET',
                 }).then(response => response.json()
-                ).then(function(res){   
+                ).then(function(res){
                     console.log(res)
-                    let template = "", 
+                    let template = "",
                         template_img = "";
                     if(res.data.gallos_hijos.length > 0){
                         if(res.data.gallos_hijos[0].padre != null){
@@ -752,7 +752,7 @@
                                 template_img = `<img src="files/gallos/${res.data.gallos_hijos[0].padre.id}/${res.data.gallos_hijos[0].padre.gallos_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
                             }else{
                                 template_img = `<img src="img/avatar.png" alt="" class="img-fluid rounded-start h-100">`;
-                            }                          
+                            }
                             template = `
                                     <div class="col-md-12">
                                         <div class="card mb-3" style="max-width: 540px;">
@@ -765,26 +765,26 @@
                                                         <h5 class="alert bg-black text-white card-title">
                                                             <span class="material-symbols-outlined float-start mx-2 text-warning">
                                                                 star_half
-                                                            </span> 
+                                                            </span>
                                                             Padre
                                                         </h5>
                                                         <hr>
                                                         <h5 class="card-title text-muted">
                                                             <span class="material-symbols-outlined float-start mx-2">
                                                                 loyalty
-                                                            </span> 
+                                                            </span>
                                                             Placa: <i class="float-end text-black">${res.data.gallos_hijos[0].padre.placa}</i>
                                                         </h5>
                                                         <h5 class="card-title text-muted">
                                                             <span class="material-symbols-outlined float-start mx-2">
                                                                 barefoot
-                                                            </span> 
+                                                            </span>
                                                             Marca: <i class="float-end text-black">${res.data.gallos_hijos[0].padre.marca_nacimiento}</i>
                                                         </h5>
                                                         <h5 class="card-title text-muted">
                                                             <span class="material-symbols-outlined float-start mx-2">
                                                                 favorite
-                                                            </span> 
+                                                            </span>
                                                             Estado: <i class="float-end text-black">${res.data.gallos_hijos[0].padre.estatus}</i>
                                                         </h5>
                                                     </div>
@@ -792,7 +792,7 @@
                                             </div>
                                         </div>
                                     </div>
-                            
+
                             `;
                         }
 
@@ -801,7 +801,7 @@
                                 template_img = `<img src="files/gallinas/${res.data.gallos_hijos[0].madre.id}/${res.data.gallos_hijos[0].madre.gallinas_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
                             }else{
                                 template_img = `<img src="img/avatar-2.png" alt="" class="img-fluid rounded-start vh-100">`;
-                            }                          
+                            }
                             template += `
                                     <div class="col-md-12">
                                         <div class="card mb-3" style="max-width: 540px;">
@@ -814,26 +814,26 @@
                                                         <h5 class="alert bg-black text-white card-title">
                                                             <span class="material-symbols-outlined float-start mx-2 text-warning">
                                                                 star
-                                                            </span> 
+                                                            </span>
                                                             Madre
                                                         </h5>
                                                         <hr>
                                                         <h5 class="card-title text-muted">
                                                             <span class="material-symbols-outlined float-start mx-2">
                                                                 loyalty
-                                                            </span> 
+                                                            </span>
                                                             Placa: <i class="float-end text-black">${res.data.gallos_hijos[0].madre.placa}</i>
                                                         </h5>
                                                         <h5 class="card-title text-muted">
                                                             <span class="material-symbols-outlined float-start mx-2">
                                                                 barefoot
-                                                            </span> 
+                                                            </span>
                                                             Marca: <i class="float-end text-black">${res.data.gallos_hijos[0].madre.marca_nacimiento}</i>
                                                         </h5>
                                                         <h5 class="card-title text-muted">
                                                             <span class="material-symbols-outlined float-start mx-2">
                                                                 favorite
-                                                            </span> 
+                                                            </span>
                                                             Estado: <i class="float-end text-black">${res.data.gallos_hijos[0].madre.estatus}</i>
                                                         </h5>
                                                     </div>
@@ -841,7 +841,7 @@
                                             </div>
                                         </div>
                                     </div>
-                            
+
                             `;
                         }
 
@@ -854,7 +854,7 @@
                                 template_img = `<img src="files/gallos/${e.gallo.id}/${e.gallo.gallos_imagenes[0].imagen}" class="img-fluid rounded-start h-100" alt="...">`
                             }else{
                                 template_img = `<img src="img/avatar.png" alt="" class="img-fluid rounded-start h-100">`;
-                            }                          
+                            }
                             template += `
                                 <div class="col-md-12">
                                     <div class="card mb-3" style="max-width: 540px;">
@@ -869,19 +869,19 @@
                                                     <h5 class="card-title text-muted">
                                                         <span class="material-symbols-outlined float-start mx-2">
                                                             loyalty
-                                                        </span> 
+                                                        </span>
                                                         Placa: <i class="float-end text-black">${e.gallo.placa}</i>
                                                     </h5>
                                                     <h5 class="card-title text-muted">
                                                         <span class="material-symbols-outlined float-start mx-2">
                                                             barefoot
-                                                        </span> 
+                                                        </span>
                                                         Marca: <i class="float-end text-black">${e.gallo.marca_nacimiento}</i>
                                                     </h5>
                                                     <h5 class="card-title text-muted">
                                                         <span class="material-symbols-outlined float-start mx-2">
                                                             favorite
-                                                        </span> 
+                                                        </span>
                                                         Estado: <i class="float-end text-black">${e.gallo.estatus}</i>
                                                     </h5>
                                                 </div>
@@ -897,7 +897,7 @@
                     $('#pedigree-section').html(template)
                     $('#modal-pedigree').modal('show')
 
-                
+
 
                 }).catch(function(err){
                     Swal.fire({
@@ -911,7 +911,7 @@
             async function getGallos(){
                 const response = await fetch('api/gallos');
                 const data = await response.json();
-                let template = "", 
+                let template = "",
                     template_img = "",
                     template_video = "",
                     template_file = "",
@@ -947,8 +947,8 @@
                         //         <a href="files/gallos/${e.id}/${f.imagen}" alt="" class="btn btn-outline-primary ${size}">
                         //             <span class="material-symbols-outlined">
                         //                 download
-                        //             </span> 
-                        //             Descargar ${f.route}                                    
+                        //             </span>
+                        //             Descargar ${f.route}
                         //         </a>
                         //         `;
                         //     }
@@ -962,32 +962,32 @@
                         btn = `<a href="#" class="btn btn-dark my-2  btn-sm float-end sell" data-id="${e.id}" data-placa="${e.placa}" data-bs-toggle="tooltip" title="Vender gallo">
                                         <span class="material-symbols-outlined float-start">
                                             sell
-                                        </span> 
+                                        </span>
                                     </a>`;
                     }
-                
+
 
                     template += `
                     <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-4">
                         <div class="card mt-4 mx-auto shadow">
                             ${template_img}
-                            <div class="card-body border-top">                                
+                            <div class="card-body border-top">
                                 <h5 class="card-title text-muted">
                                     <span class="material-symbols-outlined float-start mx-2">
                                          loyalty
-                                    </span> 
+                                    </span>
                                     Placa: <i class="float-end text-black">${e.placa}</i>
                                 </h5>
                                 <h5 class="card-title text-muted">
                                     <span class="material-symbols-outlined float-start mx-2">
                                          barefoot
-                                    </span> 
+                                    </span>
                                     Marca: <i class="float-end text-black">${e.marca_nacimiento}</i>
                                 </h5>
                                 <h5 class="card-title text-muted">
                                     <span class="material-symbols-outlined float-start mx-2">
                                          favorite
-                                    </span> 
+                                    </span>
                                     Estado: <i class="float-end text-black">${e.estatus}</i>
                                 </h5>
                                 <hr>
@@ -1044,7 +1044,7 @@
                     `;
                 });
                 $('#padre_id').html(template)
-                
+
             }
 
             async function getGallinasPlacas(){
@@ -1059,7 +1059,7 @@
                     `;
                 });
                 $('#madre_id').html(template)
-                
+
             }
 
         })

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Venta
- * 
+ *
  * @property int $id
  * @property int|null $gallo_id
  * @property int|null $cliente_id
@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $estatus
  * @property Carbon|null $created_at
  * @property Carbon|null $update_at
- * 
+ *
  * @property Cliente|null $cliente
  * @property Gallo|null $gallo
  *
@@ -34,7 +34,7 @@ class Venta extends Model
 	protected $casts = [
 		'gallo_id' => 'int',
 		'monto' => 'float',
-		'update_at' => 'datetime'
+		'updated_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -44,7 +44,7 @@ class Venta extends Model
 		'monto',
 		'observaciones',
 		'estatus',
-		'update_at'
+		'updated_at'
 	];
 
 	// public function cliente()

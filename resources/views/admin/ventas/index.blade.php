@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    
+
     <section class="container-fluid bg-white p-4">
         <h2>Ventas realizadas</h2>
         <hr>
@@ -24,7 +24,7 @@
             </div>
         </form>
         <h4>Total Ingresos: $ <span id="total-ventas" class="fw-bold"></span></h4>
-        <div class="responsive-table">
+        <div class="table-responsive">
             <table class="table table-bordered" id="table-ventas">
                 <thead>
                     <tr>
@@ -87,7 +87,7 @@
                     }
                 }).then(response => response.json())
                 .then(data => {
-                    let template = "", 
+                    let template = "",
                         template_img = "",
                         template_video = "",
                         template_file = "",
@@ -116,7 +116,7 @@
                                 </tr>
                             `;
                             total_ventas += e.monto;
-                            
+
                         });
                         $('#total-ventas').html(total_ventas)
                         $('#table-ventas > tbody').html(template)
@@ -127,7 +127,7 @@
                                 return new bootstrap.Tooltip(tooltipTriggerEl)
                             })
                         })
-                    
+
                  });
             })
 
@@ -160,8 +160,8 @@
                 fetch('api/gallos/'+id, {
                     method: 'GET',
                 }).then(response => response.json()
-                ).then(function(res){   
-                    
+                ).then(function(res){
+
                     $('#modal-gallo').modal('show')
 
 
@@ -176,10 +176,10 @@
                     $('input[name=luna]').val(res.data.luna);
                     $('input[name=peleas]').val(res.data.peleas);
                     $('[name=observaciones]').val(res.data.observaciones);
-                    
+
                     $('[name=estatus]').prepend(`<option selected>${res.data.estatus}</option>`);
                     $('#form-gallo').attr('id', 'form-gallo-edit');
-                
+
 
                 }).catch(function(err){
                     Swal.fire({
@@ -263,16 +263,16 @@
                         });
                         getVentas();
                     })
-                    
+
                 }
                 });
             })
 
-           
+
             async function getVentas(){
                 const response = await fetch('api/ventas');
                 const data = await response.json();
-                let template = "", 
+                let template = "",
                     template_img = "",
                     template_video = "",
                     template_file = "",
@@ -301,7 +301,7 @@
                         </tr>
                     `;
                     total_ventas += e.monto;
-                    
+
                 });
                 $('#total-ventas').html(total_ventas)
                 $('#table-ventas > tbody').html(template)
