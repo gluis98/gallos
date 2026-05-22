@@ -1,0 +1,51 @@
+{
+  "name": "Galpon — Gestión de Criadero Avícola",
+  "short_name": "Galpon",
+  "description": "Software profesional para gestionar tu criadero de gallos y gallinas. Inventario, pedigree, ventas, compras y reportes para criadores en Venezuela y Latinoamérica.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1a2648",
+  "theme_color": "#1a2648",
+  "lang": "es",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/img/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Ver Gallos",
+      "short_name": "Gallos",
+      "description": "Gestiona tus gallos",
+      "url": "/gallos",
+      "icons": [{ "src": "/img/logo-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Ver Inventario",
+      "short_name": "Inventario",
+      "description": "Gestiona tu inventario",
+      "url": "/inventario",
+      "icons": [{ "src": "/img/logo-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Nueva Venta",
+      "short_name": "Ventas",
+      "description": "Registra una venta",
+      "url": "/ventas",
+      "icons": [{ "src": "/img/logo-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

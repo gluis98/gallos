@@ -2,63 +2,64 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-  /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $clientes = User::all();
+        $clientes = User::query()->get();
+
         return response()->json([
-            'data' => $clientes
+            'data' => $clientes,
         ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $clientes = User::create($request->all());
+        $data = $request->validated();
+        $data['password'] = Hash::make($data['password']);
+        $clientes = User::query()->create($data);
+
         return response()->json([
-            'msj' => "Registro registrado exitosamente"
+            'msj' => 'Registro registrado exitosamente',
+            'data' => $clientes,
         ], 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        $clientes = User::find($id);
+        $clientes = User::query()->find($id);
+
         return response()->json([
-            'data' => $clientes
+            'data' => $clientes,
         ], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
-        $clientes = User::find($id)->fill($request->all())->save();
+        $data = $request->validated();
+        if (! empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
+        }
+        User::query()->findOrFail($id)->fill($data)->save();
+
         return response()->json([
-            'msj' => "Registro actualizado exitosamente"
+            'msj' => 'Registro actualizado exitosamente',
         ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $clientes = User::find($id)->delete();
+        User::query()->findOrFail($id)->delete();
+
         return response()->json([
-            'msj' => "Registro eliminado exitosamente"
+            'msj' => 'Registro eliminado exitosamente',
         ], 200);
     }
 }

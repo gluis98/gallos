@@ -4,39 +4,65 @@ namespace App\Http\Controllers;
 
 use App\Models\Gallo;
 use App\Models\Gallina;
-use Illuminate\Http\Request;
+use App\Services\ReportPdfService;
 
 class ReporteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(
+        protected ReportPdfService $reportPdf
+    ) {}
+
     public function all()
     {
-        $g = Gallo::all();
-        return view('reports.all', compact('g'));
+        $g = Gallo::query()
+            ->with([
+                'gallos_imagenes',
+                'gallos_hijos.padre.gallos_imagenes',
+                'gallos_hijos.madre.gallinas_imagenes',
+            ])
+            ->orderBy('placa')
+            ->get();
+
+        return $this->reportPdf->streamGallosCatalog($g);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function show($id)
     {
-        $g = Gallo::find($id);
-        return view('reports.show', compact('g'));
+        $g = Gallo::query()
+            ->with([
+                'gallos_imagenes',
+                'gallos_hijos.padre.gallos_imagenes',
+                'gallos_hijos.madre.gallinas_imagenes',
+            ])
+            ->findOrFail($id);
+
+        return $this->reportPdf->streamGalloFicha($g);
     }
 
     public function allGallinas()
-    {   
-        $g = Gallina::all();
-        return view('reports.all-gallinas', compact('g'));
+    {
+        $g = Gallina::query()
+            ->with([
+                'gallinas_imagenes',
+                'gallos_hijos.padre.gallos_imagenes',
+                'gallos_hijos.madre.gallinas_imagenes',
+            ])
+            ->orderBy('placa')
+            ->get();
+
+        return $this->reportPdf->streamGallinasCatalog($g);
     }
 
     public function showGallina($id)
     {
-        $g = Gallina::find($id);
-        return view('reports.show-gallina', compact('g'));
-    }
+        $g = Gallina::query()
+            ->with([
+                'gallinas_imagenes',
+                'gallos_hijos.padre.gallos_imagenes',
+                'gallos_hijos.madre.gallinas_imagenes',
+            ])
+            ->findOrFail($id);
 
-   
+        return $this->reportPdf->streamGallinaFicha($g);
+    }
 }

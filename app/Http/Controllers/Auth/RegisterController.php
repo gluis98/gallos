@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Subscription;
+use App\Models\Tenant;
 use App\Models\User;
+use App\Services\AuditService;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -28,7 +33,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -63,10 +68,36 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return DB::transaction(function () use ($data) {
+            $tenantId = (string) Str::uuid();
+
+            Tenant::query()->create([
+                'id' => $tenantId,
+                'name' => $data['name'],
+                'status' => 'active',
+            ]);
+
+            Subscription::withoutGlobalScopes()->create([
+                'tenant_id' => $tenantId,
+                'plan' => 'free',
+                'status' => 'active',
+                'ends_at' => now()->addYear(),
+            ]);
+
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'tenant_id' => $tenantId,
+                'is_superadmin' => false,
+            ]);
+
+            AuditService::log('user.registered', "Nuevo usuario registrado: {$data['name']} ({$data['email']}).", [
+                'user_id'   => $user->id,
+                'tenant_id' => $tenantId,
+            ]);
+
+            return $user;
+        });
     }
 }

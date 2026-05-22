@@ -2,63 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cliente;
+use App\Http\Requests\StoreClientRequest;
+use App\Http\Requests\UpdateClientRequest;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $clientes = Cliente::all();
+        $clientes = Client::query()->get();
+
         return response()->json([
-            'data' => $clientes
+            'data' => $clientes,
         ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreClientRequest $request)
     {
-        $clientes = Cliente::create($request->all());
+        $clientes = Client::query()->create($request->validated());
+
         return response()->json([
-            'msj' => "Registro registrado exitosamente"
+            'msj' => 'Registro registrado exitosamente',
+            'data' => $clientes,
         ], 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        $clientes = Cliente::find($id);
+        $clientes = Client::query()->find($id);
+
         return response()->json([
-            'data' => $clientes
+            'data' => $clientes,
         ], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    public function update(UpdateClientRequest $request, $id)
     {
-        $clientes = Cliente::find($id)->fill($request->all())->save();
+        Client::query()->findOrFail($id)->fill($request->validated())->save();
+
         return response()->json([
-            'msj' => "Registro actualizado exitosamente"
+            'msj' => 'Registro actualizado exitosamente',
         ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $clientes = Cliente::find($id)->delete();
+        Client::query()->findOrFail($id)->delete();
+
         return response()->json([
-            'msj' => "Registro eliminado exitosamente"
+            'msj' => 'Registro eliminado exitosamente',
         ], 200);
     }
 }

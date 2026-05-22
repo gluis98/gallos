@@ -1,0 +1,21 @@
+Tarea 0.1 – Auditoría de esquemas (8 feb 2026)
+==============================================
+
+1) php artisan db:show
+   - Ejecutado con PHP de Laragon: falló (Access denied user forge@localhost).
+   - Causa probable: .env sin credenciales reales en este entorno.
+   - Acción local: configurar DB_* en .env y repetir db:show + mysqldump según el plan.
+
+2) Comparación database/gallos.sql vs gallos.sql (raíz)
+   - gallos.sql (raíz): alineado con el código actual (ventas.nombre_cliente, ventas.telefono,
+     gallos_hijos.tipo, gallinas.estatus, color_alternativo, etc.).
+   - database/gallos.sql: esquema anterior (ventas.cliente_id sin nombre_cliente; gallos_hijos.hijo_id FK solo a gallos;
+     gallinas sin estatus/color_alternativo).
+   - Conclusión: la fuente histórica en database/ está desactualizada; el dump raíz refleja mejor el runtime esperado.
+
+3) Respaldo mysqldump
+   - No ejecutado aquí por falta de acceso a MySQL. En producción/local Laragon:
+     mysqldump -u USER -p DATABASE > backup_pre_phase0.sql
+
+4) Normalización (Fase 0.2+)
+   - Objetivo del plan: tabla clients, ventas con cliente_id/precio/fecha/tipo_venta, gallos_hijos polimórfico.

@@ -1,0 +1,72 @@
+/* Preloader para módulos que cargan datos por API */
+.module-loader-host {
+    position: relative;
+    min-height: 120px;
+}
+
+.module-loader-host[data-module-loading] {
+    min-height: 200px;
+}
+
+.module-loader-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(248, 250, 255, 0.82);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: inherit;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.module-loader-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.module-loader-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1.25rem 1.75rem;
+    background: #fff;
+    border: 1px solid #e8eef8;
+    border-radius: 1rem;
+    box-shadow: 0 12px 36px rgba(16, 39, 77, 0.1);
+    max-width: 90%;
+}
+
+.module-loader-spinner {
+    width: 42px;
+    height: 42px;
+    border: 3px solid #e8eef8;
+    border-top-color: #3b82f6;
+    border-right-color: #7c3aed;
+    border-radius: 50%;
+    animation: module-loader-spin 0.75s linear infinite;
+}
+
+.module-loader-text {
+    margin: 0;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #60708d;
+    text-align: center;
+}
+
+@keyframes module-loader-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Host en tarjetas de sección */
+.section-card.module-loader-host {
+    border-radius: 1rem;
+}

@@ -1,0 +1,214 @@
+/* Árbol genealógico — nodos + líneas SVG */
+.pg-chart {
+    --pg-line: #64748b;
+    --pg-line-w: 2;
+    --pg-focus: #2563eb;
+    --pg-gap: 1.75rem;
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem .5rem 1.5rem;
+}
+
+.pg-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 0;
+}
+
+.pg-svg path,
+.pg-svg line {
+    fill: none;
+    stroke: var(--pg-line);
+    stroke-width: var(--pg-line-w);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.pg-body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+/* ── Ancestros: padre | madre ── */
+.pg-ancestors {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    gap: var(--pg-gap);
+    width: 100%;
+    padding-bottom: 28px;
+}
+
+.pg-lineage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 1 auto;
+    min-width: 120px;
+}
+
+.pg-tier {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.pg-tier__pair {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1.25rem;
+}
+
+.pg-tier__spacer {
+    height: 28px;
+    flex-shrink: 0;
+}
+
+/* ── Sujeto ── */
+.pg-subject-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 0;
+}
+
+/* ── Hijos ── */
+.pg-children-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-top: 28px;
+}
+
+.pg-children-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1.25rem 1.75rem;
+    width: 100%;
+}
+
+.pg-child-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 0 auto;
+}
+
+/* ── Nodo ── */
+.pg-node {
+    background: #fff;
+    border: 2px solid #d8e3f5;
+    border-radius: .75rem;
+    padding: .55rem .85rem;
+    min-width: 108px;
+    max-width: 150px;
+    text-align: center;
+    font-size: .8rem;
+    box-shadow: 0 4px 14px rgba(27, 60, 114, .07);
+    position: relative;
+    z-index: 2;
+}
+
+.pg-node--empty {
+    border-style: dashed;
+    color: #94a3b8;
+    background: #f8fafc;
+}
+
+.pg-node--focus {
+    border-color: var(--pg-focus);
+    background: linear-gradient(180deg, #eff6ff 0%, #fff 100%);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, .22);
+    min-width: 120px;
+}
+
+.pg-node__role {
+    display: block;
+    font-size: .6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #3b82f6;
+    margin-bottom: .2rem;
+}
+
+.pg-node__icon {
+    font-size: 1rem;
+    line-height: 1;
+    display: block;
+    margin-bottom: .12rem;
+}
+
+.pg-node__placa {
+    font-weight: 800;
+    color: #1a2648;
+    font-size: .86rem;
+    line-height: 1.2;
+}
+
+.pg-node__nombre {
+    color: #60708d;
+    font-size: .7rem;
+    margin-top: .08rem;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pg-node__badge {
+    display: inline-block;
+    margin-top: .3rem;
+    font-size: .6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: .1rem .4rem;
+    border-radius: 999px;
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.pg-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .65rem 1.2rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e8eef8;
+    font-size: .76rem;
+    color: #60708d;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.pg-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+}
+
+@media (max-width: 576px) {
+    .pg-ancestors { gap: 1rem; flex-wrap: wrap; }
+    .pg-node { min-width: 92px; max-width: 120px; padding: .45rem .55rem; }
+}

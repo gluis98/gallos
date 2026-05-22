@@ -2,81 +2,88 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreVentaRequest;
+use App\Http\Requests\UpdateVentaRequest;
+use App\Models\Publicacion;
 use App\Models\Venta;
-use App\Models\Cliente;
-use App\Models\Gallo;
+use App\Services\VentaService;
 use Illuminate\Http\Request;
 
 class VentaController extends Controller
 {
+    public function __construct(
+        protected VentaService $ventaService
+    ) {}
+
     public function index()
     {
-        $v = Venta::with('gallo')->get();
+        $v = Venta::query()->with('gallo', 'gallina', 'cliente', 'inventario')->latest('id')->get();
+
         return response()->json([
-            'data' => $v
+            'data' => $v,
         ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreVentaRequest $request)
     {
-        $v = Venta::create($request->all());
-        $g = Gallo::find($request->gallo_id);
-        $g->estatus = "Vendido";
-        $g->save();
+        $data = $request->validated();
+        $publicacion = null;
+        if (! empty($data['publicacion_id'])) {
+            $publicacion = Publicacion::query()->find($data['publicacion_id']);
+        }
+        unset($data['publicacion_id']);
+        $this->ventaService->registrarVenta($data, $publicacion);
+
         return response()->json([
-            'msj' => "Registro registrado exitosamente"
+            'msj' => 'Registro registrado exitosamente',
         ], 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        $v = Venta::with('cliente', 'gallo')->find($id);
+        $v = Venta::query()->with('cliente', 'gallo')->find($id);
+
         return response()->json([
-            'data' => $v
+            'data' => $v,
         ], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    public function update(UpdateVentaRequest $request, $id)
     {
-        $v = Venta::find($id)->fill($request->all())->save();
+        $v = Venta::query()->findOrFail($id);
+        $v->fill($request->validated())->save();
+
         return response()->json([
-            'msj' => "Registro actualizado exitosamente"
+            'msj' => 'Registro actualizado exitosamente',
         ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $v = Venta::find($id);
-        $g = Gallo::find($v->gallo_id);
-        $g->estatus = "Activo";
-        $g->save();
-        $v->delete();
+        $this->ventaService->eliminarVenta($id);
 
         return response()->json([
-            'msj' => "Registro eliminado exitosamente"
+            'msj' => 'Registro eliminado exitosamente',
         ], 200);
     }
 
-    public function search(Request $request){
-        $g = Venta::with('gallo')
-            ->where('nombre_cliente', 'like', '%' . $request->dato . '%')
-            ->orWhere('created_at', 'like', '%' . $request->dato . '%')
-            ->orWhere('monto', 'like', '%' . $request->dato . '%')
+    public function search(Request $request)
+    {
+        $dato = $request->input('dato', '');
+        $g = Venta::query()
+            ->with(['gallo', 'cliente'])
+            ->where(function ($q) use ($dato) {
+                $q->whereHas('cliente', function ($c) use ($dato) {
+                    $c->where('name', 'like', '%'.$dato.'%')
+                        ->orWhere('phone', 'like', '%'.$dato.'%');
+                })
+                    ->orWhere('created_at', 'like', '%'.$dato.'%')
+                    ->orWhere('precio', 'like', '%'.$dato.'%');
+            })
             ->get();
+
         return response()->json([
-            'data' => $g
+            'data' => $g,
         ], 200);
     }
 }

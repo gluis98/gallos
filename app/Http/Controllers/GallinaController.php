@@ -2,158 +2,159 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreGallinaRequest;
+use App\Http\Requests\UpdateGallinaRequest;
 use App\Models\Gallina;
 use App\Models\GallinasImagene;
 use App\Models\Gallo;
 use App\Models\GallosHijo;
+use App\Services\PedigreeService;
 use Illuminate\Http\Request;
 
 class GallinaController extends Controller
 {
+    public function __construct(
+        protected PedigreeService $pedigreeService
+    ) {}
+
     public function index()
     {
-        $g = Gallina::with('gallinas_imagenes', 'gallos_hijos', 'gallos_hijos.padre', 'gallos_hijos.padre.gallos_imagenes')->get();
+        $g = Gallina::query()
+            ->with('gallinas_imagenes', 'gallos_hijos.padre', 'gallos_hijos.padre.gallos_imagenes')
+            ->get();
+
         return response()->json([
-                'data' => $g
+            'data' => $g,
         ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreGallinaRequest $request)
     {
-        $g = Gallina::create($request->all())->latest('id')->first();
+        $this->authorize('create', Gallina::class);
+        $data = $request->validated();
+        unset($data['imagen'], $data['padre_id'], $data['madre_id']);
+        $g = Gallina::query()->create($data);
 
-        if($request->padre_id != null){
-            $padre = Gallo::find($request->padre_id);
-            $gh = GallosHijo::create([ 
-                'padre_id' => $padre->id,
-                'hijo_id' => $g->id,
-                'tipo' => 'Gallina'
-            ])->latest('id')->first();
+        if ($request->filled('padre_id') || $request->filled('madre_id')) {
+            GallosHijo::query()->create(array_filter([
+                'padre_id' => $request->input('padre_id'),
+                'madre_id' => $request->input('madre_id'),
+                'hijoable_type' => Gallina::class,
+                'hijoable_id' => $g->id,
+                'tipo' => 'gallina',
+            ], fn ($v) => $v !== null && $v !== ''));
         }
 
-        if($request->madre_id != null){
-            $madre = Gallina::find($request->madre_id);
-            if(!empty($madre)){
-                $ghm = GallosHijo::find($gh->id);
-                $ghm->madre_id = $madre->id;
-                $ghm->save();
-            }
-        }
-
-        if($request->hasFile('imagen')){
-            foreach($request->file('imagen') as $file){
-                $name = $file->getClientOriginalName();
-                $file->move(public_path('files/gallinas/' . $g->id . '/'), $name);
-                $gi = GallinasImagene::create([
-                                'gallina_id' => $g->id, 
-                                'imagen' => $file->getClientOriginalName()
-                    ]);
+        if ($request->hasFile('imagen')) {
+            foreach ($request->file('imagen') as $file) {
+                $file->move(public_path('files/gallinas/'.$g->id.'/'), $file->getClientOriginalName());
+                GallinasImagene::query()->create([
+                    'gallina_id' => $g->id,
+                    'imagen' => $file->getClientOriginalName(),
+                ]);
             }
         }
 
         return response()->json([
-            'msj' => "Registro registrado exitosamente"
+            'msj' => 'Registro registrado exitosamente',
         ], 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        $g = Gallina::with('gallinas_imagenes', 
-                            'gallos_hijos',
-                            'gallos_hijos.gallo',
-                            'gallos_hijos.gallo.gallos_imagenes', 
-                            'gallos_hijos.padre', 
-                            'gallos_hijos.padre.gallos_imagenes', 
-                            'gallos_hijos.madre', 
-                            'gallos_hijos.madre.gallinas_imagenes', 
-                            'gallos_hijos.gallina', 
-                            'hijos',
-                            'hijos.gallo',
-                            'hijos.gallo.gallos_imagenes' )->find($id);
+        $g = Gallina::query()->with([
+            'gallinas_imagenes',
+            'gallos_hijos.padre',
+            'gallos_hijos.padre.gallos_imagenes',
+            'gallos_hijos.madre',
+            'gallos_hijos.madre.gallinas_imagenes',
+            'hijos.hijoable',
+        ])->find($id);
+
         return response()->json([
-            'data' => $g
+            'data' => $g,
         ], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    public function update(UpdateGallinaRequest $request, $id)
     {
-        $g = Gallina::find($id)->fill($request->all())->save();
+        $g = Gallina::query()->findOrFail($id);
+        $this->authorize('update', $g);
+        $data = $request->validated();
+        unset($data['imagen'], $data['padre_id'], $data['madre_id']);
+        $g->fill($data)->save();
 
-        if($request->padre_id != null){
-            $gh = GallosHijo::where('hijo_id', $id)->delete();
-            $gh = GallosHijo::create([ 
-                'padre_id' => $request->padre_id,
-                'hijo_id' => $id,
-                'tipo' => 'Gallina'
-            ])->latest('id')->first();
+        GallosHijo::query()
+            ->where('hijoable_type', Gallina::class)
+            ->where('hijoable_id', $id)
+            ->delete();
+
+        if ($request->filled('padre_id') || $request->filled('madre_id')) {
+            GallosHijo::query()->create(array_filter([
+                'padre_id' => $request->input('padre_id'),
+                'madre_id' => $request->input('madre_id'),
+                'hijoable_type' => Gallina::class,
+                'hijoable_id' => $g->id,
+                'tipo' => 'gallina',
+            ], fn ($v) => $v !== null && $v !== ''));
         }
 
-        if($request->padre_id == null && $request->madre_id != null){
-            $madre = Gallina::find($request->madre_id);
-            $gh = GallosHijo::where('hijo_id', $id)->delete();
-            $gh = GallosHijo::create([ 
-                'madre_id' => $request->madre_id,
-                'hijo_id' => $id,
-                'tipo' => 'Gallina'
-            ])->latest('id')->first();
-        }
-
-        if($request->madre_id != null){
-            $madre = Gallina::find($request->madre_id);
-            if(!empty($madre)){
-                $ghm = GallosHijo::find($gh->id);
-                $ghm->madre_id = $madre->id;
-                $ghm->save();
-            }
-        }
-
-
-        if($request->hasFile('imagen')){
-            foreach($request->file('imagen') as $file){
-                $name = $file->getClientOriginalName();
-                $file->move(public_path('files/gallinas/' . $id . '/'), $name);
-                $gi = GallinasImagene::create([
-                                'gallina_id' => $id, 
-                                'imagen' => $file->getClientOriginalName()
-                    ]);
+        if ($request->hasFile('imagen')) {
+            foreach ($request->file('imagen') as $file) {
+                $file->move(public_path('files/gallinas/'.$id.'/'), $file->getClientOriginalName());
+                GallinasImagene::query()->create([
+                    'gallina_id' => $id,
+                    'imagen' => $file->getClientOriginalName(),
+                ]);
             }
         }
 
         return response()->json([
-            'msj' => "Registro actualizado exitosamente"
+            'msj' => 'Registro actualizado exitosamente',
         ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $g = Gallina::find($id)->delete();
+        $g = Gallina::query()->findOrFail($id);
+        $this->authorize('delete', $g);
+
+        GallosHijo::query()
+            ->where('hijoable_type', Gallina::class)
+            ->where('hijoable_id', $id)
+            ->delete();
+        $g->delete();
+
         return response()->json([
-            'msj' => "Registro eliminado exitosamente"
+            'msj' => 'Registro eliminado exitosamente',
         ], 200);
     }
 
-    public function search(Request $request){
-        $g = Gallina::with('gallinas_imagenes', 'gallos_hijos', 'gallos_hijos.madre', 'gallos_hijos.padre')
-            ->where('placa', 'like', '%' . $request->dato . '%')
-            ->orWhere('marca_nacimiento', 'like', '%' . $request->dato . '%')
-            ->orWhere('nombre', 'like', '%' . $request->dato . '%')
-            ->orWhere('color', 'like', '%' . $request->dato . '%')
-            ->orWhere('color_alternativo', 'like', '%' . $request->dato . '%')
+    public function search(Request $request)
+    {
+        $dato = $request->input('dato', '');
+        $g = Gallina::query()
+            ->with('gallinas_imagenes', 'gallos_hijos.madre', 'gallos_hijos.padre')
+            ->where(function ($q) use ($dato) {
+                $q->where('placa', 'like', '%'.$dato.'%')
+                    ->orWhere('marca_nacimiento', 'like', '%'.$dato.'%')
+                    ->orWhere('nombre', 'like', '%'.$dato.'%')
+                    ->orWhere('color', 'like', '%'.$dato.'%')
+                    ->orWhere('color_alternativo', 'like', '%'.$dato.'%');
+            })
             ->get();
+
         return response()->json([
-            'data' => $g
+            'data' => $g,
         ], 200);
+    }
+
+    public function pedigree(string $id)
+    {
+        $gallina = Gallina::query()->findOrFail($id);
+
+        return response()->json([
+            'data' => $this->pedigreeService->arbolPorGallina($gallina, 3),
+        ]);
     }
 }

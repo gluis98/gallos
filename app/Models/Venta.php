@@ -1,59 +1,80 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
-/**
- * Class Venta
- * 
- * @property int $id
- * @property int|null $gallo_id
- * @property int|null $cliente_id
- * @property float|null $monto
- * @property string|null $observaciones
- * @property string|null $estatus
- * @property Carbon|null $created_at
- * @property Carbon|null $update_at
- * 
- * @property Cliente|null $cliente
- * @property Gallo|null $gallo
- *
- * @package App\Models
- */
 class Venta extends Model
 {
-	protected $table = 'ventas';
-	public $timestamps = true;
+    use BelongsToTenant;
 
-	protected $casts = [
-		'gallo_id' => 'int',
-		'monto' => 'float',
-		'update_at' => 'datetime'
-	];
+    protected $table = 'ventas';
 
-	protected $fillable = [
-		'gallo_id',
-		'nombre_cliente',
-		'telefono',
-		'monto',
-		'observaciones',
-		'estatus',
-		'update_at'
-	];
+    protected $fillable = [
+        'tenant_id',
+        'gallo_id',
+        'gallina_id',
+        'cliente_id',
+        'fecha',
+        'precio',
+        'tipo_venta',
+        'tipo_item',
+        'inventario_id',
+        'cantidad',
+        'observaciones',
+        'estatus',
+    ];
 
-	// public function cliente()
-	// {
-	// 	return $this->belongsTo(Cliente::class);
-	// }
+    protected $casts = [
+        'gallo_id'      => 'int',
+        'gallina_id'    => 'int',
+        'cliente_id'    => 'int',
+        'inventario_id' => 'int',
+        'fecha'         => 'date',
+        'precio'        => 'decimal:2',
+        'cantidad'      => 'decimal:2',
+    ];
 
-	public function gallo()
-	{
-		return $this->belongsTo(Gallo::class);
-	}
+    protected $appends = [
+        'nombre_cliente',
+        'telefono',
+        'monto',
+    ];
+
+    public function cliente(): BelongsTo
+    {
+        return $this->belongsTo(Client::class, 'cliente_id');
+    }
+
+    public function gallo(): BelongsTo
+    {
+        return $this->belongsTo(Gallo::class, 'gallo_id');
+    }
+
+    public function gallina(): BelongsTo
+    {
+        return $this->belongsTo(Gallina::class, 'gallina_id');
+    }
+
+    public function inventario(): BelongsTo
+    {
+        return $this->belongsTo(Inventario::class, 'inventario_id');
+    }
+
+    public function getNombreClienteAttribute(): ?string
+    {
+        return $this->cliente?->name;
+    }
+
+    public function getTelefonoAttribute(): ?string
+    {
+        return $this->cliente?->phone;
+    }
+
+    public function getMontoAttribute(): ?string
+    {
+        return $this->precio !== null ? (string) $this->precio : null;
+    }
 }

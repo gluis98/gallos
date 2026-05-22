@@ -51,23 +51,23 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    @if($item->gallos_hijos->count() > 0 && $item->gallos_hijos[0]->padre != null)
+                                    @if($item->gallos_hijos && $item->gallos_hijos->padre != null)
                                     <table class="table">
                                         <tr>
                                             <td>
-                                                @if($item->gallos_hijos[0]->padre->gallos_imagenes->count() > 0)
-                                                <img src="../../files/gallos/{{$item->gallos_hijos[0]->padre->id}}/{{$item->gallos_hijos[0]->padre->gallos_imagenes->first()->imagen}}" width="100%" height="180" alt="..." class="border">
+                                                @if($item->gallos_hijos->padre->gallos_imagenes->count() > 0)
+                                                <img src="../../files/gallos/{{$item->gallos_hijos->padre->id}}/{{$item->gallos_hijos->padre->gallos_imagenes->first()->imagen}}" width="100%" height="180" alt="..." class="border">
                                                 @else
                                                 <img src="../../files/img/avatar.png" width="100%" height="180" alt="..." class="border">
                                                 @endif
-                                                <h6>Placa del padre: {{$item->gallos_hijos[0]->padre->placa}}</h6>
+                                                <h6>Placa del padre: {{$item->gallos_hijos->padre->placa}}</h6>
                                                 <p class=" p-4 border" style="font-size: 12px">
-                                                    <span class="fw-bold">Marca de nacimiento:</span> {{$item->gallos_hijos[0]->padre->marca_nacimiento}}<br>
+                                                    <span class="fw-bold">Marca de nacimiento:</span> {{$item->gallos_hijos->padre->marca_nacimiento}}<br>
                 
-                                                    {{-- <span class="fw-bold">N° de Peleas:</span> {{$item->gallos_hijos[0]->padre->peleas}}<br> --}}
+                                                    {{-- <span class="fw-bold">N° de Peleas:</span> {{$item->gallos_hijos->padre->peleas}}<br> --}}
                                                     <span class="fw-bold">Observaciones:</span><br>
-                                                    {{$item->gallos_hijos[0]->padre->observaciones}}
-                                                    <span class="fw-bold">Estatus</span>: {{$item->gallos_hijos[0]->padre->estatus}}
+                                                    {{$item->gallos_hijos->padre->observaciones}}
+                                                    <span class="fw-bold">Estatus</span>: {{$item->gallos_hijos->padre->estatus}}
                                                 </p>
                                             </td>
                                         </tr>
@@ -75,21 +75,21 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if($item->gallos_hijos->count() > 0 && $item->gallos_hijos[0]->madre != null)
+                                    @if($item->gallos_hijos && $item->gallos_hijos->madre != null)
                                     <table class="table">
                                         <tr>
                                             <td>
-                                                @if($item->gallos_hijos[0]->madre->gallinas_imagenes->count() > 0)
-                                                <img src="../../files/gallinas/{{$item->gallos_hijos[0]->madre->id}}/{{$item->gallos_hijos[0]->madre->gallinas_imagenes->first()->imagen}}" width="100%" height="180" alt="..." class="border">
+                                                @if($item->gallos_hijos->madre->gallinas_imagenes->count() > 0)
+                                                <img src="../../files/gallinas/{{$item->gallos_hijos->madre->id}}/{{$item->gallos_hijos->madre->gallinas_imagenes->first()->imagen}}" width="100%" height="180" alt="..." class="border">
                                                 @else
                                                 <img src="../../files/img/avatar-2.png" width="100%" height="180" alt="..." class="border">
                                                 @endif
-                                                <h6>Placa de la madre: {{$item->gallos_hijos[0]->madre->placa}}</h6>
+                                                <h6>Placa de la madre: {{$item->gallos_hijos->madre->placa}}</h6>
                                                 <p class="p-4 border" style="font-size: 12px">
-                                                    <span class="fw-bold">Marca de nacimiento:</span> {{$item->gallos_hijos[0]->madre->marca_nacimiento}}<br>
+                                                    <span class="fw-bold">Marca de nacimiento:</span> {{$item->gallos_hijos->madre->marca_nacimiento}}<br>
                                                     <span class="fw-bold">Observaciones:</span><br>
-                                                    {{$item->gallos_hijos[0]->madre->observaciones}}
-                                                    <span class="fw-bold">Estatus</span>: {{$item->gallos_hijos[0]->madre->estatus}}
+                                                    {{$item->gallos_hijos->madre->observaciones}}
+                                                    <span class="fw-bold">Estatus</span>: {{$item->gallos_hijos->madre->estatus}}
                                                 </p>
                                             </td>
                                         </tr>

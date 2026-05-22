@@ -1,65 +1,47 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
-/**
- * Class GallosHijo
- * 
- * @property int $id
- * @property int|null $padre_id
- * @property int|null $madre_id
- * @property int|null $hijo_id
- * 
- * @property Gallo|null $gallo
- * @property Gallina|null $gallina
- *
- * @package App\Models
- */
 class GallosHijo extends Model
 {
-	protected $table = 'gallos_hijos';
-	public $timestamps = false;
+    use BelongsToTenant;
 
-	protected $casts = [
-		'padre_id' => 'int',
-		'madre_id' => 'int',
-	
-	];
+    protected $table = 'gallos_hijos';
 
-	protected $fillable = [
-		'padre_id',
-		'madre_id',
-		'hijo_id',
-		'tipo'
-	];
+    public $timestamps = true;
 
-	public function padre()
-	{
-		return $this->belongsTo(Gallo::class, 'padre_id');
-	}
+    protected $casts = [
+        'padre_id' => 'int',
+        'madre_id' => 'int',
+        'hijoable_id' => 'int',
+    ];
 
-	public function madre()
-	{
-		return $this->belongsTo(Gallina::class, 'madre_id');
-	}
+    protected $fillable = [
+        'tenant_id',
+        'padre_id',
+        'madre_id',
+        'hijoable_type',
+        'hijoable_id',
+        'tipo',
+    ];
 
-	public function hijos()
-	{
-		return $this->belongsTo(GallosHijo::class, 'padre_id');
-	}
-	public function gallo()
-	{
-		return $this->belongsTo(Gallo::class, 'hijo_id');
-	}
+    public function padre(): BelongsTo
+    {
+        return $this->belongsTo(Gallo::class, 'padre_id');
+    }
 
-	public function gallina()
-	{
-		return $this->belongsTo(Gallina::class, 'madre_id');
-	}
+    public function madre(): BelongsTo
+    {
+        return $this->belongsTo(Gallina::class, 'madre_id');
+    }
+
+    public function hijoable(): MorphTo
+    {
+        return $this->morphTo(__FUNCTION__, 'hijoable_type', 'hijoable_id');
+    }
 }

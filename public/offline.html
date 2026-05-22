@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sin conexión — Gallos Pro</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body {
+            min-height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #1a2648 0%, #2d4278 100%);
+            color: #fff; text-align: center; padding: 2rem;
+        }
+        .icon { font-size: 5rem; margin-bottom: 1rem; animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+        h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: .75rem; }
+        p  { color: rgba(255,255,255,.7); font-size: .95rem; max-width: 340px; line-height: 1.6; margin-bottom: 2rem; }
+        .btn {
+            background: linear-gradient(135deg, #3b82f6, #6d5efc);
+            border: none; border-radius: .85rem; padding: .85rem 2rem;
+            color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer;
+            text-decoration: none; display: inline-block;
+            box-shadow: 0 8px 24px rgba(59,130,246,.4);
+            transition: transform .2s, box-shadow .2s;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(59,130,246,.5); }
+        .logo { width: 72px; height: 72px; border-radius: 1rem; object-fit: cover; margin-bottom: 1.5rem; border: 2px solid rgba(255,255,255,.2); }
+        .status { margin-top: 1.5rem; font-size: .8rem; color: rgba(255,255,255,.4); }
+    </style>
+</head>
+<body>
+    <img src="/img/logo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
+    <div class="icon">📡</div>
+    <h1>Sin conexión a internet</h1>
+    <p>No pudimos conectarnos al servidor. Verifica tu conexión a internet e intenta de nuevo.</p>
+    <button class="btn" onclick="window.location.reload()">🔄 Reintentar</button>
+    <p class="status">Gallos Pro v1.0 — Modo offline</p>
+    <script>
+        window.addEventListener('online', () => window.location.reload());
+    </script>
+</body>
+</html>

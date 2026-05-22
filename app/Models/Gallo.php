@@ -1,72 +1,61 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
-/**
- * Class Gallo
- * 
- * @property int $id
- * @property string|null $placa
- * @property string|null $marca_nacimiento
- * @property string|null $marca_federacion
- * @property string|null $color
- * @property string|null $cresta
- * @property string|null $fecha_nacimiento
- * @property string|null $luna
- * @property string|null $peleas
- * @property string|null $observaciones
- * @property string|null $estatus
- * 
- * @property Collection|GallosHijo[] $gallos_hijos
- * @property Collection|GallosImagene[] $gallos_imagenes
- * @property Collection|Venta[] $ventas
- *
- * @package App\Models
- */
 class Gallo extends Model
 {
-	protected $table = 'gallos';
-	public $timestamps = false;
+    use BelongsToTenant;
 
-	protected $fillable = [
-		'placa',
-		'nombre',
-		'marca_nacimiento',
-		'marca_federacion',
-		'color',
-		'color_alternativo',
-		'cresta',
-		'fecha_nacimiento',
-		'luna',
-		'peleas',
-		'observaciones',
-		'estatus'
-	];
+    protected $table = 'gallos';
 
-	public function gallos_hijos()
-	{
-		return $this->hasMany(GallosHijo::class, 'hijo_id')->where('tipo', 'Gallo');
-	}
+    public $timestamps = true;
 
-	public function hijos()
-	{
-		return $this->hasMany(GallosHijo::class, 'padre_id');
-	}
+    protected $fillable = [
+        'tenant_id',
+        'placa',
+        'nombre',
+        'marca',
+        'anillo',
+        'marca_nacimiento',
+        'marca_federacion',
+        'color',
+        'color_alternativo',
+        'cresta',
+        'fecha_nacimiento',
+        'luna',
+        'peleas',
+        'observaciones',
+        'estatus',
+    ];
 
-	public function gallos_imagenes()
-	{
-		return $this->hasMany(GallosImagene::class);
-	}
+    public function tenantModel(): BelongsTo
+    {
+        return $this->belongsTo(Tenant::class, 'tenant_id', 'id');
+    }
 
-	public function ventas()
-	{
-		return $this->hasMany(Venta::class);
-	}
+    public function gallos_hijos(): MorphOne
+    {
+        return $this->morphOne(GallosHijo::class, 'hijoable');
+    }
+
+    public function hijos(): HasMany
+    {
+        return $this->hasMany(GallosHijo::class, 'padre_id');
+    }
+
+    public function gallos_imagenes(): HasMany
+    {
+        return $this->hasMany(GallosImagene::class, 'gallo_id');
+    }
+
+    public function ventas(): HasMany
+    {
+        return $this->hasMany(Venta::class, 'gallo_id');
+    }
 }
