@@ -1,4 +1,6 @@
 @php
+    use App\Support\MarketplacePresenter;
+
     $whatsapp   = env('WHATSAPP_SUPPORT_URL', 'https://wa.me/584120000000');
     $ratingDays = (int) config('marketplace.rating_days', 12);
 @endphp
@@ -9,6 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Marketplace de Gallos y Gallinas — Galpon</title>
     <meta name="description" content="Compra y vende gallos finos y gallinas de raza en el marketplace de Galpon. Criadores de Venezuela, Colombia, México y toda Latinoamérica.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ route('marketplace.index') }}">
     <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
     <link rel="shortcut icon" href="{{ asset('img/logo.png') }}">
     <meta name="theme-color" content="#1a2648">
@@ -281,16 +285,14 @@
                 $ave      = $item->ave;
                 $isGallo  = $item->ave_type === \App\Models\Gallo::class;
                 $typeLabel = $isGallo ? 'Gallo' : 'Gallina';
-                $images   = $isGallo
-                    ? ($ave?->gallos_imagenes ?? collect())
-                    : ($ave?->gallinas_imagenes ?? collect());
+                $images   = MarketplacePresenter::aveImages($ave, $isGallo);
                 $firstImg = $images->first();
                 $initials = strtoupper(substr($item->tenant_id ?? 'V', 0, 1));
             @endphp
-            <div class="listing-card {{ $item->destacado ? 'destacado' : '' }}" onclick="openDetail({{ $item->id }})">
+            <a href="{{ route('marketplace.show', $item->id) }}" class="listing-card {{ $item->destacado ? 'destacado' : '' }}" style="text-decoration:none;color:inherit;">
                 <div class="card-img-wrap">
                     @if($firstImg)
-                        <img src="{{ asset('storage/' . ($firstImg->path ?? $firstImg->ruta ?? '')) }}"
+                        <img src="{{ $firstImg }}"
                              alt="{{ $ave?->nombre ?? 'Ave' }}"
                              loading="lazy"
                              onerror="this.parentElement.innerHTML='<div class=\'card-no-img\'>{{ $isGallo ? '🐓' : '🐔' }}</div>'">
@@ -332,7 +334,7 @@
                         <span class="sales-badge">• {{ rand(1,30) }} ventas</span>
                     </div>
                 </div>
-            </div>
+            </a>
             @endforeach
         </div>
         <div class="pagination-wrap">
@@ -479,9 +481,7 @@ const ITEMS_DATA = {
 @php
     $ave     = $item->ave;
     $isGallo = $item->ave_type === \App\Models\Gallo::class;
-    $images  = $isGallo
-        ? ($ave?->gallos_imagenes ?? collect())
-        : ($ave?->gallinas_imagenes ?? collect());
+    $images  = MarketplacePresenter::aveImages($ave, $isGallo);
     // Calcular reputación simulada (se reemplazará con datos reales al escalar)
     $vendedorNombre = $item->tenant_id ?? 'Criador';
     $initials       = strtoupper(substr($vendedorNombre, 0, 1));
@@ -502,7 +502,7 @@ const ITEMS_DATA = {
     destacado:  {{ $item->destacado ? 'true' : 'false' }},
     vendedor:   @json($vendedorNombre),
     initials:   @json($initials),
-    images:     [@foreach($images as $img)@json(asset('storage/' . ($img->path ?? $img->ruta ?? ''))){{ !$loop->last ? ',' : '' }}@endforeach],
+    images:     @json($images->all()),
 },
 @endforeach
 };

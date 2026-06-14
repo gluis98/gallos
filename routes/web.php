@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\Public\CatalogController as PublicCatalogController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\SugerenciaController;
 use App\Http\Controllers\SuperAdmin\AuditController;
@@ -20,6 +21,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
+
+Route::get('/robots.txt', [SitemapController::class, 'robots']);
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);
+Route::get('/sitemap-pages.xml', [SitemapController::class, 'pages']);
+Route::get('/sitemap-marketplace.xml', [SitemapController::class, 'marketplace']);
 
 // Landing pública: muestra la página de inicio a visitantes,
 // redirige al dashboard si el usuario ya está autenticado.

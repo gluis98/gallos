@@ -56,7 +56,7 @@ class MarketplaceController extends Controller
             );
         }
 
-        $items = $q->with(['ave'])->paginate(24)->withQueryString();
+        $items = $q->with(['ave.gallos_imagenes', 'ave.gallinas_imagenes'])->paginate(24)->withQueryString();
         $rate  = DollarRateService::getCachedRate();
 
         // Opciones de filtros únicos
@@ -70,7 +70,7 @@ class MarketplaceController extends Controller
     {
         $pub = Publicacion::withoutGlobalScopes()
             ->where('activo', true)
-            ->with(['ave'])
+            ->with(['ave.gallos_imagenes', 'ave.gallinas_imagenes'])
             ->findOrFail($id);
 
         $rate = DollarRateService::getCachedRate();

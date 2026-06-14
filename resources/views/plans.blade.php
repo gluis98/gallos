@@ -21,6 +21,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Planes y Precios — Galpon</title>
     <meta name="description" content="Conoce los planes de Galpon para gestionar tu criadero de gallos finos: plan gratuito, plan Pro con aves ilimitadas y pedigree completo. Precios en dólares y bolívares.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ route('plans') }}">
     <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
     <link rel="shortcut icon" href="{{ asset('img/logo.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('img/logo.png') }}">
