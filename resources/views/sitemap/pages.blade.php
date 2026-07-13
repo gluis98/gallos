@@ -22,4 +22,29 @@
         <priority>0.6</priority>
     </url>
     @endif
+    <url>
+        <loc>{{ $base }}/blog</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>{{ $base }}/faq</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>{{ $base }}/faq/vacunacion-avicola</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>{{ $base }}/faq/historial-medico-aves</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    <url>
+        <loc>{{ $base }}/faq/crianza-gallos-finos</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
 </urlset>

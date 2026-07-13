@@ -8,4 +8,8 @@
         <loc>{{ $base }}/sitemap-marketplace.xml</loc>
         <lastmod>{{ $now }}</lastmod>
     </sitemap>
+    <sitemap>
+        <loc>{{ $base }}/sitemap-blog.xml</loc>
+        <lastmod>{{ $now }}</lastmod>
+    </sitemap>
 </sitemapindex>

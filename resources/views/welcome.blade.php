@@ -38,7 +38,15 @@
         crianza gallos, manejo gallos, cuidado gallos, alimentación gallos, vitaminas gallos,
         gallos campeones, gallos premiados, gallos finos Venezuela, gallos de alto rendimiento,
         tasa BCV gallos, precios dolares bolivares gallos, compra venta gallos Venezuela,
-        app movil gallos, celular gallos, android gallos, ios gallos
+        app movil gallos, celular gallos, android gallos, ios gallos,
+        vacunación gallos, vacunas avícolas, vacunación avícola gallos, calendario vacunación aves,
+        Newcastle gallos, Marek gallos, Gumboro aves, Bronquitis Infecciosa gallos, Viruela Aviar gallos,
+        plan sanitario criadero, control sanitario gallos, registro vacunas gallos,
+        historial médico gallos, expediente médico aves, ficha médica gallos finos,
+        tratamiento gallos enfermos, desparasitación gallos, parásitos externos gallos,
+        control parásitos aves, medicamentos gallos, salud gallos finos,
+        blog crianza gallos, artículos avicultura, guía gallos finos,
+        FAQ crianza gallos, preguntas frecuentes gallos, cómo criar gallos
     ">
     <meta name="author" content="Galpon">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
@@ -172,6 +180,30 @@
                     "@type": "Answer",
                     "text": "Sí. Galpon permite gestionar múltiples criaderos desde un solo acceso. Cada galpón tiene su propio espacio privado con su inventario, sus aves y sus registros independientes."
                 }
+            },
+            {
+                "@type": "Question",
+                "name": "¿Puedo registrar las vacunas de mis gallos en Galpon?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Sí. Galpon tiene un módulo de vacunación avícola donde puedes registrar para cada ave: la vacuna aplicada (Newcastle, Marek, Gumboro, Bronquitis Infecciosa, Viruela Aviar), la dosis, vía de administración, fecha, número de lote y próxima dosis. El sistema te alerta automáticamente cuando se acercan los refuerzos."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "¿Qué incluye el historial médico de un gallo en Galpon?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "El historial médico incluye: todas las vacunaciones con fechas y lotes, tratamientos con medicamentos, desparasitaciones internas y externas, pesajes periódicos, enfermedades diagnosticadas y observaciones veterinarias. Se puede exportar en PDF al momento de vender el animal para documentar su estado sanitario."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "¿Qué vacunas necesitan los gallos finos?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Las vacunas esenciales para gallos finos son: Newcastle (cada 3-4 meses), Marek (pollitos de 1 día), Gumboro IBD (pollitos 14-28 días), Bronquitis Infecciosa (cada 4-6 meses) y Viruela Aviar (anual). Con Galpon llevas el registro completo y recibes alertas de próximas dosis."
+                }
             }
         ]
     }
@@ -197,6 +229,8 @@
             <nav class="nav-links-desktop" aria-label="Menú principal">
                 <a href="{{ route('marketplace.index') }}">Marketplace</a>
                 <a href="{{ route('plans') }}">Planes y Precios</a>
+                <a href="{{ route('faq.index') }}">FAQ</a>
+                <a href="{{ route('blog.index') }}">Blog</a>
             </nav>
             <div class="nav-actions">
                 @if (Route::has('login'))
@@ -224,6 +258,8 @@
         <nav class="nav-drawer-panel" aria-label="Menú móvil">
             <a href="{{ route('marketplace.index') }}">Marketplace</a>
             <a href="{{ route('plans') }}">Planes y Precios</a>
+            <a href="{{ route('faq.index') }}">Preguntas Frecuentes</a>
+            <a href="{{ route('blog.index') }}">Blog</a>
             <div class="nav-drawer-divider"></div>
             @if (Route::has('login'))
                 @auth
@@ -350,6 +386,68 @@
         </div>
     </section>
 
+    {{-- ══ SALUD AVÍCOLA ══ --}}
+    <section class="bg-muted" aria-labelledby="salud-title">
+        <div class="container">
+            <div class="section-label">
+                @include('partials.landing-icon', ['name' => 'vaccines', 'size' => 16])
+                Salud Avícola Integrada
+            </div>
+            <h2 class="section-title" id="salud-title">
+                Vacunación e <span class="text-gradient">historial médico</span> para tus aves
+            </h2>
+            <p class="section-subtitle">
+                Lleva un control sanitario profesional de cada gallo y gallina: vacunas, tratamientos, desparasitaciones
+                y alertas automáticas de próximas dosis. Todo en un mismo lugar.
+            </p>
+            <div class="features-grid" style="--cols:3;">
+                <article class="feature-card">
+                    <div class="feature-icon" style="background:rgba(34,197,94,.12);">💉</div>
+                    <h3>Registro de Vacunaciones</h3>
+                    <p>Registra cada vacuna con el tipo (Newcastle, Marek, Gumboro, Bronquitis Infecciosa, Viruela Aviar), dosis, vía de administración, lote del vial y veterinario responsable.</p>
+                    <a href="{{ route('faq.vacunacion') }}" style="font-size:.82rem;color:#3b82f6;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:.3rem;margin-top:.5rem;">
+                        Guía de vacunación →
+                    </a>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon" style="background:rgba(251,191,36,.12);">📋</div>
+                    <h3>Historial Médico por Ave</h3>
+                    <p>Cada gallo y gallina tiene su expediente médico digital: vacunas, tratamientos, pesajes, desparasitaciones y observaciones veterinarias. Exportable en PDF al momento de vender.</p>
+                    <a href="{{ route('faq.historial-medico') }}" style="font-size:.82rem;color:#3b82f6;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:.3rem;margin-top:.5rem;">
+                        Qué incluye el historial →
+                    </a>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon" style="background:rgba(239,68,68,.12);">⏰</div>
+                    <h3>Alertas de Próximas Dosis</h3>
+                    <p>El sistema te notifica automáticamente cuando un gallo o gallina tiene una vacuna o tratamiento próximo. Nunca más olvides una dosis de Newcastle o un refuerzo de Gumboro.</p>
+                    <a href="{{ route('faq.vacunacion') }}" style="font-size:.82rem;color:#3b82f6;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:.3rem;margin-top:.5rem;">
+                        Ver calendario de vacunas →
+                    </a>
+                </article>
+            </div>
+
+            {{-- Tarjeta de vacunas destacada --}}
+            <div style="margin-top:2.5rem;background:linear-gradient(135deg,#065f46 0%,#059669 60%,#0d9488 100%);border-radius:1.2rem;padding:2rem 2.5rem;display:flex;flex-wrap:wrap;gap:2rem;align-items:center;">
+                <div style="flex:1;min-width:260px;">
+                    <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.65);margin-bottom:.5rem;">Plan sanitario avícola</div>
+                    <h3 style="color:#fff;font-size:1.2rem;font-weight:800;margin-bottom:.6rem;line-height:1.3;">Las vacunas más importantes para gallos finos</h3>
+                    <p style="color:rgba(255,255,255,.8);font-size:.88rem;line-height:1.7;margin-bottom:1.25rem;">
+                        Newcastle · Marek · Gumboro · Bronquitis Infecciosa · Viruela Aviar · Coriza Infecciosa — gestiona el calendario completo desde Galpon.
+                    </p>
+                    <a href="{{ route('faq.vacunacion') }}" style="display:inline-flex;align-items:center;gap:.45rem;background:#fff;color:#065f46;border-radius:.7rem;padding:.55rem 1.2rem;font-weight:700;font-size:.88rem;text-decoration:none;">
+                        Ver guía de vacunación completa
+                    </a>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:.65rem;flex:0 0 auto;">
+                    @foreach(['Newcastle', 'Marek', 'Gumboro', 'Bronquitis', 'Viruela Aviar', 'Coriza'] as $v)
+                    <span style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:2rem;padding:.3rem .85rem;font-size:.78rem;font-weight:600;">{{ $v }}</span>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+
     {{-- ══ CÓMO FUNCIONA ══ --}}
     <section class="bg-muted" aria-labelledby="howto-title">
         <div class="container">
@@ -465,6 +563,96 @@
         </div>
     </section>
 
+    {{-- ══ HUB DE RECURSOS ══ --}}
+    <section aria-labelledby="recursos-title">
+        <div class="container">
+            <div class="section-label">
+                @include('partials.landing-icon', ['name' => 'library_books', 'size' => 16])
+                Centro de recursos
+            </div>
+            <h2 class="section-title" id="recursos-title">
+                Aprende sobre <span class="text-gradient">crianza avícola</span>
+            </h2>
+            <p class="section-subtitle">
+                Guías, artículos y respuestas a las preguntas más comunes sobre vacunación, historial médico,
+                crianza de gallos finos y manejo del galpón.
+            </p>
+            <div class="features-grid" style="--cols:2;">
+
+                {{-- FAQ Hub --}}
+                <div class="feature-card" style="background:linear-gradient(135deg,#f0fdf4,#fff);border-color:#bbf7d0;">
+                    <div class="feature-icon" style="background:rgba(34,197,94,.12);">❓</div>
+                    <h3 style="color:#065f46;">Preguntas Frecuentes</h3>
+                    <p style="color:#374151;">Resuelve tus dudas sobre el software, vacunación, historial médico y crianza de gallos finos.</p>
+                    <div style="display:flex;flex-direction:column;gap:.5rem;margin-top:1rem;">
+                        <a href="{{ route('faq.vacunacion') }}" style="font-size:.83rem;color:#065f46;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:.5rem;padding:.45rem .75rem;background:rgba(34,197,94,.08);border-radius:.6rem;" onmouseover="this.style.background='rgba(34,197,94,.16)'" onmouseout="this.style.background='rgba(34,197,94,.08)'">
+                            <span style="font-size:1rem;">💉</span> FAQ: Vacunación Avícola en Gallos
+                        </a>
+                        <a href="{{ route('faq.historial-medico') }}" style="font-size:.83rem;color:#92400e;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:.5rem;padding:.45rem .75rem;background:rgba(251,191,36,.08);border-radius:.6rem;" onmouseover="this.style.background='rgba(251,191,36,.16)'" onmouseout="this.style.background='rgba(251,191,36,.08)'">
+                            <span style="font-size:1rem;">📋</span> FAQ: Historial Médico de Aves
+                        </a>
+                        <a href="{{ route('faq.crianza-gallos') }}" style="font-size:.83rem;color:#7e22ce;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:.5rem;padding:.45rem .75rem;background:rgba(147,51,234,.08);border-radius:.6rem;" onmouseover="this.style.background='rgba(147,51,234,.16)'" onmouseout="this.style.background='rgba(147,51,234,.08)'">
+                            <span style="font-size:1rem;">🌱</span> FAQ: Crianza de Gallos Finos
+                        </a>
+                        <a href="{{ route('faq.index') }}" style="font-size:.82rem;color:#3b82f6;font-weight:700;text-decoration:none;margin-top:.25rem;display:flex;align-items:center;gap:.3rem;">
+                            Ver todas las preguntas frecuentes →
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Blog Hub --}}
+                <div class="feature-card" style="background:linear-gradient(135deg,#eff6ff,#fff);border-color:#bfdbfe;">
+                    <div class="feature-icon" style="background:rgba(59,130,246,.12);">📰</div>
+                    <h3 style="color:#1e3a8a;">Blog Avícola</h3>
+                    <p style="color:#374151;">Artículos y guías especializadas para criadores de gallos finos en Venezuela y Latinoamérica.</p>
+                    <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:1rem;">
+                        @php
+                            $latestPosts = \App\Models\BlogPost::published()->orderByDesc('published_at')->limit(3)->get();
+                        @endphp
+                        @forelse($latestPosts as $lp)
+                        <a href="{{ route('blog.show', $lp->slug) }}" style="font-size:.83rem;color:#1e3a8a;font-weight:600;text-decoration:none;display:flex;align-items:flex-start;gap:.5rem;padding:.45rem .75rem;background:rgba(59,130,246,.06);border-radius:.6rem;" onmouseover="this.style.background='rgba(59,130,246,.12)'" onmouseout="this.style.background='rgba(59,130,246,.06)'">
+                            <span style="font-size:.9rem;flex-shrink:0;margin-top:.05rem;">📄</span>
+                            <span>{{ Str::limit($lp->title, 60) }}</span>
+                        </a>
+                        @empty
+                        <p style="font-size:.83rem;color:#60708d;">Pronto encontrarás artículos sobre vacunación, crianza y manejo de gallos finos.</p>
+                        @endforelse
+                        <a href="{{ route('blog.index') }}" style="font-size:.82rem;color:#3b82f6;font-weight:700;text-decoration:none;margin-top:.25rem;display:flex;align-items:center;gap:.3rem;">
+                            Ver todos los artículos del blog →
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            {{-- Temas SEO en chips --}}
+            <div style="margin-top:2rem;padding:1.5rem;background:#f8faff;border:1px solid #e5e9f2;border-radius:1rem;">
+                <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-bottom:.85rem;">Temas cubiertos en nuestra documentación</div>
+                <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+                    @php
+                    $temas = [
+                        ['Vacunación gallos Newcastle', route('faq.vacunacion')],
+                        ['Vacuna Marek gallos', route('faq.vacunacion')],
+                        ['Vacuna Gumboro avícola', route('faq.vacunacion')],
+                        ['Historial médico gallos finos', route('faq.historial-medico')],
+                        ['Desparasitación aves', route('faq.historial-medico')],
+                        ['Pesaje y control de peso gallos', route('faq.historial-medico')],
+                        ['Crianza gallos finos Venezuela', route('faq.crianza-gallos')],
+                        ['Pedigree gallos', route('faq.crianza-gallos')],
+                        ['Alimentación gallos de pelea', route('faq.crianza-gallos')],
+                        ['Linajes Kelso Sweater Hatch', route('faq.crianza-gallos')],
+                        ['Plan sanitario criadero', route('faq.vacunacion')],
+                        ['Control parásitos externos gallos', route('faq.historial-medico')],
+                    ];
+                    @endphp
+                    @foreach($temas as [$tema, $url])
+                    <a href="{{ $url }}" style="background:#fff;border:1px solid #d4dded;color:#374151;border-radius:2rem;padding:.28rem .75rem;font-size:.77rem;font-weight:500;text-decoration:none;transition:all .15s;" onmouseover="this.style.background='#eff6ff';this.style.borderColor='#93c5fd';this.style.color='#1d4ed8'" onmouseout="this.style.background='#fff';this.style.borderColor='#d4dded';this.style.color='#374151'">{{ $tema }}</a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+
     {{-- ══ PLANES ══ --}}
     <section aria-labelledby="plans-title">
         <div class="container section-center">
@@ -542,7 +730,8 @@
                     <div class="faq-answer">
                         Galpon es un software para gestionar criaderos de gallos finos y gallinas de raza.
                         Te permite registrar cada ave con su ficha completa, construir el árbol genealógico (pedigree),
-                        llevar el inventario de medicamentos y alimentos, registrar ventas y compras, y generar reportes en PDF.
+                        llevar el inventario de medicamentos y alimentos, registrar ventas y compras, registrar vacunaciones
+                        y llevar el historial médico de cada ave, y generar reportes en PDF.
                         Todo desde el celular o la computadora.
                     </div>
                 </div>
@@ -602,6 +791,68 @@
                         Puedes empezar con el plan gratuito (hasta {{ $freeGallos }} aves) sin necesidad de tarjeta.
                     </div>
                 </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        ¿Puedo registrar las vacunas de mis gallos en Galpon?
+                        @include('partials.landing-icon', ['name' => 'add', 'size' => 22, 'class' => 'faq-icon'])
+                    </button>
+                    <div class="faq-answer">
+                        Sí. Galpon tiene un módulo completo de vacunación avícola donde puedes registrar para cada ave:
+                        la vacuna aplicada (Newcastle, Marek, Gumboro, Bronquitis Infecciosa, Viruela Aviar, etc.),
+                        la dosis, la vía de administración, la fecha de aplicación, el número de lote del vial,
+                        la próxima dosis programada y el veterinario responsable. El sistema te alerta
+                        automáticamente cuando se acercan las fechas de refuerzo.
+                        <a href="{{ route('faq.vacunacion') }}" style="color:#3b82f6;font-weight:600;">Ver guía completa de vacunación →</a>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        ¿Qué incluye el historial médico de un gallo en Galpon?
+                        @include('partials.landing-icon', ['name' => 'add', 'size' => 22, 'class' => 'faq-icon'])
+                    </button>
+                    <div class="faq-answer">
+                        El historial médico digital de cada ave en Galpon incluye: todas las vacunaciones aplicadas
+                        con fechas y lotes, tratamientos con medicamentos y antibióticos, desparasitaciones internas
+                        y externas, pesajes periódicos, enfermedades diagnosticadas, procedimientos veterinarios
+                        y observaciones del criador. Este historial completo puede exportarse en PDF al momento de
+                        vender el animal, lo que aumenta su valor y la confianza del comprador.
+                        <a href="{{ route('faq.historial-medico') }}" style="color:#3b82f6;font-weight:600;">Ver qué incluye el historial médico →</a>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        ¿Qué vacunas necesitan los gallos finos?
+                        @include('partials.landing-icon', ['name' => 'add', 'size' => 22, 'class' => 'faq-icon'])
+                    </button>
+                    <div class="faq-answer">
+                        Las vacunas esenciales para gallos finos son: <strong>Newcastle</strong> (cada 3-4 meses, muy contagiosa y mortal),
+                        <strong>Marek</strong> (en pollitos de 1 día, protege contra tumores),
+                        <strong>Gumboro (IBD)</strong> (en pollitos, evita inmunosupresión),
+                        <strong>Bronquitis Infecciosa</strong> (cada 4-6 meses) y
+                        <strong>Viruela Aviar</strong> (anual, especialmente en zonas endémicas).
+                        Con Galpon llevas el registro de cada vacuna y recibes alertas antes de los refuerzos.
+                        <a href="{{ route('faq.vacunacion') }}" style="color:#3b82f6;font-weight:600;">Ver calendario completo de vacunación →</a>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        ¿Cómo afecta el historial médico al valor de venta de un gallo?
+                        @include('partials.landing-icon', ['name' => 'add', 'size' => 22, 'class' => 'faq-icon'])
+                    </button>
+                    <div class="faq-answer">
+                        Un gallo con historial médico documentado — vacunaciones al día, desparasitaciones registradas
+                        y sin historial de enfermedades graves — se vende a un precio considerablemente mayor y genera
+                        más confianza en el comprador. Con Galpon puedes generar el historial médico completo en PDF
+                        y entregarlo junto al animal al momento de la venta. Esto diferencia a los criadores
+                        profesionales de los aficionados.
+                        <a href="{{ route('faq.historial-medico') }}" style="color:#3b82f6;font-weight:600;">Saber más sobre el historial médico →</a>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:2rem;">
+                <a href="{{ route('faq.index') }}" style="display:inline-flex;align-items:center;gap:.45rem;background:#fff;border:1.5px solid #d4dded;color:#374151;border-radius:.75rem;padding:.65rem 1.5rem;font-size:.88rem;font-weight:600;text-decoration:none;transition:all .15s;" onmouseover="this.style.borderColor='#93c5fd';this.style.color='#1d4ed8'" onmouseout="this.style.borderColor='#d4dded';this.style.color='#374151'">
+                    Ver todas las preguntas frecuentes →
+                </a>
             </div>
         </div>
     </section>
@@ -640,12 +891,54 @@
                 <span>Galpon</span>
             </div>
             <p>Software de gestión para criaderos de gallos y gallinas — Venezuela y Latinoamérica</p>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;text-align:left;margin:2rem 0;padding:2rem 0;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);">
+                <div>
+                    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.4);margin-bottom:.85rem;">Plataforma</div>
+                    <div style="display:flex;flex-direction:column;gap:.5rem;">
+                        <a href="{{ route('register') }}" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Crear cuenta gratis</a>
+                        <a href="{{ route('login') }}" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Iniciar sesión</a>
+                        <a href="{{ route('plans') }}" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Planes y Precios</a>
+                        <a href="{{ route('marketplace.index') }}" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Marketplace</a>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.4);margin-bottom:.85rem;">Salud Avícola</div>
+                    <div style="display:flex;flex-direction:column;gap:.5rem;">
+                        <a href="{{ route('faq.vacunacion') }}" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Vacunación Avícola</a>
+                        <a href="{{ route('faq.historial-medico') }}" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Historial Médico de Aves</a>
+                        <a href="{{ route('faq.crianza-gallos') }}" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Crianza de Gallos Finos</a>
+                        <a href="{{ route('faq.index') }}" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Todas las FAQ</a>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.4);margin-bottom:.85rem;">Recursos</div>
+                    <div style="display:flex;flex-direction:column;gap:.5rem;">
+                        <a href="{{ route('blog.index') }}" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Blog Avícola</a>
+                        <a href="{{ route('blog.index') }}?category=vacunacion" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Artículos de Vacunación</a>
+                        <a href="{{ route('blog.index') }}?category=crianza" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Guías de Crianza</a>
+                        <a href="{{ url('/sitemap.xml') }}" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Sitemap</a>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.4);margin-bottom:.85rem;">Soporte</div>
+                    <div style="display:flex;flex-direction:column;gap:.5rem;">
+                        <a href="{{ $whatsapp }}" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">WhatsApp</a>
+                        <a href="{{ route('faq.index') }}" style="color:rgba(255,255,255,.65);font-size:.84rem;text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Centro de Ayuda</a>
+                    </div>
+                </div>
+            </div>
+
             <nav class="footer-links" aria-label="Enlaces del pie de página">
                 <a href="{{ route('login') }}">Iniciar sesión</a>
                 <span class="footer-sep" aria-hidden="true">·</span>
                 <a href="{{ route('register') }}">Registrarse</a>
                 <span class="footer-sep" aria-hidden="true">·</span>
                 <a href="{{ route('plans') }}">Planes</a>
+                <span class="footer-sep" aria-hidden="true">·</span>
+                <a href="{{ route('faq.index') }}">FAQ</a>
+                <span class="footer-sep" aria-hidden="true">·</span>
+                <a href="{{ route('blog.index') }}">Blog</a>
                 <span class="footer-sep" aria-hidden="true">·</span>
                 <a href="{{ $whatsapp }}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
             </nav>

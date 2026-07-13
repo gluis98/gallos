@@ -370,6 +370,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('superadmin.blog*') ? 'active' : '' }}" href="{{ route('superadmin.blog.index') }}">
+                            <span class="material-symbols-outlined" style="font-size:.95rem;">article</span> Blog
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('superadmin.audit*') ? 'active' : '' }}" href="{{ route('superadmin.audit.index') }}">
                             <span class="material-symbols-outlined" style="font-size:.95rem;">history</span> Auditoría
                         </a>
@@ -410,6 +415,9 @@
                     </li>
                     <li class="nav-item">
                       <a class="nav-link {{ request()->routeIs('ventas') ? 'active' : '' }}" href="{{ route('ventas')}}">Ventas</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link {{ request()->routeIs('vacunaciones') ? 'active' : '' }}" href="{{ route('vacunaciones')}}">Vacunación</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link {{ request()->routeIs('plans') ? 'active' : '' }}" href="{{ route('plans')}}">Planes</a>
@@ -622,6 +630,9 @@
             </div>
             <div class="mob-more-grid">
             @if($isSA)
+                <a href="{{ route('superadmin.blog.index') }}" class="mob-more-btn {{ str_contains($curRoute,'blog') ? 'active' : '' }}">
+                    <span class="material-symbols-outlined">article</span><span class="lbl">Blog</span>
+                </a>
                 <a href="{{ route('superadmin.subscriptions.index') }}" class="mob-more-btn {{ str_contains($curRoute,'subscriptions') ? 'active' : '' }}">
                     <span class="material-symbols-outlined">workspace_premium</span><span class="lbl">Suscript.</span>
                 </a>
@@ -635,6 +646,9 @@
                     <span class="material-symbols-outlined">logout</span><span class="lbl">Salir</span>
                 </button>
             @else
+                <a href="{{ route('vacunaciones') }}" class="mob-more-btn {{ str_contains($curRoute,'vacunaciones') ? 'active' : '' }}">
+                    <span class="material-symbols-outlined">vaccines</span><span class="lbl">Vacunas</span>
+                </a>
                 <a href="{{ route('inventario') }}" class="mob-more-btn {{ str_contains($curRoute,'inventario') ? 'active' : '' }}">
                     <span class="material-symbols-outlined">inventory_2</span><span class="lbl">Inventario</span>
                 </a>

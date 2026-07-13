@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlogPost;
 use App\Models\Gallo;
 use App\Models\Publicacion;
 use App\Support\MarketplacePresenter;
@@ -43,6 +44,19 @@ class SitemapController extends Controller
         $base = rtrim(config('app.url'), '/');
 
         $xml = view('sitemap.marketplace', compact('base', 'publicaciones'))->render();
+
+        return $this->xmlResponse($xml);
+    }
+
+    public function blog(): Response
+    {
+        $posts = BlogPost::published()
+            ->orderByDesc('updated_at')
+            ->get(['slug', 'updated_at']);
+
+        $base = rtrim(config('app.url'), '/');
+
+        $xml = view('sitemap.blog', compact('base', 'posts'))->render();
 
         return $this->xmlResponse($xml);
     }

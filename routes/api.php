@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\VacunacionController;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\NotificationController;
@@ -61,4 +62,9 @@ Route::middleware(['auth:sanctum', 'tenant.context', 'subscription.limit'])->gro
     Route::get('/catalog', [TenantCatalogController::class, 'info']);
     Route::post('/catalog/regenerate', [TenantCatalogController::class, 'regenerate']);
     Route::post('/catalog/toggle', [TenantCatalogController::class, 'toggle']);
+
+    // ── Vacunaciones ──────────────────────────────────────────────────────────
+    Route::get('/vacunaciones/estadisticas', [VacunacionController::class, 'estadisticas']);
+    Route::get('/vacunaciones/historial/{aveType}/{aveId}', [VacunacionController::class, 'historial']);
+    Route::apiResource('vacunaciones', VacunacionController::class);
 });

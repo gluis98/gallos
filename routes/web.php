@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\BlogPublicController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\Public\CatalogController as PublicCatalogController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\SugerenciaController;
 use App\Http\Controllers\SuperAdmin\AuditController;
+use App\Http\Controllers\SuperAdmin\BlogController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\PaymentOrderController as SuperAdminPaymentOrderController;
 use App\Http\Controllers\SuperAdmin\SettingsController;
@@ -26,6 +29,7 @@ Route::get('/robots.txt', [SitemapController::class, 'robots']);
 Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 Route::get('/sitemap-pages.xml', [SitemapController::class, 'pages']);
 Route::get('/sitemap-marketplace.xml', [SitemapController::class, 'marketplace']);
+Route::get('/sitemap-blog.xml', [SitemapController::class, 'blog']);
 
 // Landing pública: muestra la página de inicio a visitantes,
 // redirige al dashboard si el usuario ya está autenticado.
@@ -56,6 +60,19 @@ Route::get('/plans', function () {
 })->name('plans');
 Route::post('/sugerencias', [SugerenciaController::class, 'store'])->name('sugerencias.store');
 
+// ── Blog público ──────────────────────────────────────────────────────────────
+Route::get('/blog', [BlogPublicController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogPublicController::class, 'show'])->name('blog.show')
+    ->where('slug', '[a-z0-9\-]+');
+
+// ── FAQ ───────────────────────────────────────────────────────────────────────
+Route::controller(FaqController::class)->prefix('faq')->name('faq.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/vacunacion-avicola', 'vacunacion')->name('vacunacion');
+    Route::get('/historial-medico-aves', 'historialMedico')->name('historial-medico');
+    Route::get('/crianza-gallos-finos', 'crianzaGallos')->name('crianza-gallos');
+});
+
 // Catálogo público: solo acepta clave hexadecimal de 64 caracteres (no IDs de cuenta)
 Route::get('/catalogo/{token}', [PublicCatalogController::class, 'show'])
     ->where('token', '[a-fA-F0-9]{64}')
@@ -73,6 +90,7 @@ Route::post('/marketplace/contact', [MarketplaceController::class, 'question'])-
 
 Route::middleware(['auth', 'tenant.context'])->group(function () {
     Route::view('/gallos', 'admin.gallos.index')->name('gallos');
+    Route::view('/vacunaciones', 'admin.vacunaciones.index')->name('vacunaciones');
     Route::view('/gallinas', 'admin.gallinas.index')->name('gallinas');
     Route::view('/inventario', 'admin.inventario.index')->name('inventario');
     Route::view('/compras', 'admin.compras.index')->name('compras');
@@ -122,6 +140,10 @@ Route::middleware(['auth', 'can:superadmin'])->prefix('super-admin')->name('supe
     Route::post('/subscriptions/{id}/plan', [SubscriptionController::class, 'setPlan'])->name('subscriptions.plan');
 
     Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
+
+    // ── Blog (gestión superadmin) ─────────────────────────────────────────────
+    Route::resource('blog', BlogController::class)
+        ->parameters(['blog' => 'blog']);
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings', [SettingsController::class, 'update'])->name('settings.update');
