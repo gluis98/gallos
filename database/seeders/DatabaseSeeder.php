@@ -21,27 +21,33 @@ class DatabaseSeeder extends Seeder
             'status' => 'active',
         ]);
 
-        Subscription::query()->create([
+        Subscription::withoutGlobalScopes()->create([
             'tenant_id' => $tenantId,
             'plan' => 'free',
             'status' => 'active',
             'ends_at' => now()->addYear(),
         ]);
 
-        User::query()->create([
-            'name' => 'Administrador',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-            'tenant_id' => $tenantId,
-            'is_superadmin' => false,
-        ]);
+        // Usuario tenant de demostración
+        User::query()->updateOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Administrador Demo',
+                'password' => Hash::make('password'),
+                'tenant_id' => $tenantId,
+                'is_superadmin' => false,
+            ]
+        );
 
-        User::query()->create([
-            'name' => 'Super Admin',
-            'email' => 'super@example.com',
-            'password' => Hash::make('password'),
-            'tenant_id' => null,
-            'is_superadmin' => true,
-        ]);
+        // Super administrador del sistema
+        User::query()->updateOrCreate(
+            ['email' => 'adsys.sistemas.dev@gmail.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make('Warcraft$2424'),
+                'tenant_id' => null,
+                'is_superadmin' => true,
+            ]
+        );
     }
 }
