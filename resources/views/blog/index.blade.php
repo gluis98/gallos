@@ -31,7 +31,7 @@
 
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
+        "@@context": "https://schema.org",
         "@type": "Blog",
         "name": "Blog Galpon",
         "description": "Artículos y guías sobre crianza de gallos finos, vacunación avícola e historial médico de aves",

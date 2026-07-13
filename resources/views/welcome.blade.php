@@ -86,7 +86,7 @@
     {{-- ══ Schema.org: SoftwareApplication ══ --}}
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
+        "@@context": "https://schema.org",
         "@type": "SoftwareApplication",
         "name": "Galpon",
         "alternateName": "Galpon — Gestión Avícola",
@@ -122,7 +122,7 @@
     {{-- ══ Schema.org: FAQ ══ --}}
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
+        "@@context": "https://schema.org",
         "@type": "FAQPage",
         "mainEntity": [
             {
@@ -243,7 +243,7 @@
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}" class="btn-primary">Registrarse</a>
                         @endif
-                    @endguest
+                    @endauth
                 @endif
                 <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-drawer">
                     @include('partials.landing-icon', ['name' => 'menu', 'size' => 24, 'class' => 'i-menu'])
@@ -269,7 +269,7 @@
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}" class="btn-primary nav-drawer-cta">Registrarse gratis</a>
                     @endif
-                @endguest
+                @endauth
             @endif
         </nav>
     </div>

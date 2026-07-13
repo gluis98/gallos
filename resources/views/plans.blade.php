@@ -201,7 +201,7 @@
                         <a href="{{ route('register') }}" class="plan-cta cta-free">Comenzar gratis</a>
                     @else
                         <a href="{{ route('home') }}" class="plan-cta cta-free">Ir a mi panel</a>
-                    @endauth
+                    @endguest
                 </div>
 
                 {{-- Plan Pro --}}
