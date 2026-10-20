@@ -111,7 +111,6 @@ Route::middleware(['auth', 'tenant.context'])->group(function () {
 
     Route::get('/billing/checkout', [BillingController::class, 'checkout'])->name('billing.checkout');
     Route::get('/billing/success', [BillingController::class, 'success'])->name('billing.success');
-    Route::post('/billing/trial', [BillingController::class, 'startTrial'])->name('billing.trial');
     Route::post('/billing/paypal/subscribe', [BillingController::class, 'paypalSubscribe'])->name('billing.paypal.subscribe');
     Route::get('/billing/paypal/return', [BillingController::class, 'paypalReturn'])->name('billing.paypal.return');
     Route::post('/billing/paypal/capture', [BillingController::class, 'paypalCapture'])->name('billing.paypal.capture');

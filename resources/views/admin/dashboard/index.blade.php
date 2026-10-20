@@ -346,9 +346,7 @@ $allDone   = $completed === $total;
         <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
             @php $currentPlan = $stats['plan'] ?? 'free'; @endphp
             <span style="background:{{ $currentPlan === 'pro' ? 'linear-gradient(135deg,#f59e0b,#d97706)' : '#f3f6fd' }};color:{{ $currentPlan === 'pro' ? '#fff' : '#374151' }};border:1.5px solid {{ $currentPlan === 'pro' ? '#f59e0b' : '#d7dfed' }};border-radius:20px;padding:.3rem .85rem;font-size:.75rem;font-weight:800;">
-                @if($stats['is_trial'] ?? false) 🎁 Trial Pro
-                @else {{ $currentPlan === 'pro' ? '⭐ Plan Pro' : '🔒 Plan Gratis' }}
-                @endif
+                {{ $currentPlan === 'pro' ? '⭐ Plan Pro' : '🔒 Plan Gratis' }}
             </span>
             @if($currentPlan !== 'pro')
             <a href="{{ route('billing.checkout', ['plan' => 'pro_monthly']) }}" style="background:linear-gradient(135deg,#1a2648,#3b82f6);color:#fff;border:none;border-radius:20px;padding:.3rem .85rem;font-size:.75rem;font-weight:700;text-decoration:none;">Activar Pro →</a>

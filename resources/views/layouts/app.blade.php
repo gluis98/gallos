@@ -451,14 +451,6 @@
                 @if(($subscriptionSummary['gallos_near_limit'] ?? false) || ($subscriptionSummary['gallinas_near_limit'] ?? false))
                     <x-upgrade-cta feature="gallos" :compact="true" />
                 @endif
-            @elseif(isset($subscriptionSummary) && ($subscriptionSummary['is_trial'] ?? false))
-                <div class="alert alert-info py-2 px-3" style="font-size:.85rem;border-radius:.75rem;">
-                    Estás en periodo de prueba Pro.
-                    @if($subscriptionSummary['trial_ends_at'] ?? null)
-                        Vence: {{ \Carbon\Carbon::parse($subscriptionSummary['trial_ends_at'])->format('d/m/Y') }}.
-                    @endif
-                    <a href="{{ route('billing.checkout', ['plan' => 'pro_monthly']) }}" class="alert-link">Activar suscripción</a>
-                </div>
             @endif
             @endauth
             @yield('content')

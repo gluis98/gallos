@@ -47,21 +47,6 @@ class BillingController extends Controller
         ]);
     }
 
-    public function startTrial()
-    {
-        if ($this->subscriptionService->isPro()) {
-            return redirect()->route('dashboard')->with('ok', 'Ya tienes acceso Pro activo.');
-        }
-
-        try {
-            $this->activationService->startTrial(tenant('id'));
-        } catch (\RuntimeException $e) {
-            return redirect()->route('billing.checkout')->withErrors(['trial' => $e->getMessage()]);
-        }
-
-        return redirect()->route('dashboard')->with('ok', '¡Trial Pro activado! Disfruta '.config('paypal.trial_days', 14).' días de acceso completo.');
-    }
-
     public function paypalSubscribe(Request $request)
     {
         $request->validate(['plan' => ['required', 'in:pro_monthly,pro_yearly']]);
