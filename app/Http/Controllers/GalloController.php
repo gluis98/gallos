@@ -150,9 +150,15 @@ class GalloController extends Controller
     {
         $gallo = Gallo::query()->findOrFail($id);
 
+        // Free: solo padres (depth 1). Pro: árbol completo (depth 3) + consanguinidad.
+        $isPro = app(\App\Services\SubscriptionService::class)->isPro();
+        $depth = $isPro ? 3 : 1;
+
         return response()->json([
-            'data' => $this->pedigreeService->arbolPorGallo($gallo, 3),
-            'consanguinidad' => $this->pedigreeService->calcularConsanguinidad($gallo),
+            'data' => $this->pedigreeService->arbolPorGallo($gallo, $depth),
+            'consanguinidad' => $isPro ? $this->pedigreeService->calcularConsanguinidad($gallo) : null,
+            'is_pro' => $isPro,
+            'depth' => $depth,
         ]);
     }
 }

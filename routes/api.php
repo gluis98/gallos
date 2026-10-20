@@ -33,10 +33,9 @@ Route::middleware(['auth:sanctum', 'tenant.context', 'subscription.limit'])->gro
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead']);
 
-    Route::get('/gallos/{id}/pedigree', [GalloController::class, 'pedigree'])
-        ->middleware('pro.feature:pedigree_full');
-    Route::get('/gallinas/{id}/pedigree', [GallinaController::class, 'pedigree'])
-        ->middleware('pro.feature:pedigree_full');
+    // Pedigree básico (padre/madre) disponible para todos; profundidad Pro en el controlador
+    Route::get('/gallos/{id}/pedigree', [GalloController::class, 'pedigree']);
+    Route::get('/gallinas/{id}/pedigree', [GallinaController::class, 'pedigree']);
 
     Route::apiResource('gallos', GalloController::class);
     Route::post('gallos/search', [GalloController::class, 'search']);

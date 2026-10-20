@@ -188,16 +188,18 @@ class PedigreeService
 
     private function filaGenealogica(Gallo|Gallina $ave): ?GallosHijo
     {
-        if ($ave instanceof Gallo) {
-            return GallosHijo::query()
-                ->where('hijoable_type', Gallo::class)
-                ->where('hijoable_id', $ave->id)
-                ->first();
-        }
+        $types = $ave instanceof Gallo
+            ? [Gallo::class, 'App\\Models\\Gallo', 'Gallo', 'gallo']
+            : [Gallina::class, 'App\\Models\\Gallina', 'Gallina', 'gallina'];
 
         return GallosHijo::query()
-            ->where('hijoable_type', Gallina::class)
             ->where('hijoable_id', $ave->id)
+            ->where(function ($q) use ($types) {
+                foreach ($types as $type) {
+                    $q->orWhere('hijoable_type', $type);
+                }
+            })
+            ->orderByDesc('id')
             ->first();
     }
 

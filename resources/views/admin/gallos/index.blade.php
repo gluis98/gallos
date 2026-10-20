@@ -816,15 +816,39 @@ $(document).ready(function(){
         $section.empty();
         $('#modal-pedigree').modal('show');
         await ModuleLoader.run('#pedigree-section', async () => {
-            const res = await fetch(`api/gallos/${id}/pedigree`);
-            const payload = await res.json();
+            const res = await fetch(`api/gallos/${id}/pedigree`, {
+                headers: { 'Accept': 'application/json' },
+                credentials: 'same-origin',
+            });
+            const payload = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                const msg = payload.msj || payload.message || 'No se pudo cargar el pedigree.';
+                const upgrade = payload.upgrade_url
+                    ? `<br><a href="${payload.upgrade_url}" class="btn btn-sm btn-primary mt-2">Activar Plan Pro</a>`
+                    : '';
+                $section.html(`<p class="text-danger mb-0">${msg}${upgrade}</p>`);
+                return;
+            }
             if (!window.PedigreeTree) {
                 $section.html('<p class="text-danger">No se cargó el módulo de pedigree.</p>');
                 return;
             }
+            if (!payload.data) {
+                $section.html('<p class="text-muted mb-0">No hay datos de pedigree para este gallo.</p>');
+                return;
+            }
             const host = document.createElement('div');
             $section.empty().append(host);
-            PedigreeTree.render(payload.data, host, { consanguinidad: payload.consanguinidad });
+            PedigreeTree.render(payload.data, host, {
+                consanguinidad: payload.consanguinidad,
+                ancestorDepth: payload.depth || 3,
+            });
+            if (payload.is_pro === false) {
+                const tip = document.createElement('p');
+                tip.className = 'text-muted small mt-2 mb-0';
+                tip.innerHTML = 'Viendo pedigree básico (padre/madre). <a href="/billing/checkout?plan=pro_monthly">Activa Pro</a> para el árbol completo y consanguinidad.';
+                $section.append(tip);
+            }
         }, { message: 'Cargando árbol genealógico...', minHeight: '240px' });
     });
 

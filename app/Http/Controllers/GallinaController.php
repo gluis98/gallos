@@ -153,8 +153,14 @@ class GallinaController extends Controller
     {
         $gallina = Gallina::query()->findOrFail($id);
 
+        $isPro = app(\App\Services\SubscriptionService::class)->isPro();
+        $depth = $isPro ? 3 : 1;
+
         return response()->json([
-            'data' => $this->pedigreeService->arbolPorGallina($gallina, 3),
+            'data' => $this->pedigreeService->arbolPorGallina($gallina, $depth),
+            'consanguinidad' => null,
+            'is_pro' => $isPro,
+            'depth' => $depth,
         ]);
     }
 }
