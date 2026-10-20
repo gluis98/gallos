@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\SettingsService;
 use App\Services\SubscriptionService;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
@@ -16,8 +17,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Forzar HTTPS en URLs (route/url/asset) cuando APP_URL es https
-        // o cuando FORCE_HTTPS=true. Evita formularios con action http:// detrás de proxy SSL.
         $appUrl = (string) config('app.url', '');
         $forceHttps = filter_var(env('FORCE_HTTPS', false), FILTER_VALIDATE_BOOLEAN)
             || str_starts_with($appUrl, 'https://');
@@ -26,19 +25,28 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        View::composer(['layouts.app', 'admin.*'], function ($view) {
+        View::composer(['layouts.app', 'admin.*', 'tenant.*'], function ($view) {
+            $modules = SettingsService::get()['modules'] ?? [];
+            $view->with('planModules', $modules);
+
             if (! auth()->check() || auth()->user()->is_superadmin) {
+                $view->with('isProUser', true);
+                $view->with('subscriptionSummary', ['is_pro' => true, 'plan' => 'pro']);
+
                 return;
             }
 
             try {
+                $summary = ['is_pro' => false, 'plan' => 'free'];
                 if (tenancy()->initialized) {
-                    $view->with('subscriptionSummary', app(SubscriptionService::class)->subscriptionSummary());
+                    $summary = app(SubscriptionService::class)->subscriptionSummary();
                 }
+                $view->with('subscriptionSummary', $summary);
+                $view->with('isProUser', (bool) ($summary['is_pro'] ?? false));
             } catch (\Throwable) {
-                // tenancy may not be initialized on some routes
+                $view->with('subscriptionSummary', ['is_pro' => false, 'plan' => 'free']);
+                $view->with('isProUser', false);
             }
         });
     }
 }
-

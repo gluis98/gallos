@@ -655,9 +655,9 @@ $(document).ready(function(){
 
     function ensureTomSelect(selectEl, placeholder, store) {
         if (!window.TomSelect || !selectEl) return store;
+        // Recrear siempre para que respete opciones filtradas (ej. no ser padre de sí mismo)
         if (store) {
-            store.sync();
-            return store;
+            try { store.destroy(); } catch (e) {}
         }
         return new TomSelect(selectEl, {
             create: false,

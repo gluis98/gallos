@@ -15,10 +15,124 @@
     .tab-pills .nav-link.active { background:linear-gradient(95deg,#3b82f6,#6d5efc); color:#fff; border-color:transparent; }
     .vacuna-row:hover { background:#f8faff; }
     .proxima-alert { background:#fff7ed; border:1px solid #fed7aa; border-radius:.85rem; padding:.75rem 1rem; }
+    #sidebar-vac { width: min(560px, 100vw); }
+    .field-vac { border:1.5px solid #d7dfed; border-radius:.65rem; padding:.5rem .75rem; font-size:.88rem; width:100%; outline:none; font-family:inherit; }
+    .field-vac:focus { border-color:#86efac; box-shadow:0 0 0 .18rem rgba(34,197,94,.16); }
+    .vac-section { background:#f8faff; border:1px solid #e8eef8; border-radius:.85rem; padding:1rem; margin-bottom:1rem; }
 </style>
 @endsection
 
 @section('content')
+@if(!empty(($planModules['vacunaciones']['pro'] ?? false)) && !($isProUser ?? false))
+    <x-upgrade-cta feature="vacunaciones" />
+@endif
+
+{{-- Sidebar offcanvas vacunación --}}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="sidebar-vac">
+    <div style="background:linear-gradient(135deg,#065f46,#059669);padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+            <h5 style="margin:0;color:#fff;font-weight:800;font-size:1rem;" id="sidebar-vac-title">💉 Registrar vacunación</h5>
+            <small style="color:rgba(255,255,255,.7);font-size:.72rem;">Historial médico del ave</small>
+        </div>
+        <button type="button" data-bs-dismiss="offcanvas" style="background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <div class="offcanvas-body" style="padding:1.25rem;overflow-y:auto;">
+        <form id="form-vac" onsubmit="submitVac(event)">
+            <input type="hidden" id="vac-id" value="">
+
+            <div class="vac-section">
+                <h6 style="font-size:.82rem;font-weight:800;color:#1a2648;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem;">
+                    <span class="material-symbols-outlined" style="font-size:1rem;color:#059669;">pets</span> Ave
+                </h6>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label style="font-size:.75rem;font-weight:600;color:#374151;margin-bottom:.2rem;display:block;">Tipo de ave <span style="color:#ef4444">*</span></label>
+                        <select id="vac-ave-type" class="field-vac" required onchange="loadAves()">
+                            <option value="">Seleccionar...</option>
+                            <option value="gallo">Gallo</option>
+                            <option value="gallina">Gallina</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label style="font-size:.75rem;font-weight:600;color:#374151;margin-bottom:.2rem;display:block;">Ave <span style="color:#ef4444">*</span></label>
+                        <select id="vac-ave-id" class="field-vac" required>
+                            <option value="">Primero selecciona el tipo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vac-section">
+                <h6 style="font-size:.82rem;font-weight:800;color:#1a2648;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem;">
+                    <span class="material-symbols-outlined" style="font-size:1rem;color:#059669;">vaccines</span> Vacuna
+                </h6>
+                <div class="row g-2">
+                    <div class="col-12">
+                        <label style="font-size:.75rem;font-weight:600;color:#374151;margin-bottom:.2rem;display:block;">Vacuna / Medicamento <span style="color:#ef4444">*</span></label>
+                        <input type="text" id="vac-vacuna" class="field-vac" required placeholder="Ej: Newcastle, Marek, Gumboro...">
+                    </div>
+                    <div class="col-md-6">
+                        <label style="font-size:.75rem;font-weight:600;color:#374151;margin-bottom:.2rem;display:block;">Descripción</label>
+                        <input type="text" id="vac-descripcion" class="field-vac" placeholder="Descripción adicional">
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-size:.75rem;font-weight:600;color:#374151;margin-bottom:.2rem;display:block;">Dosis</label>
+                        <input type="text" id="vac-dosis" class="field-vac" placeholder="0.5 ml">
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-size:.75rem;font-weight:600;color:#374151;margin-bottom:.2rem;display:block;">Vía</label>
+                        <select id="vac-via" class="field-vac">
+                            <option value="">—</option>
+                            <option value="Subcutánea">Subcutánea</option>
+                            <option value="Intramuscular">Intramuscular</option>
+                            <option value="Ocular">Ocular</option>
+                            <option value="Nasal">Nasal</option>
+                            <option value="Oral / Agua">Oral / Agua</option>
+                            <option value="Ala Web">Ala Web</option>
+                            <option value="Spray">Spray</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vac-section">
+                <h6 style="font-size:.82rem;font-weight:800;color:#1a2648;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem;">
+                    <span class="material-symbols-outlined" style="font-size:1rem;color:#059669;">event</span> Fechas y seguimiento
+                </h6>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label style="font-size:.75rem;font-weight:600;color:#374151;margin-bottom:.2rem;display:block;">Fecha de aplicación <span style="color:#ef4444">*</span></label>
+                        <input type="date" id="vac-fecha" class="field-vac" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label style="font-size:.75rem;font-weight:600;color:#374151;margin-bottom:.2rem;display:block;">Próxima dosis</label>
+                        <input type="date" id="vac-proxima" class="field-vac">
+                    </div>
+                    <div class="col-md-6">
+                        <label style="font-size:.75rem;font-weight:600;color:#374151;margin-bottom:.2rem;display:block;">Lote / N° de vial</label>
+                        <input type="text" id="vac-lote" class="field-vac" placeholder="Ej: LOT-2025-A">
+                    </div>
+                    <div class="col-md-6">
+                        <label style="font-size:.75rem;font-weight:600;color:#374151;margin-bottom:.2rem;display:block;">Veterinario / Aplicador</label>
+                        <input type="text" id="vac-vet" class="field-vac" placeholder="Nombre">
+                    </div>
+                    <div class="col-12">
+                        <label style="font-size:.75rem;font-weight:600;color:#374151;margin-bottom:.2rem;display:block;">Notas</label>
+                        <textarea id="vac-notas" rows="2" class="field-vac" placeholder="Observaciones, reacciones, etc."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:flex;gap:.75rem;margin-top:.5rem;">
+                <button type="button" data-bs-dismiss="offcanvas" style="flex:1;background:#f3f6fd;border:1.5px solid #d7dfed;border-radius:.75rem;padding:.7rem;font-family:inherit;font-size:.88rem;font-weight:600;color:#374151;cursor:pointer;">Cancelar</button>
+                <button type="submit" style="flex:2;background:linear-gradient(135deg,#065f46,#059669);border:none;border-radius:.75rem;padding:.7rem;font-family:inherit;font-size:.9rem;font-weight:700;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;">
+                    <span class="material-symbols-outlined" style="font-size:1rem;">save</span> Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
     <div>
         <h1 class="section-title mb-0">
@@ -27,10 +141,12 @@
         </h1>
         <p class="section-subtitle mb-0">Historial médico y control de vacunas de tus aves</p>
     </div>
-    <button class="btn btn-primary-soft px-4" onclick="openModalVac()">
-        <span class="material-symbols-outlined align-middle me-1" style="font-size:1rem;">add</span>
-        Registrar vacuna
-    </button>
+    <x-module-create module="vacunaciones">
+        <button class="btn btn-primary-soft px-4" style="background:linear-gradient(135deg,#065f46,#059669);border:none;" onclick="openModalVac()">
+            <span class="material-symbols-outlined align-middle me-1" style="font-size:1rem;">add</span>
+            Registrar vacuna
+        </button>
+    </x-module-create>
 </div>
 
 {{-- Estadísticas --}}
@@ -118,109 +234,14 @@
     </div>
 </div>
 
-{{-- ═══ Modal registrar vacunación ═══ --}}
-<div id="modal-vac" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(10,20,50,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1rem;">
-<div style="background:#fff;border-radius:1.2rem;width:min(600px,100%);max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(10,20,50,.22);animation:slideUp .25s ease;">
-    <div style="background:linear-gradient(135deg,#1a2648,#1e3a8a);padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-radius:1.2rem 1.2rem 0 0;">
-        <div>
-            <h5 style="margin:0;color:#fff;font-weight:700;font-size:1rem;" id="modal-vac-title">Registrar Vacunación</h5>
-            <small style="color:rgba(255,255,255,.65);">Historial médico del ave</small>
-        </div>
-        <button onclick="closeModalVac()" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;">✕</button>
+{{-- Offcanvas detalle --}}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="sidebar-vac-detail" style="width:min(480px,100vw);">
+    <div style="background:linear-gradient(135deg,#065f46,#059669);padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;">
+        <h5 style="margin:0;color:#fff;font-weight:800;font-size:1rem;">Detalle de Vacunación</h5>
+        <button type="button" data-bs-dismiss="offcanvas" style="background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;">✕</button>
     </div>
-    <form id="form-vac" style="padding:1.5rem;" onsubmit="submitVac(event)">
-        <input type="hidden" id="vac-id" value="">
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label class="form-label fw-600 small">Tipo de ave *</label>
-                <select id="vac-ave-type" class="form-select" required onchange="loadAves()">
-                    <option value="">Seleccionar...</option>
-                    <option value="gallo">Gallo</option>
-                    <option value="gallina">Gallina</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label fw-600 small">Ave *</label>
-                <select id="vac-ave-id" class="form-select" required>
-                    <option value="">Primero selecciona el tipo</option>
-                </select>
-            </div>
-            <div class="col-12">
-                <label class="form-label fw-600 small">Vacuna / Medicamento *</label>
-                <input type="text" id="vac-vacuna" class="form-control" required
-                    placeholder="Ej: Newcastle, Marek, Gumboro, Bronquitis Infecciosa...">
-            </div>
-            <div class="col-md-6">
-                <label class="form-label fw-600 small">Descripción</label>
-                <input type="text" id="vac-descripcion" class="form-control" placeholder="Descripción adicional">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label fw-600 small">Dosis</label>
-                <input type="text" id="vac-dosis" class="form-control" placeholder="Ej: 0.5 ml">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label fw-600 small">Vía</label>
-                <select id="vac-via" class="form-select">
-                    <option value="">—</option>
-                    <option value="Subcutánea">Subcutánea</option>
-                    <option value="Intramuscular">Intramuscular</option>
-                    <option value="Ocular">Ocular</option>
-                    <option value="Nasal">Nasal</option>
-                    <option value="Oral / Agua">Oral / Agua</option>
-                    <option value="Ala Web">Ala Web</option>
-                    <option value="Spray">Spray</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label fw-600 small">Fecha de aplicación *</label>
-                <input type="date" id="vac-fecha" class="form-control" required>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label fw-600 small">Próxima dosis</label>
-                <input type="date" id="vac-proxima" class="form-control">
-            </div>
-            <div class="col-md-6">
-                <label class="form-label fw-600 small">Lote / N° de vial</label>
-                <input type="text" id="vac-lote" class="form-control" placeholder="Ej: LOT-2025-A">
-            </div>
-            <div class="col-md-6">
-                <label class="form-label fw-600 small">Veterinario / Aplicador</label>
-                <input type="text" id="vac-vet" class="form-control" placeholder="Nombre">
-            </div>
-            <div class="col-12">
-                <label class="form-label fw-600 small">Notas</label>
-                <textarea id="vac-notas" rows="2" class="form-control" placeholder="Observaciones, reacciones, etc."></textarea>
-            </div>
-        </div>
-        <div class="d-flex gap-2 justify-content-end mt-4">
-            <button type="button" onclick="closeModalVac()" class="btn btn-outline-soft">Cancelar</button>
-            <button type="submit" class="btn btn-primary-soft px-4">
-                <span class="material-symbols-outlined align-middle me-1" style="font-size:.9rem;">save</span>
-                Guardar
-            </button>
-        </div>
-    </form>
+    <div class="offcanvas-body" id="detail-body" style="padding:1.5rem;"></div>
 </div>
-</div>
-
-{{-- Modal detalle --}}
-<div id="modal-vac-detail" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(10,20,50,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1rem;">
-<div style="background:#fff;border-radius:1.2rem;width:min(520px,100%);box-shadow:0 24px 64px rgba(10,20,50,.22);animation:slideUp .25s ease;">
-    <div style="background:linear-gradient(135deg,#065f46,#059669);padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-radius:1.2rem 1.2rem 0 0;">
-        <h5 style="margin:0;color:#fff;font-weight:700;font-size:1rem;">Detalle de Vacunación</h5>
-        <button onclick="closeDetail()" style="background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;">✕</button>
-    </div>
-    <div id="detail-body" style="padding:1.5rem;"></div>
-</div>
-</div>
-
-<style>
-@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-#modal-vac { display:none!important; }
-#modal-vac.open { display:flex!important; }
-#modal-vac-detail { display:none!important; }
-#modal-vac-detail.open { display:flex!important; }
-</style>
 @endsection
 
 @section('scripts')
@@ -378,21 +399,25 @@ function debounceSearch() {
     }, 400);
 }
 
-// ─── Modal registrar ──────────────────────────────────────────────────────
+// ─── Sidebar registrar ────────────────────────────────────────────────────
+function getVacSidebar() {
+    return bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('sidebar-vac'));
+}
+
 function openModalVac() {
-    document.getElementById('modal-vac-title').textContent = 'Registrar Vacunación';
+    document.getElementById('sidebar-vac-title').textContent = '💉 Registrar vacunación';
     document.getElementById('form-vac').reset();
     document.getElementById('vac-id').value = '';
     document.getElementById('vac-fecha').value = new Date().toISOString().split('T')[0];
-    document.getElementById('modal-vac').classList.add('open');
+    getVacSidebar().show();
 }
 
 function closeModalVac() {
-    document.getElementById('modal-vac').classList.remove('open');
+    getVacSidebar().hide();
 }
 
 function editVac(v) {
-    document.getElementById('modal-vac-title').textContent = 'Editar Vacunación';
+    document.getElementById('sidebar-vac-title').textContent = '✏️ Editar vacunación';
     document.getElementById('vac-id').value = v.id;
     document.getElementById('vac-ave-type').value = v.ave_type;
     document.getElementById('vac-vacuna').value = v.vacuna || '';
@@ -405,7 +430,7 @@ function editVac(v) {
     document.getElementById('vac-vet').value = v.veterinario || '';
     document.getElementById('vac-notas').value = v.notas || '';
     loadAves(v.ave_id);
-    document.getElementById('modal-vac').classList.add('open');
+    getVacSidebar().show();
 }
 
 async function loadAves(selectedId = null) {
@@ -505,12 +530,14 @@ function showDetail(v) {
         </div>
         <div class="d-flex gap-2 justify-content-end mt-4">
             <button onclick="closeDetail()" class="btn btn-outline-soft">Cerrar</button>
-            <button onclick="closeDetail();editVac(${JSON.stringify(v).replace(/"/g,'&quot;')})" class="btn btn-primary-soft px-4">Editar</button>
+            <button onclick="closeDetail();editVac(${JSON.stringify(v).replace(/"/g,'&quot;')})" class="btn btn-primary-soft px-4" style="background:linear-gradient(135deg,#065f46,#059669);border:none;color:#fff;">Editar</button>
         </div>`;
-    document.getElementById('modal-vac-detail').classList.add('open');
+    bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('sidebar-vac-detail')).show();
 }
 
-function closeDetail() { document.getElementById('modal-vac-detail').classList.remove('open'); }
+function closeDetail() {
+    bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('sidebar-vac-detail')).hide();
+}
 
 // ─── Init ─────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {

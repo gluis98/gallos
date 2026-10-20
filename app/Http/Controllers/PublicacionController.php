@@ -24,12 +24,8 @@ class PublicacionController extends Controller
 
     public function store(Request $request)
     {
-        if (! $this->subscriptionService->canUseFeature(SubscriptionService::FEATURE_MARKETPLACE_PUBLISH)) {
-            return response()->json([
-                'message' => 'Publicar en el Marketplace requiere Plan Pro.',
-                'msj' => 'Publicar en el Marketplace requiere Plan Pro.',
-                'upgrade_url' => route('billing.checkout', ['plan' => 'pro_monthly']),
-            ], 403);
+        if ($denied = $this->subscriptionService->proGateJson(SubscriptionService::FEATURE_MARKETPLACE_PUBLISH)) {
+            return $denied;
         }
 
         $data = $request->validate([

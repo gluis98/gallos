@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inventario;
 use App\Services\DollarRateService;
+use App\Services\SubscriptionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,6 +18,10 @@ class InventarioController extends Controller
 
     public function store(Request $request)
     {
+        if ($denied = app(SubscriptionService::class)->proGateJson(SubscriptionService::FEATURE_INVENTARIO)) {
+            return $denied;
+        }
+
         $data = $request->validate([
             'nombre'              => 'required|string|max:120',
             'descripcion'         => 'nullable|string',

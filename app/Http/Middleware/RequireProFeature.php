@@ -25,10 +25,17 @@ class RequireProFeature
         }
 
         $message = match ($feature) {
-            SubscriptionService::FEATURE_PEDIGREE_FULL => 'El pedigree completo requiere Plan Pro.',
-            SubscriptionService::FEATURE_REPORTS_ADVANCED => 'Los reportes avanzados requieren Plan Pro.',
-            SubscriptionService::FEATURE_COMPRAS => 'El módulo de compras requiere Plan Pro.',
-            SubscriptionService::FEATURE_MARKETPLACE_PUBLISH => 'Publicar en el Marketplace requiere Plan Pro.',
+            SubscriptionService::FEATURE_PEDIGREE_FULL,
+            'pedigree_full' => 'El pedigree completo requiere Plan Pro.',
+            SubscriptionService::FEATURE_REPORTS_ADVANCED,
+            'reports_advanced', 'reports' => 'Los reportes avanzados requieren Plan Pro.',
+            SubscriptionService::FEATURE_COMPRAS,
+            'compras_module' => 'El módulo de compras requiere Plan Pro.',
+            SubscriptionService::FEATURE_MARKETPLACE_PUBLISH,
+            'marketplace_publish' => 'Publicar en el Marketplace requiere Plan Pro.',
+            SubscriptionService::FEATURE_VACUNACIONES => 'El módulo de vacunación requiere Plan Pro.',
+            SubscriptionService::FEATURE_INVENTARIO => 'El módulo de inventario requiere Plan Pro.',
+            SubscriptionService::FEATURE_VENTAS => 'El módulo de ventas requiere Plan Pro.',
             default => 'Esta función requiere Plan Pro.',
         };
 

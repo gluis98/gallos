@@ -17,7 +17,7 @@
 @endsection
 
 @section('content')
-@if(isset($subscriptionSummary) && !($subscriptionSummary['is_pro'] ?? false))
+@if(!empty(($planModules['compras']['pro'] ?? false)) && !($isProUser ?? false))
     <x-upgrade-cta feature="compras" />
 @endif
 {{-- Sidebar offcanvas compras --}}
@@ -93,9 +93,11 @@
             <h2 class="section-title">Compras</h2>
             <p class="section-subtitle">Registra compras de gallos, gallinas o ítems de inventario.</p>
         </div>
-        <button class="btn btn-primary-soft" data-bs-toggle="offcanvas" data-bs-target="#sidebar-compra">
-            <span class="material-symbols-outlined float-start me-2">add_circle</span> Nueva compra
-        </button>
+        <x-module-create module="compras">
+            <button class="btn btn-primary-soft" data-bs-toggle="offcanvas" data-bs-target="#sidebar-compra">
+                <span class="material-symbols-outlined float-start me-2">add_circle</span> Nueva compra
+            </button>
+        </x-module-create>
     </div>
 
     <input type="text" class="form-control mb-3" id="search-compras" placeholder="🔍 Buscar por proveedor o fecha..." oninput="filterCompras(this.value)">

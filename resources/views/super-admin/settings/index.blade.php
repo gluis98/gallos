@@ -44,7 +44,7 @@
 <section class="section-card p-3 p-md-4">
     <div class="mb-4">
         <h2 class="section-title">Configuración del sistema</h2>
-        <p class="section-subtitle">Precios de planes, métodos de pago y datos de recepción.</p>
+        <p class="section-subtitle">Precios, módulos Free/Pro, métodos de pago y datos de recepción.</p>
     </div>
 
     @if(session('ok'))
@@ -60,6 +60,7 @@
         <div class="settings-tabs">
             <a class="stab active" data-panel="tasa" href="#"><span class="material-symbols-outlined">currency_exchange</span> Tasa del Dólar</a>
             <a class="stab" data-panel="planes" href="#"><span class="material-symbols-outlined">workspace_premium</span> Planes & Precios</a>
+            <a class="stab" data-panel="modulos" href="#"><span class="material-symbols-outlined">view_module</span> Módulos Free/Pro</a>
             <a class="stab" data-panel="metodos" href="#"><span class="material-symbols-outlined">credit_card</span> Métodos de pago</a>
             <a class="stab" data-panel="limites" href="#"><span class="material-symbols-outlined">tune</span> Límites plan Free</a>
         </div>
@@ -321,6 +322,52 @@
                             <input type="text" name="usdt_notes" class="form-control-alone" value="{{ $pm['usdt_binance']['notes'] ?? '' }}" placeholder="Instrucciones adicionales...">
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Panel: Módulos Free vs Pro --}}
+        <div class="settings-panel" id="panel-modulos">
+            <div class="set-section">
+                <h5><span class="material-symbols-outlined">view_module</span> Acceso por módulo</h5>
+                <p style="font-size:.83rem;color:#60708d;margin-bottom:1.25rem;">
+                    Activa la corona Pro en los módulos que quieras restringir. Los usuarios Free verán el módulo pero no podrán registrar nuevos ítems.
+                </p>
+                @php $modules = $settings['modules'] ?? []; @endphp
+                <div class="row g-3">
+                    @foreach($modules as $key => $mod)
+                    <div class="col-md-6">
+                        <label class="method-toggle" style="margin-bottom:0;">
+                            <span class="method-toggle-icon">
+                                @if(!empty($mod['nav']))
+                                    <span class="material-symbols-outlined" style="color:#f59e0b;font-variation-settings:'FILL' 1;">crown</span>
+                                @else
+                                    <span class="material-symbols-outlined" style="color:#94a3b8;">extension</span>
+                                @endif
+                            </span>
+                            <span class="method-toggle-label">
+                                {{ $mod['label'] ?? $key }}
+                                <div style="font-size:.72rem;font-weight:500;color:#94a3b8;margin-top:.15rem;">
+                                    {{ !empty($mod['nav']) ? 'Aparece en navegación' : 'Función interna' }}
+                                </div>
+                            </span>
+                            <div style="display:flex;align-items:center;gap:.5rem;">
+                                <span style="font-size:.72rem;font-weight:700;color:#60708d;" id="mod-label-{{ $key }}">
+                                    {{ !empty($mod['pro']) ? 'PRO' : 'FREE' }}
+                                </span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" name="modules[{{ $key }}][pro]" value="1"
+                                        {{ !empty($mod['pro']) ? 'checked' : '' }}
+                                        onchange="document.getElementById('mod-label-{{ $key }}').textContent = this.checked ? 'PRO' : 'FREE'">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </label>
+                    </div>
+                    @endforeach
+                </div>
+                <div class="mt-3 p-3 rounded-3" style="background:#eff6ff;border:1px solid #bfdbfe;font-size:.82rem;color:#1e40af;">
+                    Los módulos marcados como PRO muestran una corona en el menú y ocultan el botón de registrar para usuarios Free.
                 </div>
             </div>
         </div>

@@ -149,6 +149,9 @@
     </div>
 </div>
 
+@if(!empty(($planModules['inventario']['pro'] ?? false)) && !($isProUser ?? false))
+    <x-upgrade-cta feature="inventario" />
+@endif
 <section id="inv-module" class="section-card p-3 p-md-4">
     {{-- Header --}}
     <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
@@ -156,9 +159,11 @@
             <h2 class="section-title">📦 Inventario</h2>
             <p class="section-subtitle">Gestiona tus productos, insumos y materiales con costos y precios en tiempo real.</p>
         </div>
-        <button class="btn btn-primary-soft" data-bs-toggle="offcanvas" data-bs-target="#sidebar-inv" onclick="resetInvForm()">
-            <span class="material-symbols-outlined float-start me-2">add_circle</span> Nuevo ítem
-        </button>
+        <x-module-create module="inventario">
+            <button class="btn btn-primary-soft" data-bs-toggle="offcanvas" data-bs-target="#sidebar-inv" onclick="resetInvForm()">
+                <span class="material-symbols-outlined float-start me-2">add_circle</span> Nuevo ítem
+            </button>
+        </x-module-create>
     </div>
 
     {{-- Stats --}}
@@ -202,6 +207,7 @@
 @section('scripts')
 <script>
 const TASA = {{ \App\Services\DollarRateService::getCachedRate() }};
+const CAN_CREATE_INV = @json(($isProUser ?? false) || empty($planModules['inventario']['pro'] ?? false));
 let allItems = [];
 let precioManual = false;
 
@@ -237,9 +243,9 @@ function renderInv(items) {
                 <span class="material-symbols-outlined" style="font-size:3.5rem;color:#94a3b8;display:block;margin-bottom:1rem;">inventory_2</span>
                 <h5 style="color:#60708d;font-weight:700;margin-bottom:.4rem;">Inventario vacío</h5>
                 <p style="color:#94a3b8;font-size:.88rem;margin-bottom:1.5rem;">Registra tu primer ítem de inventario para comenzar a gestionar tus productos e insumos.</p>
-                <button class="btn btn-primary-soft" data-bs-toggle="offcanvas" data-bs-target="#sidebar-inv" onclick="resetInvForm()">
+                ${CAN_CREATE_INV ? `<button class="btn btn-primary-soft" data-bs-toggle="offcanvas" data-bs-target="#sidebar-inv" onclick="resetInvForm()">
                     <span class="material-symbols-outlined float-start me-2">add_circle</span> Agregar primer ítem
-                </button>
+                </button>` : ''}
             </div>
         </div>`;
         return;

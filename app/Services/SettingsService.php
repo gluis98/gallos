@@ -36,6 +36,49 @@ class SettingsService
                 'monthly_plan_id'  => '',
                 'yearly_plan_id'   => '',
             ],
+            // Módulos: pro=true → requiere Plan Pro. nav=true → aparece corona en menú.
+            'modules' => [
+                'compras' => [
+                    'label' => 'Compras',
+                    'pro' => true,
+                    'nav' => true,
+                ],
+                'marketplace' => [
+                    'label' => 'Marketplace',
+                    'pro' => true,
+                    'nav' => true,
+                ],
+                'vacunaciones' => [
+                    'label' => 'Vacunación',
+                    'pro' => false,
+                    'nav' => true,
+                ],
+                'inventario' => [
+                    'label' => 'Inventario',
+                    'pro' => false,
+                    'nav' => true,
+                ],
+                'ventas' => [
+                    'label' => 'Ventas',
+                    'pro' => false,
+                    'nav' => true,
+                ],
+                'reports' => [
+                    'label' => 'Reportes avanzados',
+                    'pro' => true,
+                    'nav' => false,
+                ],
+                'pedigree_full' => [
+                    'label' => 'Pedigree completo (3+ generaciones)',
+                    'pro' => true,
+                    'nav' => false,
+                ],
+                'unlimited_birds' => [
+                    'label' => 'Aves ilimitadas',
+                    'pro' => true,
+                    'nav' => false,
+                ],
+            ],
             'payment_methods' => [
                 'zelle' => [
                     'enabled' => true,

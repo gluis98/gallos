@@ -81,15 +81,20 @@
     </div>
 </div>
 
+@if(!empty(($planModules['ventas']['pro'] ?? false)) && !($isProUser ?? false))
+    <x-upgrade-cta feature="ventas" />
+@endif
 <section id="ventas-module" class="section-card p-3 p-md-4">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <div>
             <h2 class="section-title">Ventas</h2>
             <p class="section-subtitle">Registra ventas de gallos, gallinas e ítems de inventario.</p>
         </div>
-        <button class="btn btn-primary-soft" style="background:linear-gradient(135deg,#15803d,#16a34a);border:none;" data-bs-toggle="offcanvas" data-bs-target="#sidebar-venta">
-            <span class="material-symbols-outlined float-start me-2">add_circle</span> Nueva venta
-        </button>
+        <x-module-create module="ventas">
+            <button class="btn btn-primary-soft" style="background:linear-gradient(135deg,#15803d,#16a34a);border:none;" data-bs-toggle="offcanvas" data-bs-target="#sidebar-venta">
+                <span class="material-symbols-outlined float-start me-2">add_circle</span> Nueva venta
+            </button>
+        </x-module-create>
     </div>
 
     <div class="row g-3 mb-3">

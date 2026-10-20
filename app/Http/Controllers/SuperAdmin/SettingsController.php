@@ -58,6 +58,16 @@ class SettingsController extends Controller
         $data['payment_methods']['usdt_binance']['wallet']  = $request->input('usdt_wallet', '');
         $data['payment_methods']['usdt_binance']['notes']   = $request->input('usdt_notes', '');
 
+        // ── Módulos Free vs Pro ──
+        $defaults = SettingsService::defaults()['modules'] ?? [];
+        foreach ($defaults as $key => $meta) {
+            $data['modules'][$key] = [
+                'label' => $meta['label'],
+                'nav' => (bool) ($meta['nav'] ?? false),
+                'pro' => $request->boolean("modules.$key.pro"),
+            ];
+        }
+
         SettingsService::save($data);
 
         AuditService::log('settings.updated', 'Configuración del sistema actualizada.', [

@@ -408,19 +408,19 @@
                       <a class="nav-link {{ request()->routeIs('gallinas') ? 'active' : '' }}" href="{{ route('gallinas')}}">Gallinas</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link {{ request()->routeIs('inventario') ? 'active' : '' }}" href="{{ route('inventario')}}">Inventario</a>
+                      <a class="nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('inventario') ? 'active' : '' }}" href="{{ route('inventario')}}">Inventario <x-pro-crown module="inventario" size=".9rem" /></a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link {{ request()->routeIs('compras') ? 'active' : '' }}" href="{{ route('compras')}}">Compras</a>
+                      <a class="nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('compras') ? 'active' : '' }}" href="{{ route('compras')}}">Compras <x-pro-crown module="compras" size=".9rem" /></a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link {{ request()->routeIs('ventas') ? 'active' : '' }}" href="{{ route('ventas')}}">Ventas</a>
+                      <a class="nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('ventas') ? 'active' : '' }}" href="{{ route('ventas')}}">Ventas <x-pro-crown module="ventas" size=".9rem" /></a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link {{ request()->routeIs('vacunaciones') ? 'active' : '' }}" href="{{ route('vacunaciones')}}">Vacunación</a>
+                      <a class="nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('vacunaciones') ? 'active' : '' }}" href="{{ route('vacunaciones')}}">Vacunación <x-pro-crown module="vacunaciones" size=".9rem" /></a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link {{ request()->routeIs('marketplace.tenant') ? 'active' : '' }}" href="{{ route('marketplace.tenant')}}">Marketplace</a>
+                      <a class="nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('marketplace.tenant') ? 'active' : '' }}" href="{{ route('marketplace.tenant')}}">Marketplace <x-pro-crown module="marketplace" size=".9rem" /></a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link {{ request()->routeIs('plans') ? 'active' : '' }}" href="{{ route('plans')}}">Planes</a>
@@ -659,14 +659,21 @@
                     <span class="material-symbols-outlined">logout</span><span class="lbl">Salir</span>
                 </button>
             @else
-                <a href="{{ route('vacunaciones') }}" class="mob-more-btn {{ str_contains($curRoute,'vacunaciones') ? 'active' : '' }}">
-                    <span class="material-symbols-outlined">vaccines</span><span class="lbl">Vacunas</span>
+                <a href="{{ route('vacunaciones') }}" class="mob-more-btn {{ str_contains($curRoute,'vacunaciones') ? 'active' : '' }}" style="position:relative;">
+                    <span class="material-symbols-outlined">vaccines</span>
+                    <span class="lbl">Vacunas <x-pro-crown module="vacunaciones" size=".75rem" /></span>
                 </a>
                 <a href="{{ route('inventario') }}" class="mob-more-btn {{ str_contains($curRoute,'inventario') ? 'active' : '' }}">
-                    <span class="material-symbols-outlined">inventory_2</span><span class="lbl">Inventario</span>
+                    <span class="material-symbols-outlined">inventory_2</span>
+                    <span class="lbl">Inventario <x-pro-crown module="inventario" size=".75rem" /></span>
                 </a>
                 <a href="{{ route('compras') }}" class="mob-more-btn {{ str_contains($curRoute,'compras') ? 'active' : '' }}">
-                    <span class="material-symbols-outlined">shopping_cart</span><span class="lbl">Compras</span>
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                    <span class="lbl">Compras <x-pro-crown module="compras" size=".75rem" /></span>
+                </a>
+                <a href="{{ route('marketplace.tenant') }}" class="mob-more-btn {{ str_contains($curRoute,'marketplace') ? 'active' : '' }}">
+                    <span class="material-symbols-outlined">storefront</span>
+                    <span class="lbl">Market <x-pro-crown module="marketplace" size=".75rem" /></span>
                 </a>
                 <a href="{{ route('plans') }}" class="mob-more-btn {{ str_contains($curRoute,'plans') ? 'active' : '' }}">
                     <span class="material-symbols-outlined">workspace_premium</span><span class="lbl">Planes</span>
@@ -719,8 +726,11 @@
                 <span class="material-symbols-outlined mni-icon">egg</span>
                 <span class="mni-label">Gallinas</span>
             </a>
-            <a href="{{ route('ventas') }}" class="mob-nav-item {{ $curRoute === 'ventas' ? 'active' : '' }}">
+            <a href="{{ route('ventas') }}" class="mob-nav-item {{ $curRoute === 'ventas' ? 'active' : '' }}" style="position:relative;">
                 <span class="material-symbols-outlined mni-icon">point_of_sale</span>
+                @if(!empty(($planModules['ventas']['pro'] ?? false)))
+                <span class="material-symbols-outlined" style="position:absolute;top:4px;right:calc(50% - 16px);font-size:.7rem;color:#f59e0b;font-variation-settings:'FILL' 1;">crown</span>
+                @endif
                 <span class="mni-label">Ventas</span>
             </a>
         @endif

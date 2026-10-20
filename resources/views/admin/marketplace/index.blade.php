@@ -8,13 +8,15 @@
         <h1 class="h4 mb-0" style="font-weight:800;">Marketplace</h1>
         <p class="text-muted small mb-0">Publica tus aves para vender en Galpon.cc</p>
     </div>
-    <button type="button" class="btn btn-primary" id="btn-new-pub" data-bs-toggle="modal" data-bs-target="#modal-publicar">
-        <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:-2px;">add</span>
-        Nueva publicación
-    </button>
+    <x-module-create module="marketplace">
+        <button type="button" class="btn btn-primary" id="btn-new-pub" data-bs-toggle="modal" data-bs-target="#modal-publicar">
+            <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:-2px;">add</span>
+            Nueva publicación
+        </button>
+    </x-module-create>
 </div>
 
-@if(!($subscriptionSummary['is_pro'] ?? false))
+@if(!empty(($planModules['marketplace']['pro'] ?? false)) && !($isProUser ?? false))
     <x-upgrade-cta feature="marketplace" />
 @endif
 

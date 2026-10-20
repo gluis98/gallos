@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Gallo;
 use App\Models\Gallina;
 use App\Models\Vacunacion;
+use App\Services\SubscriptionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class VacunacionController extends Controller
 {
+    public function __construct(
+        protected SubscriptionService $subscriptionService
+    ) {}
+
     public function index(Request $request): JsonResponse
     {
         $user     = $request->user();
@@ -44,6 +49,10 @@ class VacunacionController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        if ($denied = $this->subscriptionService->proGateJson(SubscriptionService::FEATURE_VACUNACIONES)) {
+            return $denied;
+        }
+
         $data = $request->validate([
             'ave_id'             => 'required|integer',
             'ave_type'           => 'required|in:gallo,gallina',
@@ -78,6 +87,10 @@ class VacunacionController extends Controller
 
     public function update(Request $request, int $id): JsonResponse
     {
+        if ($denied = $this->subscriptionService->proGateJson(SubscriptionService::FEATURE_VACUNACIONES)) {
+            return $denied;
+        }
+
         $vac = Vacunacion::forTenant($request->user()->tenant_id)->findOrFail($id);
 
         $data = $request->validate([

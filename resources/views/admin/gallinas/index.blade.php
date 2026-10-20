@@ -453,8 +453,7 @@ $(document).ready(function(){
     function ensureTomSelect(selectEl, placeholder, store) {
         if (!window.TomSelect || !selectEl) return store;
         if (store) {
-            store.sync();
-            return store;
+            try { store.destroy(); } catch (e) {}
         }
         return new TomSelect(selectEl, {
             create: false,

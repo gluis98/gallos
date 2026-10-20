@@ -6,6 +6,7 @@ use App\Http\Requests\StoreVentaRequest;
 use App\Http\Requests\UpdateVentaRequest;
 use App\Models\Publicacion;
 use App\Models\Venta;
+use App\Services\SubscriptionService;
 use App\Services\VentaService;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,10 @@ class VentaController extends Controller
 
     public function store(StoreVentaRequest $request)
     {
+        if ($denied = app(SubscriptionService::class)->proGateJson(SubscriptionService::FEATURE_VENTAS)) {
+            return $denied;
+        }
+
         $data = $request->validated();
         $publicacion = null;
         if (! empty($data['publicacion_id'])) {

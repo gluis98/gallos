@@ -87,9 +87,17 @@ class GalloController extends Controller
             ->where('hijoable_id', $id)
             ->delete();
 
+        $padreId = $request->input('padre_id');
+        if ($padreId && (int) $padreId === (int) $g->id) {
+            return response()->json([
+                'msj' => 'Un gallo no puede ser padre de sí mismo.',
+                'message' => 'Un gallo no puede ser padre de sí mismo.',
+            ], 422);
+        }
+
         if ($request->filled('padre_id') || $request->filled('madre_id')) {
             GallosHijo::query()->create(array_filter([
-                'padre_id' => $request->input('padre_id'),
+                'padre_id' => $padreId,
                 'madre_id' => $request->input('madre_id'),
                 'hijoable_type' => Gallo::class,
                 'hijoable_id' => $g->id,

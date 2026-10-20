@@ -16,18 +16,28 @@ class SubscriptionService
 
     public const FEATURE_UNLIMITED_BIRDS = 'unlimited_birds';
     public const FEATURE_PEDIGREE_FULL = 'pedigree_full';
-    public const FEATURE_REPORTS_ADVANCED = 'reports_advanced';
-    public const FEATURE_MARKETPLACE_PUBLISH = 'marketplace_publish';
-    public const FEATURE_COMPRAS = 'compras_module';
+    public const FEATURE_REPORTS_ADVANCED = 'reports';
+    public const FEATURE_MARKETPLACE_PUBLISH = 'marketplace';
+    public const FEATURE_COMPRAS = 'compras';
+    public const FEATURE_VACUNACIONES = 'vacunaciones';
+    public const FEATURE_INVENTARIO = 'inventario';
+    public const FEATURE_VENTAS = 'ventas';
     public const FEATURE_BCV_RATE = 'bcv_rate';
 
-    protected static array $proFeatures = [
-        self::FEATURE_UNLIMITED_BIRDS,
-        self::FEATURE_PEDIGREE_FULL,
-        self::FEATURE_REPORTS_ADVANCED,
-        self::FEATURE_MARKETPLACE_PUBLISH,
-        self::FEATURE_COMPRAS,
-        self::FEATURE_BCV_RATE,
+    /** Mapeo legacy → clave de módulo en settings */
+    protected static array $featureToModule = [
+        'compras_module' => 'compras',
+        'marketplace_publish' => 'marketplace',
+        'reports_advanced' => 'reports',
+        'pedigree_full' => 'pedigree_full',
+        'unlimited_birds' => 'unlimited_birds',
+        'vacunaciones' => 'vacunaciones',
+        'inventario' => 'inventario',
+        'ventas' => 'ventas',
+        'compras' => 'compras',
+        'marketplace' => 'marketplace',
+        'reports' => 'reports',
+        'bcv_rate' => 'bcv_rate',
     ];
 
     public function getActiveSubscription(?string $tenantId = null): ?Subscription
@@ -91,7 +101,51 @@ class SubscriptionService
             return true;
         }
 
-        return ! in_array($feature, self::$proFeatures, true);
+        return ! $this->moduleRequiresPro($feature);
+    }
+
+    public function moduleRequiresPro(string $featureOrModule): bool
+    {
+        $key = self::$featureToModule[$featureOrModule] ?? $featureOrModule;
+        $modules = SettingsService::get()['modules'] ?? [];
+
+        if (isset($modules[$key])) {
+            return (bool) ($modules[$key]['pro'] ?? false);
+        }
+
+        // Fallback si aún no está en settings
+        return in_array($key, [
+            'compras', 'marketplace', 'reports', 'pedigree_full', 'unlimited_birds',
+        ], true);
+    }
+
+    /** @return array<string, array{label:string,pro:bool,nav:bool}> */
+    public function getModules(): array
+    {
+        return SettingsService::get()['modules'] ?? [];
+    }
+
+    public function isModuleProLocked(string $module, ?string $tenantId = null): bool
+    {
+        return $this->moduleRequiresPro($module) && ! $this->isPro($tenantId);
+    }
+
+    /** Respuesta 403 JSON si el módulo está bloqueado para el plan actual. */
+    public function proGateJson(string $featureOrModule, ?string $customMessage = null): ?\Illuminate\Http\JsonResponse
+    {
+        if (! $this->isModuleProLocked($featureOrModule)) {
+            return null;
+        }
+
+        $key = self::$featureToModule[$featureOrModule] ?? $featureOrModule;
+        $label = (SettingsService::get()['modules'][$key]['label'] ?? null) ?: 'Esta función';
+        $message = $customMessage ?? "{$label} requiere Plan Pro.";
+
+        return response()->json([
+            'message' => $message,
+            'msj' => $message,
+            'upgrade_url' => route('billing.checkout', ['plan' => 'pro_monthly']),
+        ], 403);
     }
 
     public function getLimits(?string $tenantId = null): array

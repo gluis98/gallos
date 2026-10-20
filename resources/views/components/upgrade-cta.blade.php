@@ -8,6 +8,9 @@
         'reports' => 'Los reportes avanzados en PDF requieren Plan Pro.',
         'marketplace' => 'Publicar en el Marketplace requiere Plan Pro.',
         'compras' => 'El módulo de compras requiere Plan Pro.',
+        'vacunaciones' => 'El módulo de vacunación requiere Plan Pro.',
+        'inventario' => 'El módulo de inventario requiere Plan Pro.',
+        'ventas' => 'El módulo de ventas requiere Plan Pro.',
         'general' => 'Desbloquea todas las funciones con Plan Pro.',
     ];
     $msg = $messages[$feature] ?? $messages['general'];
