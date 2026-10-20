@@ -181,14 +181,23 @@
         <div id="panel-paypal" class="{{ $defaultMethod === 'paypal' ? 'show' : '' }}">
             <div class="payment-info-box show" style="background:#f0f7ff;border-color:#bfdbfe;">
                 <div class="pib-title" style="color:#0070ba;">Pago seguro con PayPal</div>
-                <p style="font-size:.85rem;color:#445;margin:0 0 1rem;">Serás redirigido a PayPal para completar el pago. Al confirmar, tu Plan Pro se activa automáticamente.</p>
+                <p style="font-size:.85rem;color:#445;margin:0 0 1rem;">
+                    Monto a cobrar: <strong>${{ number_format($config['amount'], 2) }} {{ $config['currency'] }}</strong>.
+                    Serás redirigido a PayPal; al confirmar, Pro se activa automáticamente.
+                </p>
                 @if($paypalEnabled)
-                    <button type="button" id="btn-paypal-pay" class="btn-paypal">
-                        Pagar ${{ number_format($config['amount'], 2) }} con PayPal
-                    </button>
+                    <form method="POST" action="{{ url('/billing/paypal/subscribe') }}" id="form-paypal">
+                        @csrf
+                        <input type="hidden" name="plan" value="{{ $planSku }}">
+                        <button type="submit" id="btn-paypal-pay" class="btn-paypal">
+                            Pagar ${{ number_format($config['amount'], 2) }} con PayPal
+                        </button>
+                    </form>
                 @else
                     <div class="alert alert-warning mb-0" style="font-size:.85rem;border-radius:.75rem;">
-                        PayPal aún no está configurado en el servidor. Usa Zelle, Pago Móvil o USDT, o pide al administrador que agregue <code>PAYPAL_CLIENT_ID</code> y <code>PAYPAL_CLIENT_SECRET</code> en el <code>.env</code>.
+                        PayPal aún no está configurado. Agrega en el <code>.env</code> de producción:
+                        <code>PAYPAL_CLIENT_ID</code>, <code>PAYPAL_CLIENT_SECRET</code> y <code>PAYPAL_MODE=live</code>
+                        (o <code>sandbox</code> para pruebas). Luego <code>php artisan config:clear</code>.
                     </div>
                 @endif
             </div>
@@ -359,29 +368,11 @@
         });
     };
 
-    document.getElementById('btn-paypal-pay')?.addEventListener('click', async function() {
-        const btn = this;
-        btn.disabled = true;
-        const original = btn.textContent;
-        btn.textContent = 'Redirigiendo a PayPal...';
-        try {
-            const res = await fetch('{{ route('billing.paypal.subscribe') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({ plan: '{{ $planSku }}' }),
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error || 'Error al iniciar pago');
-            if (!data.approval_url) throw new Error('No se recibió URL de PayPal');
-            window.location.href = data.approval_url;
-        } catch (e) {
-            alert(e.message);
-            btn.disabled = false;
-            btn.textContent = original;
+    document.getElementById('form-paypal')?.addEventListener('submit', function() {
+        const btn = document.getElementById('btn-paypal-pay');
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Redirigiendo a PayPal...';
         }
     });
 })();

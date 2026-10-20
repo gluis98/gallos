@@ -8,15 +8,15 @@ use Illuminate\Http\Request;
 class TrustProxies extends Middleware
 {
     /**
-     * The trusted proxies for this application.
+     * Confiar en todos los proxies (Cloudflare, Nginx, load balancer).
+     * Sin esto, Laravel ve la petición como HTTP aunque el usuario entre por HTTPS,
+     * y genera formularios/action en http:// → aviso "envío no seguro" en Chrome.
      *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = '*';
 
     /**
-     * The headers that should be used to detect proxies.
-     *
      * @var int
      */
     protected $headers =

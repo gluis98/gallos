@@ -60,9 +60,15 @@ class SettingsController extends Controller
 
         SettingsService::save($data);
 
-        AuditService::log('settings.updated', 'Configuración del sistema actualizada.', []);
+        AuditService::log('settings.updated', 'Configuración del sistema actualizada.', [
+            'pro_monthly_price' => $data['plans']['pro_monthly_price'],
+            'pro_yearly_price' => $data['plans']['pro_yearly_price'],
+        ]);
 
-        return redirect()->route('superadmin.settings.index')->with('ok', 'Configuración guardada correctamente.');
+        return redirect()->route('superadmin.settings.index')->with(
+            'ok',
+            'Configuración guardada. Precio Pro mensual: $'.$data['plans']['pro_monthly_price'].' / anual: $'.$data['plans']['pro_yearly_price']
+        );
     }
 
     public function refreshRate()

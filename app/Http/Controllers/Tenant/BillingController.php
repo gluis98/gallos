@@ -51,47 +51,77 @@ class BillingController extends Controller
     {
         $request->validate(['plan' => ['required', 'in:pro_monthly,pro_yearly']]);
 
+        $wantsJson = $request->expectsJson() || $request->ajax();
+
         if (! $this->paypal->isConfigured()) {
-            return response()->json(['error' => 'PayPal no está configurado.'], 422);
+            $msg = 'PayPal no está configurado. Agrega PAYPAL_CLIENT_ID y PAYPAL_CLIENT_SECRET en el .env.';
+
+            return $wantsJson
+                ? response()->json(['error' => $msg], 422)
+                : redirect()->route('billing.checkout', ['plan' => $request->plan])->withErrors(['paypal' => $msg]);
         }
 
-        $settings = SettingsService::get();
-        $tenantId = tenant('id');
-        $returnUrl = route('billing.paypal.return', ['plan' => $request->plan]);
-        $cancelUrl = route('billing.checkout', ['plan' => $request->plan]);
+        try {
+            $settings = SettingsService::get();
+            $tenantId = tenant('id');
+            $returnUrl = route('billing.paypal.return', ['plan' => $request->plan], absolute: true);
+            $cancelUrl = route('billing.checkout', ['plan' => $request->plan], absolute: true);
 
-        $planId = $request->plan === 'pro_yearly'
-            ? ($settings['paypal']['yearly_plan_id'] ?? '')
-            : ($settings['paypal']['monthly_plan_id'] ?? '');
+            // Asegurar HTTPS en URLs de retorno hacia PayPal
+            if (str_starts_with((string) config('app.url'), 'https://')) {
+                $returnUrl = preg_replace('#^http://#', 'https://', $returnUrl);
+                $cancelUrl = preg_replace('#^http://#', 'https://', $cancelUrl);
+            }
 
-        if (empty($planId)) {
-            $sku = $request->plan === 'pro_yearly'
-                ? SubscriptionService::SKU_PRO_YEARLY
-                : SubscriptionService::SKU_PRO_MONTHLY;
-            $config = $this->subscriptionService->getPlanSkuConfig($sku);
-            $order = $this->paypal->createOrder(
-                $config['amount'],
-                $config['currency'],
-                $config['name'],
-                $tenantId,
-                $returnUrl,
-                $cancelUrl
-            );
+            $planId = $request->plan === 'pro_yearly'
+                ? ($settings['paypal']['yearly_plan_id'] ?? '')
+                : ($settings['paypal']['monthly_plan_id'] ?? '');
 
-            return response()->json([
-                'type' => 'order',
-                'order_id' => $order['id'],
-                'approval_url' => $this->paypal->getApprovalUrl($order),
-            ]);
+            if (empty($planId)) {
+                $sku = $request->plan === 'pro_yearly'
+                    ? SubscriptionService::SKU_PRO_YEARLY
+                    : SubscriptionService::SKU_PRO_MONTHLY;
+                $config = $this->subscriptionService->getPlanSkuConfig($sku);
+                $order = $this->paypal->createOrder(
+                    $config['amount'],
+                    $config['currency'],
+                    $config['name'],
+                    $tenantId,
+                    $returnUrl,
+                    $cancelUrl
+                );
+                $approvalUrl = $this->paypal->getApprovalUrl($order);
+
+                if (! $approvalUrl) {
+                    throw new \RuntimeException('PayPal no devolvió URL de aprobación.');
+                }
+
+                return $wantsJson
+                    ? response()->json(['type' => 'order', 'order_id' => $order['id'], 'approval_url' => $approvalUrl])
+                    : redirect()->away($approvalUrl);
+            }
+
+            $subscription = $this->paypal->createSubscription($planId, $tenantId, $returnUrl, $cancelUrl);
+            $approvalUrl = $this->paypal->getApprovalUrl($subscription);
+
+            if (! $approvalUrl) {
+                throw new \RuntimeException('PayPal no devolvió URL de aprobación.');
+            }
+
+            return $wantsJson
+                ? response()->json([
+                    'type' => 'subscription',
+                    'subscription_id' => $subscription['id'],
+                    'approval_url' => $approvalUrl,
+                ])
+                : redirect()->away($approvalUrl);
+        } catch (\Throwable $e) {
+            \Log::error('PayPal subscribe failed', ['error' => $e->getMessage()]);
+
+            return $wantsJson
+                ? response()->json(['error' => $e->getMessage()], 422)
+                : redirect()->route('billing.checkout', ['plan' => $request->plan])->withErrors(['paypal' => $e->getMessage()]);
         }
-
-        $subscription = $this->paypal->createSubscription($planId, $tenantId, $returnUrl, $cancelUrl);
-
-        return response()->json([
-            'type' => 'subscription',
-            'subscription_id' => $subscription['id'],
-            'approval_url' => $this->paypal->getApprovalUrl($subscription),
-        ]);
     }
 
     public function paypalReturn(Request $request)
