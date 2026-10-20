@@ -4,14 +4,17 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subscription;
-use App\Models\User;
-use App\Notifications\SubscriptionUpgradedNotification;
 use App\Services\AuditService;
+use App\Services\SubscriptionActivationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SubscriptionController extends Controller
 {
+    public function __construct(
+        protected SubscriptionActivationService $activationService
+    ) {}
+
     public function index(Request $request)
     {
         $filter = $request->get('filter', 'all');
@@ -61,21 +64,13 @@ class SubscriptionController extends Controller
     {
         $sub = Subscription::withoutGlobalScopes()->findOrFail($id);
         $months = (int) $request->input('months', 12);
+        $planSku = $months <= 1 ? 'pro_monthly' : 'pro_yearly';
 
-        $newEnd = ($sub->ends_at && $sub->ends_at->isFuture())
-            ? $sub->ends_at->addMonths($months)
-            : now()->addMonths($months);
-
-        $sub->update(['plan' => 'pro', 'status' => 'active', 'ends_at' => $newEnd]);
-
-        User::query()->where('tenant_id', $sub->tenant_id)->where('is_superadmin', false)
-            ->get()->each(fn(User $u) => $u->notify(new SubscriptionUpgradedNotification));
-
-        AuditService::log('subscription.activated', "Suscripción Pro activada/extendida para tenant {$sub->tenant_id} por {$months} meses.", [
-            'subscription_id' => $sub->id,
-            'tenant_id'       => $sub->tenant_id,
-            'ends_at'         => $newEnd,
+        $this->activationService->activatePro($sub->tenant_id, $planSku, now(), [
+            'gateway' => 'manual',
         ]);
+
+        $newEnd = $sub->fresh()->ends_at;
 
         return redirect()->back()->with('ok', "Plan Pro activado hasta {$newEnd->format('d/m/Y')}.");
     }

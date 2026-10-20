@@ -12,17 +12,25 @@ class PaymentOrder extends Model
 
     protected $fillable = [
         'tenant_id',
+        'plan_sku',
         'amount',
         'currency',
         'method',
+        'gateway',
+        'gateway_order_id',
+        'gateway_subscription_id',
         'reference',
         'status',
         'proof_path',
         'notes',
+        'period_starts_at',
+        'period_ends_at',
     ];
 
     protected $casts = [
         'amount' => 'decimal:2',
+        'period_starts_at' => 'datetime',
+        'period_ends_at' => 'datetime',
     ];
 
     public function tenant(): BelongsTo

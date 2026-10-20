@@ -3,9 +3,8 @@
 namespace App\Policies;
 
 use App\Models\Gallina;
-use App\Models\Subscription;
 use App\Models\User;
-use App\Services\SettingsService;
+use App\Services\SubscriptionService;
 use App\Services\UserGalponService;
 
 class GallinaPolicy
@@ -20,24 +19,14 @@ class GallinaPolicy
             return false;
         }
 
-        $sub = Subscription::query()
-            ->where('status', 'active')
-            ->latest('id')
-            ->first();
+        $subscriptionService = app(SubscriptionService::class);
+        $tenantId = app(UserGalponService::class)->resolveActiveTenantId($user);
 
-        $plan = $sub?->plan ?? 'free';
-
-        if ($plan !== 'free') {
+        if ($subscriptionService->isPro($tenantId)) {
             return true;
         }
 
-        $tenantId = app(UserGalponService::class)->resolveActiveTenantId($user);
-        $limit = (int) (SettingsService::get()['plans']['free_gallinas_limit'] ?? 20);
-        $count = Gallina::withoutGlobalScopes()
-            ->where('tenant_id', $tenantId)
-            ->count();
-
-        return $count < $limit;
+        return ! $subscriptionService->isAtLimit('gallinas', $tenantId);
     }
 
     public function update(User $user, Gallina $gallina): bool

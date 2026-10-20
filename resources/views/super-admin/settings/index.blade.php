@@ -175,7 +175,40 @@
                                 <label class="form-label-s">Descripción del plan Pro</label>
                                 <textarea name="pro_description" rows="2" class="form-control-alone">{{ $settings['plans']['pro_description'] }}</textarea>
                             </div>
+                            <div class="col-sm-4">
+                                <label class="form-label-s">Galpón extra ($/mes)</label>
+                                <div style="display:flex;">
+                                    <span class="input-group-text-s">$</span>
+                                    <input type="number" name="extra_galpon_price" step="0.01" min="0"
+                                        value="{{ $settings['plans']['extra_galpon_price'] ?? 5 }}"
+                                        class="form-control-s">
+                                </div>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="set-section mt-3">
+                        <h5><span class="material-symbols-outlined">account_balance_wallet</span> PayPal</h5>
+                        <div class="form-check mb-2">
+                            <input type="checkbox" name="paypal_enabled" value="1" class="form-check-input" id="paypal_enabled"
+                                {{ ($settings['paypal']['enabled'] ?? true) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="paypal_enabled">Habilitar pagos con PayPal</label>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label class="form-label-s">Plan ID mensual (suscripción recurrente)</label>
+                                <input type="text" name="paypal_monthly_plan_id" class="form-control-alone"
+                                    value="{{ $settings['paypal']['monthly_plan_id'] ?? '' }}"
+                                    placeholder="P-XXXXXXXX (opcional — sin ID usa pago único)">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label-s">Plan ID anual (suscripción)</label>
+                                <input type="text" name="paypal_yearly_plan_id" class="form-control-alone"
+                                    value="{{ $settings['paypal']['yearly_plan_id'] ?? '' }}"
+                                    placeholder="P-XXXXXXXX (opcional — sin ID usa pago único)">
+                            </div>
+                        </div>
+                        <p class="text-muted small mt-2 mb-0">Credenciales en <code>.env</code>: PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_WEBHOOK_ID. Webhook URL: <code>{{ url('/webhooks/paypal') }}</code></p>
                     </div>
                 </div>
                 <div class="col-lg-5">

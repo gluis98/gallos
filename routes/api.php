@@ -10,6 +10,7 @@ use App\Http\Controllers\GallinaController;
 use App\Http\Controllers\GalloController;
 use App\Http\Controllers\Tenant\CatalogController as TenantCatalogController;
 use App\Http\Controllers\Tenant\GalponSwitchController;
+use App\Http\Controllers\PublicacionController;
 use App\Http\Controllers\Tenant\EventoAveController;
 use App\Http\Controllers\Tenant\ReportsExportController;
 use App\Http\Controllers\UserController;
@@ -32,8 +33,10 @@ Route::middleware(['auth:sanctum', 'tenant.context', 'subscription.limit'])->gro
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead']);
 
-    Route::get('/gallos/{id}/pedigree', [GalloController::class, 'pedigree']);
-    Route::get('/gallinas/{id}/pedigree', [GallinaController::class, 'pedigree']);
+    Route::get('/gallos/{id}/pedigree', [GalloController::class, 'pedigree'])
+        ->middleware('pro.feature:pedigree_full');
+    Route::get('/gallinas/{id}/pedigree', [GallinaController::class, 'pedigree'])
+        ->middleware('pro.feature:pedigree_full');
 
     Route::apiResource('gallos', GalloController::class);
     Route::post('gallos/search', [GalloController::class, 'search']);
@@ -44,6 +47,8 @@ Route::middleware(['auth:sanctum', 'tenant.context', 'subscription.limit'])->gro
     Route::apiResource('clientes', ClienteController::class);
     Route::apiResource('inventario', InventarioController::class)->except(['create', 'edit', 'show']);
     Route::post('inventario/search', [InventarioController::class, 'search']);
+
+    Route::apiResource('publicaciones', PublicacionController::class)->only(['index', 'store', 'destroy']);
 
     Route::apiResource('compras', CompraController::class)->only(['index', 'store', 'destroy']);
     Route::post('compras/search', [CompraController::class, 'search']);

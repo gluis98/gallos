@@ -17,6 +17,8 @@ use App\Http\Controllers\SuperAdmin\TenantController;
 use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
 use App\Http\Controllers\SuperAdmin\UserExtraGalponController;
 use App\Http\Controllers\Tenant\GalponSwitchController;
+use App\Http\Controllers\PayPalWebhookController;
+use App\Http\Controllers\Tenant\BillingController;
 use App\Http\Controllers\Tenant\PaymentOrderController;
 use App\Services\DollarRateService;
 use App\Services\SettingsService;
@@ -88,6 +90,8 @@ Route::post('/marketplace/chat/{order}/send', [MarketplaceController::class, 'se
 Route::post('/marketplace/chat/{order}/rate', [MarketplaceController::class, 'rateSeller'])->name('marketplace.rate');
 Route::post('/marketplace/contact', [MarketplaceController::class, 'question'])->name('marketplace.contact');
 
+Route::post('/webhooks/paypal', [PayPalWebhookController::class, 'handle'])->name('webhooks.paypal');
+
 Route::middleware(['auth', 'tenant.context'])->group(function () {
     Route::view('/gallos', 'admin.gallos.index')->name('gallos');
     Route::view('/vacunaciones', 'admin.vacunaciones.index')->name('vacunaciones');
@@ -105,7 +109,16 @@ Route::middleware(['auth', 'tenant.context'])->group(function () {
     Route::get('/payments/create', [PaymentOrderController::class, 'create'])->name('tenant.payments.create');
     Route::post('/payments', [PaymentOrderController::class, 'store'])->name('tenant.payments.store');
 
-    Route::controller(ReporteController::class)->group(function () {
+    Route::get('/billing/checkout', [BillingController::class, 'checkout'])->name('billing.checkout');
+    Route::get('/billing/success', [BillingController::class, 'success'])->name('billing.success');
+    Route::post('/billing/trial', [BillingController::class, 'startTrial'])->name('billing.trial');
+    Route::post('/billing/paypal/subscribe', [BillingController::class, 'paypalSubscribe'])->name('billing.paypal.subscribe');
+    Route::get('/billing/paypal/return', [BillingController::class, 'paypalReturn'])->name('billing.paypal.return');
+    Route::post('/billing/paypal/capture', [BillingController::class, 'paypalCapture'])->name('billing.paypal.capture');
+
+    Route::view('/marketplace/mis-publicaciones', 'admin.marketplace.index')->name('marketplace.tenant');
+
+    Route::controller(ReporteController::class)->middleware('pro.feature:reports_advanced')->group(function () {
         Route::get('/report/all', 'all')->name('report.all');
         Route::get('/report/show/{id}', 'show')->name('report.show');
         Route::get('/report/gallinas/all', 'allGallinas')->name('report.all.gallinas');

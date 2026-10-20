@@ -7,14 +7,14 @@ use App\Models\Compra;
 use App\Models\Gallo;
 use App\Models\Gallina;
 use App\Models\Inventario;
-use App\Models\Subscription;
 use App\Models\Venta;
+use App\Services\SubscriptionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
 class DashboardController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, SubscriptionService $subscriptionService)
     {
         if ($request->user()?->is_superadmin) {
             return redirect()->route('superadmin.tenants.index');
@@ -48,10 +48,9 @@ class DashboardController extends Controller
             ]);
         }
 
-        $sub = Subscription::query()
-            ->where('status', 'active')
-            ->latest('id')
-            ->first();
+        $subSummary = $subscriptionService->subscriptionSummary();
+
+        $sub = null; // legacy compat for view
 
         $gallos     = Gallo::query()->count();
         $gallinas   = Gallina::query()->count();
@@ -137,8 +136,16 @@ class DashboardController extends Controller
                 'ingresos_mes' => $ingresosMes,
                 'egresos_mes'  => $egresosMes,
                 'balance_mes'  => $ingresosMes - $egresosMes,
-                'plan'         => $sub?->plan ?? 'free',
-                'limite_aves'  => ($sub?->plan ?? 'free') === 'free' ? 20 : null,
+                'plan'         => $subSummary['plan'],
+                'is_pro'       => $subSummary['is_pro'],
+                'is_trial'     => $subSummary['is_trial'],
+                'limite_aves'  => $subSummary['is_pro'] ? null : ($subSummary['limits']['gallos'] ?? 20),
+                'limits'       => $subSummary['limits'],
+                'usage'        => $subSummary['usage'],
+                'gallos_near_limit' => $subSummary['gallos_near_limit'],
+                'gallinas_near_limit' => $subSummary['gallinas_near_limit'],
+                'trial_ends_at' => $subSummary['trial_ends_at'],
+                'ends_at'      => $subSummary['ends_at'],
             ],
             'charts' => [
                 'estatus_labels' => $estatusLabels,

@@ -195,6 +195,26 @@ $steps = [
         'url'   => route('ventas'),
         'btn'   => 'Ir a Ventas',
     ],
+    [
+        'key'   => 'pedigree',
+        'done'  => ($stats['is_pro'] ?? false),
+        'icon'  => '🌳',
+        'color' => '#e0e7ff',
+        'title' => 'Explora el pedigree completo',
+        'desc'  => 'Con Pro ves el árbol genealógico, coeficiente de consanguinidad y exportas PDF.',
+        'url'   => route('billing.checkout', ['plan' => 'pro_monthly']),
+        'btn'   => 'Activar Pro',
+    ],
+    [
+        'key'   => 'marketplace',
+        'done'  => false,
+        'icon'  => '🏪',
+        'color' => '#fef9c3',
+        'title' => 'Publica en el Marketplace',
+        'desc'  => 'Llega a compradores de toda Latinoamérica. Solo usuarios Pro pueden publicar aves.',
+        'url'   => route('marketplace.tenant'),
+        'btn'   => 'Mis publicaciones',
+    ],
 ];
 $completed = collect($steps)->where('done', true)->count();
 $total     = count($steps);
@@ -326,10 +346,12 @@ $allDone   = $completed === $total;
         <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
             @php $currentPlan = $stats['plan'] ?? 'free'; @endphp
             <span style="background:{{ $currentPlan === 'pro' ? 'linear-gradient(135deg,#f59e0b,#d97706)' : '#f3f6fd' }};color:{{ $currentPlan === 'pro' ? '#fff' : '#374151' }};border:1.5px solid {{ $currentPlan === 'pro' ? '#f59e0b' : '#d7dfed' }};border-radius:20px;padding:.3rem .85rem;font-size:.75rem;font-weight:800;">
-                {{ $currentPlan === 'pro' ? '⭐ Plan Pro' : '🔒 Plan Gratis' }}
+                @if($stats['is_trial'] ?? false) 🎁 Trial Pro
+                @else {{ $currentPlan === 'pro' ? '⭐ Plan Pro' : '🔒 Plan Gratis' }}
+                @endif
             </span>
             @if($currentPlan !== 'pro')
-            <a href="{{ route('plans') }}" style="background:linear-gradient(135deg,#1a2648,#3b82f6);color:#fff;border:none;border-radius:20px;padding:.3rem .85rem;font-size:.75rem;font-weight:700;text-decoration:none;">Mejorar a Pro →</a>
+            <a href="{{ route('billing.checkout', ['plan' => 'pro_monthly']) }}" style="background:linear-gradient(135deg,#1a2648,#3b82f6);color:#fff;border:none;border-radius:20px;padding:.3rem .85rem;font-size:.75rem;font-weight:700;text-decoration:none;">Activar Pro →</a>
             @endif
         </div>
     </div>

@@ -8,6 +8,7 @@ use App\Models\CompraItem;
 use App\Models\Inventario;
 use App\Models\Proveedor;
 use App\Services\CompraAvicolaService;
+use App\Services\SubscriptionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,6 +30,14 @@ class CompraController extends Controller
 
     public function store(StoreCompraRequest $request)
     {
+        if (! app(SubscriptionService::class)->canUseFeature(SubscriptionService::FEATURE_COMPRAS)) {
+            return response()->json([
+                'message' => 'El módulo de compras requiere Plan Pro.',
+                'msj' => 'El módulo de compras requiere Plan Pro.',
+                'upgrade_url' => route('billing.checkout', ['plan' => 'pro_monthly']),
+            ], 403);
+        }
+
         $data = $request->validated();
 
         $result = DB::transaction(function () use ($data, $request) {

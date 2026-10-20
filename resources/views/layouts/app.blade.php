@@ -420,10 +420,16 @@
                       <a class="nav-link {{ request()->routeIs('vacunaciones') ? 'active' : '' }}" href="{{ route('vacunaciones')}}">Vacunación</a>
                     </li>
                     <li class="nav-item">
+                      <a class="nav-link {{ request()->routeIs('marketplace.tenant') ? 'active' : '' }}" href="{{ route('marketplace.tenant')}}">Marketplace</a>
+                    </li>
+                    <li class="nav-item">
                       <a class="nav-link {{ request()->routeIs('plans') ? 'active' : '' }}" href="{{ route('plans')}}">Planes</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link {{ request()->routeIs('tenant.payments.create') ? 'active' : '' }}" href="{{ route('tenant.payments.create')}}">Pago Pro</a>
+                      <a class="nav-link {{ request()->routeIs('billing.*') ? 'active' : '' }}" href="{{ route('billing.checkout', ['plan' => 'pro_monthly'])}}">Activar Pro</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link {{ request()->routeIs('tenant.payments.create') ? 'active' : '' }}" href="{{ route('tenant.payments.create')}}">Pago manual</a>
                     </li>
                     <li class="nav-item">
                         <form action="{{route('logout')}}" method="POST">
@@ -440,6 +446,21 @@
         </header>
         
         <main class="app-shell my-3 my-md-4 pb-5 pb-md-3">
+            @auth
+            @if(!auth()->user()->is_superadmin && isset($subscriptionSummary) && !($subscriptionSummary['is_pro'] ?? false))
+                @if(($subscriptionSummary['gallos_near_limit'] ?? false) || ($subscriptionSummary['gallinas_near_limit'] ?? false))
+                    <x-upgrade-cta feature="gallos" :compact="true" />
+                @endif
+            @elseif(isset($subscriptionSummary) && ($subscriptionSummary['is_trial'] ?? false))
+                <div class="alert alert-info py-2 px-3" style="font-size:.85rem;border-radius:.75rem;">
+                    Estás en periodo de prueba Pro.
+                    @if($subscriptionSummary['trial_ends_at'] ?? null)
+                        Vence: {{ \Carbon\Carbon::parse($subscriptionSummary['trial_ends_at'])->format('d/m/Y') }}.
+                    @endif
+                    <a href="{{ route('billing.checkout', ['plan' => 'pro_monthly']) }}" class="alert-link">Activar suscripción</a>
+                </div>
+            @endif
+            @endauth
             @yield('content')
         </main>
 
@@ -751,6 +772,31 @@
     <script src="{{asset('js/pedigree-tree.js')}}"></script>
     <script src="{{asset('js/sweetalert2@11.js')}}"></script>
     <script>window.ghRow=function(g){if(!g)return null;return Array.isArray(g)?(g[0]||null):g;};</script>
+    <script>
+    (function() {
+        const origFetch = window.fetch;
+        window.fetch = async function(...args) {
+            const res = await origFetch.apply(this, args);
+            if (res.status === 403) {
+                try {
+                    const clone = res.clone();
+                    const data = await clone.json();
+                    if (data.at_limit && data.upgrade_url && typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Límite del plan gratuito',
+                            text: data.msj || data.message,
+                            confirmButtonText: 'Ver planes Pro',
+                            showCancelButton: true,
+                            cancelButtonText: 'Cerrar',
+                        }).then(r => { if (r.isConfirmed) window.location = data.upgrade_url; });
+                    }
+                } catch (e) {}
+            }
+            return res;
+        };
+    })();
+    </script>
     @yield('scripts')
     {{-- ═══ PWA: Service Worker + Banner de instalación ═══ --}}
     <style>

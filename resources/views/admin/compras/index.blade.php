@@ -17,6 +17,9 @@
 @endsection
 
 @section('content')
+@if(isset($subscriptionSummary) && !($subscriptionSummary['is_pro'] ?? false))
+    <x-upgrade-cta feature="compras" />
+@endif
 {{-- Sidebar offcanvas compras --}}
 <div class="offcanvas offcanvas-end" tabindex="-1" id="sidebar-compra" style="width:min(600px,100vw);">
     <div style="background:linear-gradient(135deg,#1a2648,#2d4278);padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;">

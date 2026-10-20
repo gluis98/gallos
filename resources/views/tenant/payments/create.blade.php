@@ -225,6 +225,23 @@
 
         <form method="post" action="{{ route('tenant.payments.store') }}" enctype="multipart/form-data" id="form-payment">
             @csrf
+            <input type="hidden" name="plan_sku" value="{{ $planSku ?? 'pro_monthly' }}">
+
+            <div class="alert alert-info" style="font-size:.85rem;border-radius:.85rem;">
+                <strong>¿Tienes PayPal?</strong>
+                <a href="{{ route('billing.checkout', ['plan' => $planSku ?? 'pro_monthly']) }}">Paga en línea y activa al instante</a>
+            </div>
+
+            <div class="pay-section">
+                <div class="pay-section-title">
+                    <span class="material-symbols-outlined">workspace_premium</span>
+                    Plan seleccionado
+                </div>
+                <div style="background:#f8fbff;border:1px solid #dbeafe;border-radius:.85rem;padding:1rem;">
+                    <strong>{{ $planConfig['name'] ?? 'Plan Pro' }}</strong>
+                    <div style="font-size:1.4rem;font-weight:900;color:#1a2648;">${{ number_format($planConfig['amount'] ?? 15, 2) }} {{ $planConfig['currency'] ?? 'USD' }}</div>
+                </div>
+            </div>
 
             {{-- Sección 1: Método de pago --}}
             <div class="pay-section">
@@ -306,28 +323,14 @@
                 </div>
             </div>
 
-            {{-- Sección 2: Monto --}}
+            {{-- Sección 2: Referencia --}}
             <div class="pay-section">
                 <div class="pay-section-title">
                     <span class="material-symbols-outlined">payments</span>
-                    Detalle del monto
+                    Detalle del pago
                 </div>
                 <div class="row g-3">
-                    <div class="col-sm-8">
-                        <label class="form-label-pay">Monto pagado <span class="required-star">*</span></label>
-                        <div class="amount-currency-group">
-                            <div class="input-icon-wrap flex-grow-1">
-                                <span class="material-symbols-outlined">attach_money</span>
-                                <input type="number" step="0.01" name="amount" class="form-control" required
-                                    value="{{ old('amount') }}" placeholder="0.00">
-                            </div>
-                            <select name="currency" class="form-select" required>
-                                <option value="USD" @selected(old('currency','USD')==='USD')>USD $</option>
-                                <option value="VES" @selected(old('currency')==='VES')>VES Bs.</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-12">
                         <label class="form-label-pay">Referencia / últimos dígitos</label>
                         <div class="input-icon-wrap">
                             <span class="material-symbols-outlined">tag</span>
@@ -462,24 +465,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // ── Resumen dinámico ──
     const usdtIconHtml = '<img src="{{ asset("img/usdt.svg") }}" alt="" style="width:1rem;height:1rem;vertical-align:-2px;margin-right:2px;">';
     const methodLabels = { zelle: '💳 Zelle', pagomovil: '📱 Pago Móvil', usdt_binance: usdtIconHtml + ' USDT Binance' };
-    const amountInput  = document.querySelector('[name=amount]');
-    const currencyEl   = document.querySelector('[name=currency]');
+    const planAmount = '{{ number_format($planConfig['amount'] ?? 15, 2) }}';
+    const planCurrency = '{{ $planConfig['currency'] ?? 'USD' }}';
     const refInput     = document.querySelector('[name=reference]');
     const summaryBox   = document.getElementById('payment-summary');
 
     function updateSummary() {
         const method  = document.querySelector('[name=method]:checked')?.value;
-        const amount  = amountInput.value;
-        const currency= currencyEl.value;
         const ref     = refInput.value;
-        if (method && amount) {
+        if (method) {
             const sumMethod = document.getElementById('sum-method');
             if (method === 'usdt_binance') {
                 sumMethod.innerHTML = methodLabels[method] || method;
             } else {
                 sumMethod.textContent = methodLabels[method] || method;
             }
-            document.getElementById('sum-amount').textContent = amount + ' ' + currency;
+            document.getElementById('sum-amount').textContent = planAmount + ' ' + planCurrency;
             document.getElementById('sum-ref').textContent    = ref || '—';
             summaryBox.style.display = 'block';
         } else {
@@ -487,7 +488,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    [amountInput, currencyEl, refInput].forEach(el => el.addEventListener('input', updateSummary));
+    [refInput].forEach(el => el.addEventListener('input', updateSummary));
     updateSummary();
 
     // ── Copiar al portapapeles ──

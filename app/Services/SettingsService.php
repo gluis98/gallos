@@ -25,6 +25,11 @@ class SettingsService
                 'extra_galpon_price'     => 5,
                 'marketplace_rating_days'=> 12,
             ],
+            'paypal' => [
+                'enabled'          => true,
+                'monthly_plan_id'  => '',
+                'yearly_plan_id'   => '',
+            ],
             'payment_methods' => [
                 'zelle' => [
                     'enabled' => true,

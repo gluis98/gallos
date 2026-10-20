@@ -33,6 +33,11 @@ class SettingsController extends Controller
         $data['plans']['pro_description']     = $request->input('pro_description', '');
         $data['plans']['free_gallos_limit']   = (int) $request->input('free_gallos_limit', 20);
         $data['plans']['free_gallinas_limit'] = (int) $request->input('free_gallinas_limit', 20);
+        $data['plans']['extra_galpon_price']  = (float) $request->input('extra_galpon_price', 5);
+
+        $data['paypal']['enabled']         = $request->boolean('paypal_enabled');
+        $data['paypal']['monthly_plan_id'] = trim($request->input('paypal_monthly_plan_id', ''));
+        $data['paypal']['yearly_plan_id']  = trim($request->input('paypal_yearly_plan_id', ''));
 
         // ── Zelle ──
         $data['payment_methods']['zelle']['enabled'] = $request->boolean('zelle_enabled');

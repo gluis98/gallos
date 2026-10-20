@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'tenant.context' => \App\Http\Middleware\InitializeTenancyFromAuthenticatedUser::class,
         'subscription.limit' => \App\Http\Middleware\CheckSubscriptionLimit::class,
+        'pro.feature' => \App\Http\Middleware\RequireProFeature::class,
     ];
 }
