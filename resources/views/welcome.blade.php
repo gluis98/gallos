@@ -6,6 +6,9 @@
     $proCurrency = $settings['plans']['pro_currency']       ?? 'USD';
     $freeGallos  = $settings['plans']['free_gallos_limit']  ?? 20;
     $whatsapp    = env('WHATSAPP_SUPPORT_URL', 'https://wa.me/584120000000');
+    $banner      = $settings['landing_banner'] ?? [];
+    $bannerOn    = !empty($banner['enabled']);
+    $bannerCta   = trim($banner['cta_url'] ?? '') ?: $whatsapp;
 @endphp
 <!DOCTYPE html>
 <html lang="es">
@@ -321,6 +324,37 @@
             </div>
         </div>
     </header>
+
+    @if($bannerOn && !empty($banner['title']))
+    {{-- ══ BANNER INFORMATIVO ══ --}}
+    <aside class="landing-banner" id="landing-banner" role="complementary" aria-label="Aviso informativo"
+         @if(!empty($banner['dismissible'])) data-dismissible="1" @endif>
+        <div class="landing-banner-inner">
+            <div class="landing-banner-icon" aria-hidden="true">
+                @include('partials.landing-icon', ['name' => 'campaign', 'size' => 22])
+            </div>
+            <div class="landing-banner-copy">
+                @if(!empty($banner['eyebrow']))
+                    <span class="landing-banner-eyebrow">{{ $banner['eyebrow'] }}</span>
+                @endif
+                <strong class="landing-banner-title">{{ $banner['title'] }}</strong>
+                @if(!empty($banner['text']))
+                    <p class="landing-banner-text">{{ $banner['text'] }}</p>
+                @endif
+            </div>
+            <div class="landing-banner-actions">
+                @if(!empty($banner['cta_label']) && $bannerCta)
+                    <a href="{{ $bannerCta }}" class="landing-banner-cta" target="_blank" rel="noopener noreferrer">
+                        {{ $banner['cta_label'] }}
+                    </a>
+                @endif
+                @if(!empty($banner['dismissible']))
+                    <button type="button" class="landing-banner-close" id="landing-banner-close" aria-label="Cerrar aviso">✕</button>
+                @endif
+            </div>
+        </div>
+    </aside>
+    @endif
 
     {{-- ══ FEATURES ══ --}}
     <section aria-labelledby="features-title">
@@ -980,6 +1014,21 @@
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') setNavOpen(false);
         });
+
+        var banner = document.getElementById('landing-banner');
+        if (banner) {
+            var banKey = 'landing_banner_dismissed_v1';
+            if (banner.getAttribute('data-dismissible') === '1' && localStorage.getItem(banKey) === '1') {
+                banner.hidden = true;
+            }
+            var banClose = document.getElementById('landing-banner-close');
+            if (banClose) {
+                banClose.addEventListener('click', function () {
+                    banner.hidden = true;
+                    try { localStorage.setItem(banKey, '1'); } catch (e) {}
+                });
+            }
+        }
 
         document.querySelectorAll('.faq-question').forEach(function (btn) {
             btn.addEventListener('click', function () {

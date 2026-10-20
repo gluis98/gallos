@@ -68,6 +68,18 @@ class SettingsController extends Controller
             ];
         }
 
+        // ── Banner landing ──
+        $whatsappDefault = (string) env('WHATSAPP_SUPPORT_URL', '');
+        $data['landing_banner'] = [
+            'enabled'     => $request->boolean('landing_banner_enabled'),
+            'eyebrow'     => trim($request->input('landing_banner_eyebrow', '')),
+            'title'       => trim($request->input('landing_banner_title', '')),
+            'text'        => trim($request->input('landing_banner_text', '')),
+            'cta_label'   => trim($request->input('landing_banner_cta_label', '')),
+            'cta_url'     => trim($request->input('landing_banner_cta_url', $whatsappDefault)),
+            'dismissible' => $request->boolean('landing_banner_dismissible'),
+        ];
+
         SettingsService::save($data);
 
         AuditService::log('settings.updated', 'Configuración del sistema actualizada.', [

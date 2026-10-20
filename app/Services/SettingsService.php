@@ -36,6 +36,16 @@ class SettingsService
                 'monthly_plan_id'  => '',
                 'yearly_plan_id'   => '',
             ],
+            // Banner informativo bajo el hero de la landing (venta / anuncios).
+            'landing_banner' => [
+                'enabled'   => false,
+                'eyebrow'   => '¿Te interesa este proyecto?',
+                'title'     => 'Galpon está disponible para compra o licencia',
+                'text'      => 'Si buscas un SaaS listo para operar criaderos —con planes, pagos, marketplace y multi-galpón— contáctanos y te compartimos detalles.',
+                'cta_label' => 'Quiero más información',
+                'cta_url'   => '',
+                'dismissible' => true,
+            ],
             // Módulos: pro=true → requiere Plan Pro. nav=true → aparece corona en menú.
             'modules' => [
                 'compras' => [

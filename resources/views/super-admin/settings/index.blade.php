@@ -61,6 +61,7 @@
             <a class="stab active" data-panel="tasa" href="#"><span class="material-symbols-outlined">currency_exchange</span> Tasa del Dólar</a>
             <a class="stab" data-panel="planes" href="#"><span class="material-symbols-outlined">workspace_premium</span> Planes & Precios</a>
             <a class="stab" data-panel="modulos" href="#"><span class="material-symbols-outlined">view_module</span> Módulos Free/Pro</a>
+            <a class="stab" data-panel="banner" href="#"><span class="material-symbols-outlined">campaign</span> Banner landing</a>
             <a class="stab" data-panel="metodos" href="#"><span class="material-symbols-outlined">credit_card</span> Métodos de pago</a>
             <a class="stab" data-panel="limites" href="#"><span class="material-symbols-outlined">tune</span> Límites plan Free</a>
         </div>
@@ -368,6 +369,64 @@
                 </div>
                 <div class="mt-3 p-3 rounded-3" style="background:#eff6ff;border:1px solid #bfdbfe;font-size:.82rem;color:#1e40af;">
                     Los módulos marcados como PRO muestran una corona en el menú y ocultan el botón de registrar para usuarios Free.
+                </div>
+            </div>
+        </div>
+
+        {{-- Panel: Banner landing --}}
+        @php $banner = $settings['landing_banner'] ?? []; @endphp
+        <div class="settings-panel" id="panel-banner">
+            <div class="set-section">
+                <h5><span class="material-symbols-outlined">campaign</span> Banner informativo (landing)</h5>
+                <p style="font-size:.83rem;color:#60708d;margin-bottom:1.25rem;">
+                    Aparece debajo del hero en la página de inicio. Útil para avisar que el proyecto está en venta, buscar socios o enlazar un contacto.
+                </p>
+
+                <label class="method-toggle">
+                    <span class="method-toggle-icon"><span class="material-symbols-outlined" style="color:#3b82f6;">visibility</span></span>
+                    <span class="method-toggle-label">Mostrar banner en la landing</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="landing_banner_enabled" value="1" {{ !empty($banner['enabled']) ? 'checked' : '' }}>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </label>
+
+                <div class="row g-3 mt-1">
+                    <div class="col-md-6">
+                        <label class="form-label-s">Etiqueta superior</label>
+                        <input type="text" name="landing_banner_eyebrow" class="form-control-alone"
+                            value="{{ $banner['eyebrow'] ?? '' }}" placeholder="¿Te interesa este proyecto?">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-s">Título</label>
+                        <input type="text" name="landing_banner_title" class="form-control-alone"
+                            value="{{ $banner['title'] ?? '' }}" placeholder="Galpon está disponible para compra">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label-s">Texto</label>
+                        <textarea name="landing_banner_text" rows="3" class="form-control-alone" placeholder="Mensaje breve para interesados...">{{ $banner['text'] ?? '' }}</textarea>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label-s">Texto del botón</label>
+                        <input type="text" name="landing_banner_cta_label" class="form-control-alone"
+                            value="{{ $banner['cta_label'] ?? '' }}" placeholder="Quiero más información">
+                    </div>
+                    <div class="col-md-7">
+                        <label class="form-label-s">URL del botón</label>
+                        <input type="url" name="landing_banner_cta_url" class="form-control-alone"
+                            value="{{ $banner['cta_url'] ?? '' }}" placeholder="https://wa.me/58... o mailto:tu@email.com">
+                        <small style="font-size:.72rem;color:#94a3b8;margin-top:.25rem;display:block;">WhatsApp, email o página de contacto. Si lo dejas vacío se usa el WhatsApp de soporte.</small>
+                    </div>
+                    <div class="col-12">
+                        <label class="method-toggle" style="margin-bottom:0;">
+                            <span class="method-toggle-icon"><span class="material-symbols-outlined" style="color:#94a3b8;">close</span></span>
+                            <span class="method-toggle-label">Permitir cerrar el banner (se recuerda en el navegador)</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" name="landing_banner_dismissible" value="1" {{ ($banner['dismissible'] ?? true) ? 'checked' : '' }}>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
