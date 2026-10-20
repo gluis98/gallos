@@ -100,6 +100,38 @@
 @endphp
 
 <div class="billing-wrap">
+    @if(!empty($upgradePitch) && is_array($upgradePitch))
+    <div class="upgrade-pitch mb-3" style="
+        background: linear-gradient(135deg, #fffbeb 0%, #eff6ff 55%, #f5f3ff 100%);
+        border: 1.5px solid #fde68a; border-radius: 1.15rem; padding: 1.25rem 1.4rem;
+        box-shadow: 0 10px 28px rgba(245,158,11,.12);
+    ">
+        <div style="display:flex;gap:.9rem;align-items:flex-start;">
+            <div style="
+                width:44px;height:44px;border-radius:.85rem;flex-shrink:0;
+                background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#1a1408;
+                display:flex;align-items:center;justify-content:center;
+            ">
+                <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">crown</span>
+            </div>
+            <div style="min-width:0;">
+                <div style="font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#b45309;margin-bottom:.3rem;">
+                    Módulo Pro · Acceso exclusivo
+                </div>
+                <h3 style="margin:0 0 .45rem;font-size:1.1rem;font-weight:900;color:#1a2648;line-height:1.3;">
+                    {{ $upgradePitch['title'] }}
+                </h3>
+                <p style="margin:0;font-size:.9rem;color:#4b5563;line-height:1.55;">
+                    {{ $upgradePitch['body'] }}
+                </p>
+                <p style="margin:.7rem 0 0;font-size:.82rem;font-weight:700;color:#1d4ed8;">
+                    {{ $upgradePitch['cta'] ?? 'Activa Plan Pro y desbloquea todo ahora.' }} ↓
+                </p>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <div class="billing-hero">
         <div class="plan-pill mb-2">
             <span class="material-symbols-outlined" style="font-size:1rem;">workspace_premium</span>

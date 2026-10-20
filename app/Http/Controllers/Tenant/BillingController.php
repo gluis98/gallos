@@ -37,7 +37,20 @@ class BillingController extends Controller
         $rate = DollarRateService::getCachedRate();
         $paypalEnabled = $this->paypal->isConfigured() && ($settings['paypal']['enabled'] ?? true);
 
-        return view('tenant.billing.checkout', compact('planSku', 'config', 'summary', 'settings', 'rate', 'paypalEnabled'));
+        $upgradePitch = session('upgrade_pitch');
+        if (! is_array($upgradePitch) && $request->filled('from')) {
+            $upgradePitch = $this->subscriptionService->upgradePitch((string) $request->query('from'));
+        }
+
+        return view('tenant.billing.checkout', compact(
+            'planSku',
+            'config',
+            'summary',
+            'settings',
+            'rate',
+            'paypalEnabled',
+            'upgradePitch'
+        ));
     }
 
     public function success(Request $request)

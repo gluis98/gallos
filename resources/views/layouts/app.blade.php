@@ -93,6 +93,54 @@
                 background: linear-gradient(95deg, #4f8cff, #7a4dff);
             }
 
+            .app-menu .nav-pro-item {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                gap: .35rem;
+            }
+            .app-menu .nav-pro-crown,
+            .pro-crown {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                color: #fbbf24;
+                line-height: 1;
+            }
+            .app-menu .nav-pro-crown {
+                position: absolute;
+                top: -2px;
+                right: 2px;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #1a2648, #2d4278);
+                box-shadow: 0 0 0 1.5px rgba(251,191,36,.55);
+                pointer-events: none;
+            }
+            .app-menu .nav-pro-crown .material-symbols-outlined {
+                font-size: .65rem !important;
+                font-variation-settings: 'FILL' 1, 'wght' 600;
+            }
+            .app-menu .nav-pro-locked {
+                opacity: .92;
+            }
+            .mob-more-btn .nav-pro-crown,
+            .mob-nav-item .nav-pro-crown {
+                position: absolute;
+                top: 4px;
+                right: calc(50% - 18px);
+                color: #fbbf24;
+                line-height: 1;
+                z-index: 2;
+            }
+            .mob-more-btn .nav-pro-crown .material-symbols-outlined,
+            .mob-nav-item .nav-pro-crown .material-symbols-outlined {
+                font-size: .72rem !important;
+                font-variation-settings: 'FILL' 1, 'wght' 600;
+            }
+            .mob-more-btn { position: relative; }
+
             .app-shell {
                 max-width: 1380px;
                 margin: 0 auto;
@@ -408,19 +456,19 @@
                       <a class="nav-link {{ request()->routeIs('gallinas') ? 'active' : '' }}" href="{{ route('gallinas')}}">Gallinas</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('inventario') ? 'active' : '' }}" href="{{ route('inventario')}}">Inventario <x-pro-crown module="inventario" size=".9rem" /></a>
+                      <x-pro-nav-link module="inventario" route="inventario" label="Inventario" />
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('compras') ? 'active' : '' }}" href="{{ route('compras')}}">Compras <x-pro-crown module="compras" size=".9rem" /></a>
+                      <x-pro-nav-link module="compras" route="compras" label="Compras" />
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('ventas') ? 'active' : '' }}" href="{{ route('ventas')}}">Ventas <x-pro-crown module="ventas" size=".9rem" /></a>
+                      <x-pro-nav-link module="ventas" route="ventas" label="Ventas" />
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('vacunaciones') ? 'active' : '' }}" href="{{ route('vacunaciones')}}">Vacunación <x-pro-crown module="vacunaciones" size=".9rem" /></a>
+                      <x-pro-nav-link module="vacunaciones" route="vacunaciones" label="Vacunación" />
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('marketplace.tenant') ? 'active' : '' }}" href="{{ route('marketplace.tenant')}}">Marketplace <x-pro-crown module="marketplace" size=".9rem" /></a>
+                      <x-pro-nav-link module="marketplace" route="marketplace.tenant" route-is="marketplace.tenant" label="Marketplace" />
                     </li>
                     <li class="nav-item">
                       <a class="nav-link {{ request()->routeIs('plans') ? 'active' : '' }}" href="{{ route('plans')}}">Planes</a>
@@ -659,22 +707,10 @@
                     <span class="material-symbols-outlined">logout</span><span class="lbl">Salir</span>
                 </button>
             @else
-                <a href="{{ route('vacunaciones') }}" class="mob-more-btn {{ str_contains($curRoute,'vacunaciones') ? 'active' : '' }}" style="position:relative;">
-                    <span class="material-symbols-outlined">vaccines</span>
-                    <span class="lbl">Vacunas <x-pro-crown module="vacunaciones" size=".75rem" /></span>
-                </a>
-                <a href="{{ route('inventario') }}" class="mob-more-btn {{ str_contains($curRoute,'inventario') ? 'active' : '' }}">
-                    <span class="material-symbols-outlined">inventory_2</span>
-                    <span class="lbl">Inventario <x-pro-crown module="inventario" size=".75rem" /></span>
-                </a>
-                <a href="{{ route('compras') }}" class="mob-more-btn {{ str_contains($curRoute,'compras') ? 'active' : '' }}">
-                    <span class="material-symbols-outlined">shopping_cart</span>
-                    <span class="lbl">Compras <x-pro-crown module="compras" size=".75rem" /></span>
-                </a>
-                <a href="{{ route('marketplace.tenant') }}" class="mob-more-btn {{ str_contains($curRoute,'marketplace') ? 'active' : '' }}">
-                    <span class="material-symbols-outlined">storefront</span>
-                    <span class="lbl">Market <x-pro-crown module="marketplace" size=".75rem" /></span>
-                </a>
+                <x-pro-mob-link module="vacunaciones" route="vacunaciones" label="Vacunas" icon="vaccines" />
+                <x-pro-mob-link module="inventario" route="inventario" label="Inventario" icon="inventory_2" />
+                <x-pro-mob-link module="compras" route="compras" label="Compras" icon="shopping_cart" />
+                <x-pro-mob-link module="marketplace" route="marketplace.tenant" route-is="marketplace.tenant" label="Market" icon="storefront" />
                 <a href="{{ route('plans') }}" class="mob-more-btn {{ str_contains($curRoute,'plans') ? 'active' : '' }}">
                     <span class="material-symbols-outlined">workspace_premium</span><span class="lbl">Planes</span>
                 </a>
@@ -726,13 +762,7 @@
                 <span class="material-symbols-outlined mni-icon">egg</span>
                 <span class="mni-label">Gallinas</span>
             </a>
-            <a href="{{ route('ventas') }}" class="mob-nav-item {{ $curRoute === 'ventas' ? 'active' : '' }}" style="position:relative;">
-                <span class="material-symbols-outlined mni-icon">point_of_sale</span>
-                @if(!empty(($planModules['ventas']['pro'] ?? false)))
-                <span class="material-symbols-outlined" style="position:absolute;top:4px;right:calc(50% - 16px);font-size:.7rem;color:#f59e0b;font-variation-settings:'FILL' 1;">crown</span>
-                @endif
-                <span class="mni-label">Ventas</span>
-            </a>
+            <x-pro-mob-link module="ventas" route="ventas" label="Ventas" icon="point_of_sale" variant="bar" />
         @endif
             {{-- Botón "Más" --}}
             <button type="button" class="mob-nav-item {{ in_array($curRoute, ['inventario','compras','plans','tenant.payments.create','superadmin.subscriptions.index','superadmin.tenants.index','superadmin.audit.index']) ? 'active' : '' }}" onclick="toggleMobMore()" id="btn-mob-more">

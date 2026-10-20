@@ -25,11 +25,15 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        View::composer(['layouts.app', 'admin.*', 'tenant.*'], function ($view) {
-            $modules = SettingsService::get()['modules'] ?? [];
+        View::composer(['layouts.app', 'layouts.*', 'admin.*', 'tenant.*', 'components.*'], function ($view) {
+            try {
+                $modules = SettingsService::get()['modules'] ?? [];
+            } catch (\Throwable) {
+                $modules = [];
+            }
             $view->with('planModules', $modules);
 
-            if (! auth()->check() || auth()->user()->is_superadmin) {
+            if (! auth()->check() || (auth()->user()->is_superadmin ?? false)) {
                 $view->with('isProUser', true);
                 $view->with('subscriptionSummary', ['is_pro' => true, 'plan' => 'pro']);
 
@@ -38,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
 
             try {
                 $summary = ['is_pro' => false, 'plan' => 'free'];
-                if (tenancy()->initialized) {
+                if (function_exists('tenancy') && tenancy()->initialized) {
                     $summary = app(SubscriptionService::class)->subscriptionSummary();
                 }
                 $view->with('subscriptionSummary', $summary);

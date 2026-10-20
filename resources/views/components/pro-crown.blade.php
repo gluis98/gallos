@@ -1,13 +1,16 @@
-@props(['module' => '', 'size' => '1rem'])
+@props(['module' => '', 'size' => '.85rem', 'float' => false])
 
 @php
-    $modules = $planModules ?? [];
-    $requiresPro = !empty($modules[$module]['pro']);
+    $modules = $planModules ?? (\App\Services\SettingsService::get()['modules'] ?? []);
+    $requiresPro = !empty($modules[$module]['pro'] ?? false);
 @endphp
 
 @if($requiresPro)
-    <span {{ $attributes->merge(['class' => 'pro-crown', 'title' => 'Requiere Plan Pro']) }}
-          style="display:inline-flex;align-items:center;color:#f59e0b;line-height:1;">
-        <span class="material-symbols-outlined" style="font-size:{{ $size }};font-variation-settings:'FILL' 1;">crown</span>
+    <span {{ $attributes->merge([
+        'class' => $float ? 'nav-pro-crown' : 'pro-crown',
+        'title' => 'Módulo Plan Pro',
+        'aria-label' => 'Requiere Plan Pro',
+    ]) }}>
+        <span class="material-symbols-outlined" style="font-size:{{ $size }};font-variation-settings:'FILL' 1,'wght' 600;">crown</span>
     </span>
 @endif

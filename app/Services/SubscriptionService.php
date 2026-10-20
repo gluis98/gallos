@@ -137,15 +137,72 @@ class SubscriptionService
             return null;
         }
 
-        $key = self::$featureToModule[$featureOrModule] ?? $featureOrModule;
-        $label = (SettingsService::get()['modules'][$key]['label'] ?? null) ?: 'Esta función';
-        $message = $customMessage ?? "{$label} requiere Plan Pro.";
+        $pitch = $this->upgradePitch($featureOrModule);
+        $message = $customMessage ?? $pitch['body'];
 
         return response()->json([
             'message' => $message,
             'msj' => $message,
-            'upgrade_url' => route('billing.checkout', ['plan' => 'pro_monthly']),
+            'title' => $pitch['title'],
+            'upgrade_url' => route('billing.checkout', ['plan' => 'pro_monthly', 'from' => $pitch['module']]),
         ], 403);
+    }
+
+    /**
+     * Mensaje persuasivo para convertir Free → Pro según el módulo.
+     *
+     * @return array{module:string,title:string,body:string,cta:string}
+     */
+    public function upgradePitch(string $featureOrModule): array
+    {
+        $key = self::$featureToModule[$featureOrModule] ?? $featureOrModule;
+        $label = (SettingsService::get()['modules'][$key]['label'] ?? null) ?: 'este módulo';
+
+        $pitches = [
+            'compras' => [
+                'title' => 'Tus compras merecen el control de un profesional',
+                'body' => 'Con Plan Pro registras proveedores, costos y entradas al inventario en un solo flujo. Deja de anotar en papeles y empieza a ver cuánto gana de verdad tu galpón.',
+                'cta' => 'Activar Pro y dominar mis compras',
+            ],
+            'marketplace' => [
+                'title' => 'Publica tus aves donde los compradores ya están buscando',
+                'body' => 'El Marketplace Pro pone tus gallos y gallinas frente a criadores de toda Latinoamérica. Una publicación bien hecha puede pagarte el plan varias veces.',
+                'cta' => 'Activar Pro y empezar a publicar',
+            ],
+            'vacunaciones' => [
+                'title' => 'La salud de tu plantel no espera',
+                'body' => 'Con Vacunación Pro llevas el historial médico al día, alertas de próximas dosis y un expediente listo para vender con más confianza. Cuida tu inversión genética.',
+                'cta' => 'Activar Pro y proteger mi plantel',
+            ],
+            'inventario' => [
+                'title' => 'Cada saco, vacuna y suplemento cuenta',
+                'body' => 'Inventario Pro te muestra stock, costos y precios en tiempo real. Evita quiebres, calcula utilidad y toma decisiones con números claros, no con intuición.',
+                'cta' => 'Activar Pro y ordenar mi inventario',
+            ],
+            'ventas' => [
+                'title' => 'Cierra más ventas con el control que te falta',
+                'body' => 'Ventas Pro registra clientes, montos y movimientos al instante. Verás ingresos claros, historial completo y un galpón que se gestiona como un negocio serio.',
+                'cta' => 'Activar Pro y potenciar mis ventas',
+            ],
+            'reports' => [
+                'title' => 'Reportes que hablan por tu criadero',
+                'body' => 'Los reportes avanzados Pro te dan pedigree y listados listos para compartir o imprimir. Impresiona compradores y lleva tu operación al siguiente nivel.',
+                'cta' => 'Activar Pro y generar reportes',
+            ],
+            'pedigree_full' => [
+                'title' => 'El linaje completo es tu mejor carta de venta',
+                'body' => 'Con Pedigree Pro exploras generaciones completas y demuestras la calidad de tu línea. Es la diferencia entre “otro gallo” y un animal con historia.',
+                'cta' => 'Activar Pro y ver el pedigree completo',
+            ],
+        ];
+
+        $pitch = $pitches[$key] ?? [
+            'title' => "Desbloquea {$label} con Plan Pro",
+            'body' => "Para usar {$label} necesitas Plan Pro. Desbloquea herramientas pensadas para criadores que quieren crecer con orden, velocidad y resultados.",
+            'cta' => 'Activar Plan Pro ahora',
+        ];
+
+        return array_merge(['module' => $key], $pitch);
     }
 
     public function getLimits(?string $tenantId = null): array

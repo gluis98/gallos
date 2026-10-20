@@ -94,11 +94,15 @@ Route::post('/webhooks/paypal', [PayPalWebhookController::class, 'handle'])->nam
 
 Route::middleware(['auth', 'tenant.context'])->group(function () {
     Route::view('/gallos', 'admin.gallos.index')->name('gallos');
-    Route::view('/vacunaciones', 'admin.vacunaciones.index')->name('vacunaciones');
+    Route::view('/vacunaciones', 'admin.vacunaciones.index')->name('vacunaciones')
+        ->middleware('pro.feature:vacunaciones');
     Route::view('/gallinas', 'admin.gallinas.index')->name('gallinas');
-    Route::view('/inventario', 'admin.inventario.index')->name('inventario');
-    Route::view('/compras', 'admin.compras.index')->name('compras');
-    Route::view('/ventas', 'admin.ventas.index')->name('ventas');
+    Route::view('/inventario', 'admin.inventario.index')->name('inventario')
+        ->middleware('pro.feature:inventario');
+    Route::view('/compras', 'admin.compras.index')->name('compras')
+        ->middleware('pro.feature:compras');
+    Route::view('/ventas', 'admin.ventas.index')->name('ventas')
+        ->middleware('pro.feature:ventas');
 
     Route::get('/dashboard', \App\Http\Controllers\Tenant\DashboardController::class)->name('dashboard');
 
@@ -115,7 +119,8 @@ Route::middleware(['auth', 'tenant.context'])->group(function () {
     Route::get('/billing/paypal/return', [BillingController::class, 'paypalReturn'])->name('billing.paypal.return');
     Route::post('/billing/paypal/capture', [BillingController::class, 'paypalCapture'])->name('billing.paypal.capture');
 
-    Route::view('/marketplace/mis-publicaciones', 'admin.marketplace.index')->name('marketplace.tenant');
+    Route::view('/marketplace/mis-publicaciones', 'admin.marketplace.index')->name('marketplace.tenant')
+        ->middleware('pro.feature:marketplace');
 
     Route::controller(ReporteController::class)->middleware('pro.feature:reports_advanced')->group(function () {
         Route::get('/report/all', 'all')->name('report.all');
